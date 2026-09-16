@@ -14,9 +14,12 @@ import {
   type SavedReading,
 } from '@/lib/tarot/history'
 import type { DrawnCard } from '@/lib/tarot/types'
+import { type DeckThemeId, getDeckTheme } from '@/lib/tarot/decks'
 import { TarotCard } from './tarot-card'
+import { DeckPicker } from './deck-picker'
 
 const STORAGE_KEY = 'empire-tarot-reading-v1'
+const DECK_THEME_STORAGE_KEY = 'empire-tarot-deck-theme-v1'
 
 const SUIT_ELEMENT: Record<string, string> = {
   wands: 'Fire',
@@ -73,10 +76,11 @@ export function ReadingBoard() {
   const [drawing, setDrawing] = useState(false)
   const [history, setHistory] = useState<SavedReading[]>([])
   const [savedId, setSavedId] = useState<string | null>(null)
+  const [deckTheme, setDeckTheme] = useState<DeckThemeId>('classic')
 
   const spread = getSpread(spreadId) ?? SPREADS[0]
 
-  // ---- Load any in-progress reading + saved history on mount ----
+  // ---- Load any in-progress reading + saved history + deck choice on mount ----
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
@@ -90,12 +94,20 @@ export function ReadingBoard() {
           if (firstRevealed >= 0) setSelectedIndex(firstRevealed)
         }
       }
+      const storedTheme = localStorage.getItem(DECK_THEME_STORAGE_KEY)
+      if (storedTheme) setDeckTheme(getDeckTheme(storedTheme).id)
     } catch {
       /* ignore corrupt storage */
     }
     setHistory(loadHistory())
     setHydrated(true)
   }, [])
+
+  // ---- Persist the chosen deck theme (a display preference, not account data) ----
+  useEffect(() => {
+    if (!hydrated) return
+    localStorage.setItem(DECK_THEME_STORAGE_KEY, deckTheme)
+  }, [deckTheme, hydrated])
 
   // ---- Persist the in-progress reading whenever it changes ----
   useEffect(() => {
@@ -217,6 +229,11 @@ export function ReadingBoard() {
         </p>
       </div>
 
+      {/* ---- Deck theme selector ---- */}
+      <div className="mb-10">
+        <DeckPicker value={deckTheme} onChange={setDeckTheme} />
+      </div>
+
       {/* ---- Spread selector ---- */}
       <div className="flex flex-col items-center gap-4">
         <p className="font-display text-xs uppercase tracking-[0.4em] text-gold/70">
@@ -315,6 +332,7 @@ export function ReadingBoard() {
                 onSelect={() => setSelectedIndex(i)}
                 selected={selectedIndex === i}
                 compact={compact}
+                deckTheme={deckTheme}
               />
             ))}
           </div>

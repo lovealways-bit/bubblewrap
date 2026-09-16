@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Crown } from 'lucide-react'
 import type { DrawnCard, TarotCard as TarotCardData } from '@/lib/tarot/types'
 import { hasProof, proofSrc, hasBlondeVariant, blondeSrc } from '@/lib/tarot/proofs'
+import { type DeckThemeId, hasThemeArt, themeArtSrc } from '@/lib/tarot/decks'
 import { SuitEmblem } from './suit-emblem'
 import { Wings } from './wings'
 
@@ -181,9 +182,19 @@ interface Props {
   onSelect?: () => void
   selected?: boolean
   compact?: boolean
+  /** Which deck theme's art to prefer for this card. Defaults to classic. */
+  deckTheme?: DeckThemeId
 }
 
-export function TarotCard({ drawn, positionLabel, onReveal, onSelect, selected = false, compact = false }: Props) {
+export function TarotCard({
+  drawn,
+  positionLabel,
+  onReveal,
+  onSelect,
+  selected = false,
+  compact = false,
+  deckTheme = 'classic',
+}: Props) {
   const { card, orientation, revealed } = drawn
   const isReversed = orientation === 'reversed'
   const isMajor = card.arcana === 'major'
@@ -191,12 +202,17 @@ export function TarotCard({ drawn, positionLabel, onReveal, onSelect, selected =
   const pipCount = !isMajor && card.number <= 10 ? card.number : 0
   const meta = SUIT_META[card.suit ?? 'major']
   const numeral = isMajor || isCourt ? rankLabel(drawn) : WORD[pipCount] ?? String(pipCount)
-  const theme = card.theme ?? card.keywords[0]
+  const themeLabel = card.theme ?? card.keywords[0]
   // This draw shows blonde variant art when flagged AND a variant exists. The
   // blonde art is illustration-only, so it renders inside the app frame and
   // takes precedence over the baked full-card proof for this draw.
-  const showBlonde = Boolean(drawn.blonde) && hasBlondeVariant(card.id)
-  const proof = hasProof(card.id) && !showBlonde
+  const showBlonde = Boolean(drawn.blonde) && hasBlondeVariant(card.id) && deckTheme === 'classic'
+  // Themed deck art (mermaid/fairy/creature) takes precedence over the
+  // classic proof when it exists for this card; both render as a full baked
+  // face. Cards a theme hasn't reached yet fall back to the classic proof.
+  const themedArt = hasThemeArt(deckTheme, card.id)
+  const proof = (themedArt || hasProof(card.id)) && !showBlonde
+  const proofImageSrc = themedArt ? themeArtSrc(deckTheme, card.id) : proofSrc(card.id)
 
   const handleClick = () => {
     if (!revealed) onReveal()
@@ -260,7 +276,7 @@ export function TarotCard({ drawn, positionLabel, onReveal, onSelect, selected =
           {proof ? (
             <div className="backface-hidden rotate-y-180 absolute inset-0 overflow-hidden rounded-xl bg-black">
               <img
-                src={proofSrc(card.id) || '/placeholder.svg'}
+                src={proofImageSrc || '/placeholder.svg'}
                 alt={`${card.name}${isReversed ? ', reversed' : ''}`}
                 className="h-full w-full object-cover"
                 crossOrigin="anonymous"
@@ -324,7 +340,7 @@ export function TarotCard({ drawn, positionLabel, onReveal, onSelect, selected =
                 </h3>
                 {!compact && (
                   <p className="mt-0.5 font-display text-[0.55rem] uppercase tracking-[0.3em] text-gold/70">
-                    {theme}
+                    {themeLabel}
                   </p>
                 )}
               </div>
