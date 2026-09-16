@@ -1,0 +1,176 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* ---- The Empire Tarot palette ---- */
+/* Deep cosmic purple-black base, ceremonial gold, faint arcane teal. */
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-foreground: var(--surface-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-gold: var(--gold);
+  --color-gold-bright: var(--gold-bright);
+  --color-gold-dim: var(--gold-dim);
+  --color-teal: var(--teal);
+  --color-primary: var(--gold);
+  --color-primary-foreground: var(--background);
+  --color-ring: var(--gold);
+
+  --font-display: var(--font-cinzel);
+  --font-sans: var(--font-body);
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+}
+
+:root {
+  color-scheme: dark;
+  --background: #1a0f2e;
+  --foreground: #efe6d6;
+  --surface: #241640;
+  --surface-foreground: #efe6d6;
+  --muted: #2c1c4d;
+  --muted-foreground: #a99bc7;
+  --border: rgba(212, 175, 55, 0.22);
+  --gold: #d4af37;
+  --gold-bright: #f2d478;
+  --gold-dim: #8a7231;
+  --teal: #3fd6c8;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  html {
+    background-color: var(--background);
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Cosmic nebula field behind the whole experience */
+@layer utilities {
+  .cosmic-nebula {
+    background:
+      radial-gradient(1100px 800px at 22% 8%, rgba(146, 61, 196, 0.55), transparent 60%),
+      radial-gradient(900px 720px at 82% 18%, rgba(214, 71, 158, 0.32), transparent 58%),
+      radial-gradient(1000px 900px at 70% 92%, rgba(63, 138, 214, 0.3), transparent 60%),
+      radial-gradient(760px 620px at 12% 82%, rgba(63, 214, 200, 0.14), transparent 58%),
+      radial-gradient(1300px 1000px at 50% 50%, rgba(58, 28, 92, 0.65), transparent 75%),
+      linear-gradient(180deg, #150a26 0%, #1d0f38 45%, #150a24 100%);
+  }
+}
+
+/* Card flip 3D helpers */
+@layer utilities {
+  .perspective {
+    perspective: 1400px;
+  }
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  .backface-hidden {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+  .text-glow-gold {
+    text-shadow: 0 0 18px rgba(242, 212, 120, 0.45), 0 0 3px rgba(242, 212, 120, 0.6);
+  }
+  .font-runic {
+    font-family: var(--font-runic), 'Segoe UI Symbol', system-ui, sans-serif;
+  }
+}
+
+/* ---- Lunara Ascension signature surfaces ---- */
+/* One coherent look every panel, row, and primary action shares. */
+@layer utilities {
+  /* The ceremonial panel: plum-to-purple gradient behind a gold hairline. */
+  .empire-panel {
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 1rem;
+    background:
+      linear-gradient(
+        160deg,
+        rgba(58, 28, 92, 0.7) 0%,
+        rgba(40, 24, 70, 0.6) 55%,
+        rgba(26, 15, 46, 0.72) 100%
+      );
+    box-shadow:
+      0 26px 60px -32px rgba(0, 0, 0, 0.85),
+      0 0 40px -22px rgba(212, 175, 55, 0.5),
+      inset 0 1px 0 rgba(242, 212, 120, 0.08);
+  }
+
+  /* A lighter horizontal gradient for list rows inside a panel. */
+  .empire-row {
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 0.75rem;
+    background:
+      linear-gradient(
+        100deg,
+        rgba(58, 28, 92, 0.6) 0%,
+        rgba(44, 28, 77, 0.4) 58%,
+        rgba(36, 22, 64, 0.24) 100%
+      );
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .empire-row:hover {
+    border-color: rgba(212, 175, 55, 0.5);
+  }
+
+  /* The signature primary action: solid gold with dark ink. */
+  .empire-cta {
+    background: linear-gradient(180deg, var(--gold-bright) 0%, var(--gold) 55%, #b8932e 100%);
+    color: #1a0f2e;
+    box-shadow:
+      0 12px 34px -10px rgba(212, 175, 55, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    transition: filter 0.3s ease, box-shadow 0.3s ease, transform 0.15s ease;
+  }
+  .empire-cta:hover:not(:disabled) {
+    filter: brightness(1.06);
+    box-shadow:
+      0 16px 44px -10px rgba(212, 175, 55, 0.72),
+      inset 0 1px 0 rgba(255, 255, 255, 0.42);
+  }
+  .empire-cta:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+}
+
+@keyframes empire-twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes empire-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
