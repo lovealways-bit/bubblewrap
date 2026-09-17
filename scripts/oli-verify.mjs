@@ -6,6 +6,7 @@ const required = [
   'AGENTS.md',
   'README_OLI_COMMANDER_HUB.md',
   'commander/MANUSCRIPT.md',
+  'commander/MANUSCRIPT_ADDENDUM_MUSIC_OLI_2026-09-17.md',
   'commander/OLI_APP_REGISTRY.json',
   'commander/OLI_CAPABILITIES.json',
   'commander/OLI_APP_BEHAVIOR_MATRIX.md',
@@ -50,6 +51,7 @@ const noEmDashFiles = [
   'app/oli/music/page.tsx',
   'app/oli/design-closet/page.tsx',
   'app/oli/dev/page.tsx',
+  'commander/MANUSCRIPT_ADDENDUM_MUSIC_OLI_2026-09-17.md',
   'commander/USER_DEV_SURFACE_CONTRACT.md',
   'commander/DEPLOYMENT_LINKAGE_ISSUES.md',
 ]
