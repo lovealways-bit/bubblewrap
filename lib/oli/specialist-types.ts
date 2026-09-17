@@ -10,6 +10,7 @@ export type OliHubSurfaceId =
   | 'mothership-vault'
   | 'manifesto-scribe'
   | 'commander-log'
+  | 'design-closet'
   | 'source-intelligence'
   | 'specialist-stacks'
 
@@ -65,6 +66,8 @@ export type PermissionScope =
   | 'mothership.commander-log.write'
   | 'mothership.daily-debrief.read'
   | 'mothership.daily-debrief.write'
+  | 'mothership.design-closet.read'
+  | 'mothership.design-closet.write-candidate'
   | 'mothership.source-intelligence.read'
   | 'commander.report.write'
   | 'scribe.addendum.propose'
