@@ -52,6 +52,7 @@ export type OliCommandRequest = {
   host?: string
   pathname?: string
   appId?: string
+  isAdmin?: boolean
 }
 
 export type OliCommandResponse = {
