@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import {
   Activity,
   Bot,
+  BookOpen,
   Boxes,
   BrainCircuit,
   Cable,
@@ -10,11 +11,14 @@ import {
   CircleDot,
   Database,
   GitBranch,
+  Layers3,
   Network,
   ShieldCheck,
   Sparkles,
 } from 'lucide-react'
+import { listOliHubSurfaces } from '@/lib/oli/hub-surfaces'
 import { appProfiles, capabilities, deploymentProjects, repositories } from '@/lib/oli/registry'
+import { listOliSpecialistStacks } from '@/lib/oli/specialist-stacks'
 import { getSession, isAdminEmail } from '@/lib/session'
 
 const stateOrder = ['LIVE', 'READY', 'PLANNED', 'BLOCKED', 'GRAY'] as const
@@ -28,6 +32,8 @@ export default async function OliHubPage() {
     state,
     count: capabilities.filter((item) => item.state === state).length,
   }))
+  const hubSurfaces = listOliHubSurfaces()
+  const specialistStacks = listOliSpecialistStacks()
 
   return (
     <main className="relative min-h-svh overflow-hidden bg-[#fbfafc] text-slate-950">
@@ -73,7 +79,7 @@ export default async function OliHubPage() {
                 One commander brain for every app skin.
               </h1>
               <p className="mt-4 max-w-2xl text-pretty text-base leading-7 text-slate-600 sm:text-lg">
-                Bubblewrap holds Oli’s executable Manuscript, app profiles, capability flags, first-line support router, Commander context, and handoff rules. Upstream governance stays in Mothership and Commander source control.
+                Bubblewrap holds Oli’s executable Manuscript, app profiles, specialist modes, capability flags, first-line support router, Commander context, and handoff rules. Upstream governance stays in Mothership and Commander source control.
               </p>
 
               <div className="mt-7 grid grid-cols-3 gap-3">
@@ -159,18 +165,51 @@ export default async function OliHubPage() {
           </Panel>
         </section>
 
+        <section className="grid gap-5 pb-5 xl:grid-cols-2">
+          <Panel title="Commander surfaces" icon={BookOpen}>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {hubSurfaces.map((surface) => (
+                <div key={surface.id} id={surface.id === 'manifesto-scribe' ? 'manifesto' : undefined} className="rounded-[22px] border border-slate-200 bg-slate-50 p-4">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-sm font-semibold">{surface.name}</p>
+                    {surface.founderGate ? <StateBadge state="OWNER" /> : null}
+                  </div>
+                  <p className="mt-2 text-xs leading-5 text-slate-500">{surface.description}</p>
+                </div>
+              ))}
+            </div>
+          </Panel>
+
+          <Panel title="Oli specialist stacks" icon={Layers3}>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {specialistStacks.map((stack) => (
+                <div key={stack.id} className="rounded-[22px] border border-slate-200 bg-white p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-semibold">{stack.shortName}</p>
+                      <p className="mt-1 text-xs leading-5 text-slate-500">{stack.mission}</p>
+                    </div>
+                    <span className="rounded-full bg-purple-50 px-2 py-1 text-[9px] font-bold uppercase tracking-[0.1em] text-purple-700">{stack.defaultDataClass}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Panel>
+        </section>
+
         <section className="mb-5 rounded-[30px] border border-slate-900 bg-slate-950 px-6 py-6 text-white shadow-2xl shadow-purple-950/10 sm:px-8">
           <div className="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-center">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-200">Daily learning loop</p>
               <h2 className="mt-2 text-2xl font-semibold tracking-tight">Capture → verify → permission → act → log → feedback → version.</h2>
               <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-300">
-                Operational learning updates prompts, app profiles, runbooks, tests, registries, and approved context. It does not silently retrain a third-party model or overwrite approved design source.
+                Operational learning updates prompts, app profiles, runbooks, tests, registries, approved context, and Scribe addendum candidates. It does not silently retrain a third-party model or overwrite approved design source.
               </p>
             </div>
             <div className="rounded-[22px] border border-white/10 bg-white/5 px-5 py-4 text-sm text-slate-300">
               <p className="font-semibold text-white">Manuscript source</p>
               <p className="mt-1 font-mono text-xs text-amber-200">commander/MANUSCRIPT.md</p>
+              <p className="mt-2 text-xs">{specialistStacks.length} specialist modes · {hubSurfaces.length} Commander surfaces</p>
             </div>
           </div>
         </section>
