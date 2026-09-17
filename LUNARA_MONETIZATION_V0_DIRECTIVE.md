@@ -18,7 +18,7 @@ Stripe is currently connected only to **AllPath Edu. sandbox**. Everything below
 | Offer | Price | Stripe Price ID | Test checkout |
 | --- | ---: | --- | --- |
 | Birth Chart | $33.33 | `price_1UGj0xQA3HJlweQS81G8Vnso` | `https://book.stripe.com/test_eVq6oJ2GR5df9Nj2iWgnK03` |
-| Personal Reading | $49.99 | `price_1UGj16QA3HJlweQSTxXFToCW` | `https://book.stripe.com/test_6oUcN74OZ6hj0cJ7DggnK04` |
+| Personal Reading | $49.99 | `price_1UGj16QA3HJlweQSTxXFToCW` | `https://book.stripe.com/test_6oUcN74OZ6hj7DggnK04` |
 
 Personal Reading checkout already collects one required delivery preference: Zoom, Phone, Text, Email, Social media, or In app.
 
@@ -65,21 +65,35 @@ Use Stripe subscription/customer metadata or the signed-in account mapping to as
 ## Free-plan web ads
 Use AdSense for the web/PWA. `components/adsense-slot.tsx` is a guarded ad component. v0 should place it only behind the free entitlement.
 
+AdSense publisher account now supplied and configured for site verification:
+
+```text
+Publisher ID: pub-4805370280965046
+Client ID: ca-pub-4805370280965046
+```
+
+The repository now contains:
+- `public/ads.txt` with Google's authorized-seller line
+- a `google-adsense-account` verification meta tag in `app/layout.tsx`
+- `.env.example` with the public AdSense client ID
+
+Do not put payments account IDs, payments profile IDs, organization mailing details, banking information, tax identifiers, or other AdSense payout administration data in the client app, GitHub, logs, analytics, or v0 prompts.
+
 Suggested placements:
 - one in-feed/native-feeling slot after approximately 5 to 7 meaningful content cards, never between every interaction
 - one restrained lower-page/banner slot on selected free screens
 - exclude checkout, account/settings, privacy/terms, payment success, personal-reading intake, and sensitive private-reading screens
 
-Do not create fake publisher IDs or ad slot IDs.
-
 ### Environment variables
-Add in Vercel only after the AdSense account/site is approved:
+The publisher ID is known. The ad unit slot IDs still need to be created after site approval.
 
 ```env
-NEXT_PUBLIC_ADSENSE_CLIENT_ID=ca-pub-XXXXXXXXXXXXXXXX
-NEXT_PUBLIC_ADSENSE_FREE_FEED_SLOT=XXXXXXXXXX
-NEXT_PUBLIC_ADSENSE_FREE_BANNER_SLOT=XXXXXXXXXX
+NEXT_PUBLIC_ADSENSE_CLIENT_ID=ca-pub-4805370280965046
+NEXT_PUBLIC_ADSENSE_FREE_FEED_SLOT=
+NEXT_PUBLIC_ADSENSE_FREE_BANNER_SLOT=
 ```
+
+Never invent slot IDs.
 
 ## Rewarded access on web
 Use **AdSense Offerwall**, configured in AdSense Privacy & messaging. Do not hand-build a fake rewarded-video flow. Use Offerwall to let a Free visitor voluntarily view a rewarded ad for access to selected bonus content. Keep the reward non-transferable and inside Lunara.
@@ -90,12 +104,18 @@ Recommended first reward:
 The UI may display a soft entry point such as `Unlock a bonus insight`, but the Google Offerwall itself controls the rewarded-ad fulfillment when configured.
 
 ## AdSense launch checklist
-Owner actions required outside v0:
-1. Create/connect the AdSense publisher account.
-2. Add the Lunara production domain under AdSense Sites.
-3. Complete ownership verification and site review.
-4. Copy the real `ca-pub-...` publisher ID and ad slot IDs into Vercel environment variables.
-5. Publish an `ads.txt` file at the root using the exact line provided by AdSense, commonly shaped like `google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0`.
+Completed in code:
+1. AdSense publisher ID supplied.
+2. AdSense ownership meta tag added.
+3. Root `/ads.txt` file added.
+4. Public client ID documented for Vercel/v0.
+
+Owner actions still required in AdSense:
+1. Add the final Lunara production domain under AdSense Sites if it is not already listed.
+2. Click Verify / Request review once the verification deployment is public.
+3. Wait for the site to reach `Ready` status.
+4. Create the Free feed/banner ad units and copy their numeric slot IDs.
+5. Add those slot IDs to Vercel environment variables.
 6. Configure Google Privacy & messaging / certified CMP coverage for regions where required.
 7. Create and publish the Offerwall rewarded-ad message if rewarded access is desired.
 
@@ -114,5 +134,5 @@ Add `/success` or an equivalent post-checkout screen that:
 - TEST Stripe links must never be labeled live.
 - Replace all TEST links and Price IDs with live equivalents only after the owner connects a live Stripe account and the live catalog is created.
 - Do not enable Stripe automatic tax until registrations are confirmed.
-- Do not ship placeholder AdSense publisher or slot IDs.
+- Do not ship invented AdSense slot IDs.
 - Do not merge this monetization branch into any other Vercel project that shares this repository without confirming the target project first.
