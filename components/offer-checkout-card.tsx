@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createOneTimeCheckout } from '@/app/actions/subscription'
@@ -13,6 +14,7 @@ interface Props {
 export function OfferCheckoutCard({ offer, signedIn }: Props) {
   const router = useRouter()
   const [delivery, setDelivery] = useState<DeliveryPreference | ''>('')
+  const [legalAccepted, setLegalAccepted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -26,9 +28,13 @@ export function OfferCheckoutCard({ offer, signedIn }: Props) {
       setError('Please choose how you would like your reading delivered.')
       return
     }
+    if (!legalAccepted) {
+      setError('Please accept the Terms and Privacy Notice before purchasing.')
+      return
+    }
     setLoading(true)
     try {
-      const url = await createOneTimeCheckout(offer.id, delivery || undefined)
+      const url = await createOneTimeCheckout(offer.id, delivery || undefined, legalAccepted)
       if (url) window.location.href = url
       else setError('Checkout is not configured yet. Please try again shortly.')
     } catch (e) {
@@ -69,6 +75,22 @@ export function OfferCheckoutCard({ offer, signedIn }: Props) {
           </select>
         </label>
       )}
+
+      <label className="mt-4 flex cursor-pointer items-start gap-2.5 text-xs text-foreground/80">
+        <input
+          type="checkbox"
+          checked={legalAccepted}
+          onChange={(e) => setLegalAccepted(e.target.checked)}
+          className="mt-0.5 size-4 shrink-0 accent-[var(--gold)]"
+        />
+        <span>
+          I agree to the{' '}
+          <Link href="/terms" className="text-gold-bright underline underline-offset-4">Terms</Link>
+          {' '}and acknowledge the{' '}
+          <Link href="/privacy" className="text-gold-bright underline underline-offset-4">Privacy Notice</Link>.
+          I understand this is a one-time digital service and that tarot, astrology, and AI content are reflective/informational rather than professional advice or guaranteed predictions.
+        </span>
+      </label>
 
       <button
         onClick={handleCheckout}
