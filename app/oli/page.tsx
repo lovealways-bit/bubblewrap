@@ -13,7 +13,6 @@ import {
   ShieldCheck,
   Sparkles,
 } from 'lucide-react'
-import { OliCommanderDock } from '@/components/oli/oli-commander-dock'
 import { appProfiles, capabilities, deploymentProjects, repositories } from '@/lib/oli/registry'
 
 const stateOrder = ['LIVE', 'READY', 'PLANNED', 'BLOCKED', 'GRAY'] as const
@@ -170,8 +169,6 @@ export default function OliHubPage() {
           </div>
         </section>
       </div>
-
-      <OliCommanderDock appId="oli-hub" />
     </main>
   )
 }
