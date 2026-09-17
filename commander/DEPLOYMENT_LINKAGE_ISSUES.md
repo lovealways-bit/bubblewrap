@@ -4,7 +4,7 @@ Updated: 2026-09-17
 
 ## coughlin-atlas
 
-State: ACTION REQUIRED
+State: CONFIRMED LINKAGE / ENVIRONMENT CONFIGURATION ISSUE
 
 Verified Vercel project:
 
@@ -14,19 +14,26 @@ Verified Vercel project:
 - currently receiving deployments from `lovealways-bit/bubblewrap`
 - observed branch deployments from `oli-commander-training-hub-20260917` and `oli-specialist-stacks-20260917`
 
-This means Bubblewrap commits are currently capable of triggering `coughlin-atlas` checks. A red Vercel deployment on that project must not be treated as the canonical Bubblewrap build result until project linkage and environment configuration are intentionally reconciled.
+A failed build was inspected directly. Vercel build logs confirm the project does not currently have the Bubblewrap environment required to compile the shared authentication and Stripe code.
+
+Confirmed build errors include:
+
+- `BETTER_AUTH_SECRET` is not configured, causing Better Auth to reject the default secret.
+- `STRIPE_SECRET_KEY` is absent, so Stripe initialization fails while collecting configuration for `/api/stripe/webhook`.
+
+This confirms the red check is caused by the current project/repository configuration. It is not evidence that the same Bubblewrap commit is broken everywhere. The same branch commits have reached READY on the `lunara-atlas` Vercel project.
 
 ## Required resolution
 
-Choose one verified path:
+Choose one intentional path:
 
-1. Keep `coughlin-atlas` linked to `lovealways-bit/bubblewrap` only if that architecture is intentional, then configure the environment variables and build assumptions needed by the shared repository for that Vercel project.
-2. If `coughlin-atlas` should remain an independent product/deployment lane, unlink it from the Bubblewrap Git repository or reconnect it to its intended source repository.
+1. Keep `coughlin-atlas` linked to `lovealways-bit/bubblewrap` only if that architecture is intended. In that case, configure the required environment variables and any product-specific build assumptions in the proper Vercel environments.
+2. If `coughlin-atlas` should remain an independent deployment lane, unlink it from Bubblewrap or reconnect it to its intended source repository.
 
-Do not add secrets merely to make an accidental repository linkage turn green.
+Do not copy production secrets into an unrelated project merely to make an accidental repository linkage turn green.
 
-## Current limitation
+## Tool limitation
 
-The connected Vercel tools used for this verification expose project and deployment state but do not expose or mutate project environment-variable values or Git repository linkage. Therefore the environment variables themselves have not been confirmed from this runtime, and unlinking has not been performed here.
+The connected Vercel actions available in this session can inspect project state, deployments, runtime state, and build logs. They do not expose an action here for changing Git repository linkage or writing project environment-variable values. Therefore unlinking and secret configuration have not been performed from this chat.
 
-Until resolved, Commander should label this deployment signal `LINKAGE / CONFIGURATION ISSUE` rather than `BUBBLEWRAP BUILD FAILURE`.
+Until the owner intentionally resolves the relationship, Commander should label this deployment signal `LINKAGE / CONFIGURATION ISSUE`, with the missing environment documented above, rather than `BUBBLEWRAP BUILD FAILURE`.
