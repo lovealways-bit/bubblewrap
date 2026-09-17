@@ -6,6 +6,13 @@ export type OliStackId =
   | 'industrial-safety'
   | 'medical'
 
+export type OliHubSurfaceId =
+  | 'mothership-vault'
+  | 'manifesto-scribe'
+  | 'commander-log'
+  | 'source-intelligence'
+  | 'specialist-stacks'
+
 export type RiskLevel = 'LOW' | 'MODERATE' | 'HIGH' | 'CRITICAL'
 
 export type DataClass =
@@ -37,6 +44,15 @@ export type PermissionScope =
   | 'medical.records.read'
   | 'medical.wellness.read'
   | 'medical.trend-analysis'
+  | 'mothership.vault.read'
+  | 'mothership.vault.write-candidate'
+  | 'mothership.manifesto.read'
+  | 'mothership.manifesto.propose-addendum'
+  | 'mothership.commander-log.read'
+  | 'mothership.commander-log.write'
+  | 'mothership.daily-debrief.read'
+  | 'mothership.daily-debrief.write'
+  | 'mothership.source-intelligence.read'
   | 'commander.report.write'
   | 'scribe.addendum.propose'
 
@@ -80,6 +96,19 @@ export interface OliSpecialistStack {
   }
 }
 
+export interface OliHubSurface {
+  id: OliHubSurfaceId
+  name: string
+  description: string
+  purpose: string
+  route: string
+  requiredReadScopes: PermissionScope[]
+  optionalWriteScopes: PermissionScope[]
+  founderGate: boolean
+  dataClasses: DataClass[]
+  rules: string[]
+}
+
 export interface OliRouteRequest {
   text: string
   requestedStack?: OliStackId
@@ -104,7 +133,12 @@ export interface OliCommanderEvent {
     | 'CAPABILITY_FEEDBACK'
     | 'SOURCE_SUGGESTION'
     | 'STACK_OUTCOME'
-  stackId: OliStackId
+    | 'VAULT_CANDIDATE_CREATED'
+    | 'MANIFESTO_ADDENDUM_PROPOSED'
+    | 'COMMANDER_LOG_WRITTEN'
+    | 'DAILY_DEBRIEF_UPDATED'
+  stackId?: OliStackId
+  surfaceId?: OliHubSurfaceId
   timestamp: string
   dataClass: DataClass
   summary: string
