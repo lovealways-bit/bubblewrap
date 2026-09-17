@@ -2,6 +2,7 @@
 
 import { db } from '@/lib/db'
 import { subscription } from '@/lib/db/schema'
+import { LEGAL_VERSION, recordLegalAcceptance } from '@/lib/legal'
 import { getSession, getUserId } from '@/lib/session'
 import { stripe } from '@/lib/stripe'
 import { getUserTier } from '@/lib/subscription/entitlements'
@@ -53,11 +54,18 @@ async function getOrCreateStripeCustomer(userId: string, email: string | null | 
 }
 
 // Creates a Stripe Checkout Session for a paid membership tier and returns its URL.
-export async function createCheckout(tierId: Exclude<TierId, 'free'>) {
+// The legalAccepted flag comes from an unchecked-by-default user control on the pricing page.
+export async function createCheckout(
+  tierId: Exclude<TierId, 'free'>,
+  legalAccepted = false,
+) {
   const session = await getSession()
   if (!session?.user) throw new Error('Unauthorized')
-  const userId = session.user.id
+  if (!legalAccepted) {
+    throw new Error('Please accept the Terms, Privacy Notice, and Subscription Terms to continue.')
+  }
 
+  const userId = session.user.id
   const priceId = TIERS[tierId].stripePriceId
   if (!priceId) {
     throw new Error(`Missing Stripe price for the ${tierId} plan.`)
@@ -66,6 +74,7 @@ export async function createCheckout(tierId: Exclude<TierId, 'free'>) {
   const h = await headers()
   const base = origin(h)
   const customerId = await getOrCreateStripeCustomer(userId, session.user.email)
+  await recordLegalAcceptance(userId, `subscription:${tierId}`)
 
   const checkout = await stripe.checkout.sessions.create({
     mode: 'subscription',
@@ -73,22 +82,31 @@ export async function createCheckout(tierId: Exclude<TierId, 'free'>) {
     line_items: [{ price: priceId, quantity: 1 }],
     success_url: `${base}/success?type=membership&tier=${tierId}`,
     cancel_url: `${base}/pricing?checkout=cancelled`,
-    metadata: { userId, tier: tierId },
-    subscription_data: { metadata: { userId, tier: tierId } },
+    metadata: { userId, tier: tierId, legalVersion: LEGAL_VERSION },
+    subscription_data: { metadata: { userId, tier: tierId, legalVersion: LEGAL_VERSION } },
+    custom_text: {
+      submit: {
+        message:
+          'This is a recurring monthly subscription that renews automatically until canceled. You may manage or cancel through your Lunara account. Access generally continues through the paid billing period, subject to applicable law and platform rules.',
+      },
+    },
   })
 
   return checkout.url
 }
 
-// Creates a one-time Checkout Session for the Birth Chart or Personal Reading
-// offer. Personal Reading requires a delivery preference collected in-app
-// (never inside Stripe checkout).
+// Creates a one-time Checkout Session for the Birth Chart or Personal Reading offer.
 export async function createOneTimeCheckout(
   offerId: OneTimeOfferId,
   deliveryPreference?: DeliveryPreference,
+  legalAccepted = false,
 ) {
   const session = await getSession()
   if (!session?.user) throw new Error('Unauthorized')
+  if (!legalAccepted) {
+    throw new Error('Please accept the Terms and Privacy Notice to continue.')
+  }
+
   const userId = session.user.id
   const offer = ONE_TIME_OFFERS[offerId]
 
@@ -99,6 +117,7 @@ export async function createOneTimeCheckout(
   const h = await headers()
   const base = origin(h)
   const customerId = await getOrCreateStripeCustomer(userId, session.user.email)
+  await recordLegalAcceptance(userId, `one-time:${offerId}`)
 
   const checkout = await stripe.checkout.sessions.create({
     mode: 'payment',
@@ -109,7 +128,14 @@ export async function createOneTimeCheckout(
     metadata: {
       userId,
       offer: offerId,
+      legalVersion: LEGAL_VERSION,
       ...(deliveryPreference ? { deliveryPreference } : {}),
+    },
+    custom_text: {
+      submit: {
+        message:
+          'This is a one-time digital service. Tarot, astrology, and AI-generated content are for informational, reflective, and entertainment purposes and are not professional medical, legal, financial, or mental-health advice.',
+      },
     },
   })
 
