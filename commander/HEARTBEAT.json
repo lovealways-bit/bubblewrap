@@ -1,14 +1,21 @@
 {
   "schema": "allpath.oli.heartbeat/v1",
-  "recordedAt": "2026-09-17T14:36:00-04:00",
+  "recordedAt": "2026-09-17T15:03:00-04:00",
   "branch": "oli-commander-training-hub-20260917",
   "runtime": {
     "manuscript": "LIVE",
+    "musicOliAddendum": "LIVE_ON_BRANCH",
     "localCommandRouter": "LIVE",
     "contextApi": "LIVE",
     "healthApi": "LIVE",
+    "commandRateLimit": "LIVE_ON_BRANCH",
+    "contextRateLimit": "LIVE_ON_BRANCH",
     "customerDock": "LIVE_ON_BRANCH",
     "adminTrainingHub": "LIVE_ON_BRANCH",
+    "adminMusicCommander": "LIVE_ON_BRANCH",
+    "adminDesignCloset": "LIVE_ON_BRANCH",
+    "developerDiagnostics": "LIVE_ON_BRANCH",
+    "userAdminDeveloperContract": "LIVE_ON_BRANCH",
     "dailyRepositoryVerifier": "PENDING_DEFAULT_BRANCH_MERGE"
   },
   "sourceState": {
@@ -16,24 +23,38 @@
     "vercelProjectsObserved": 50,
     "vercelTeam": "SynchPathways",
     "vercelPlanObserved": "pro",
-    "snapshot": "commander/OLI_APP_REGISTRY.json"
+    "snapshot": "commander/OLI_APP_REGISTRY.json",
+    "coughlinAtlasLinkage": "BUBBLEWRAP_LINKED_REQUIRES_RECONCILIATION"
   },
   "providerState": {
-    "sharedGenerativeProvider": "READY_NOT_CONNECTED",
-    "sharedWebResearchProvider": "READY_NOT_CONNECTED",
-    "reason": "Provider/model entitlement, credentials, privacy configuration, and approved budget must be verified before activation."
+    "sharedGenerativeProvider": "READY_NOT_CONNECTED_TO_BUBBLEWRAP_RUNTIME",
+    "sharedWebResearchProvider": "READY_NOT_CONNECTED_TO_BUBBLEWRAP_RUNTIME",
+    "verifiedOpenAIModelId": "gpt-5.6-luna",
+    "verifiedVercelGatewayModelString": "openai/gpt-5.6-luna",
+    "chatPluginsConnectedForCurrentCommanderRequest": [
+      "Midify",
+      "Background Music",
+      "Apple Music",
+      "Spotify"
+    ],
+    "chatPluginProductionCredentialRule": "CHATGPT_CONNECTION_DOES_NOT_IMPLY_REUSABLE_APP_API_CREDENTIALS",
+    "reason": "Production provider activation still requires app-specific entitlement, credentials, privacy configuration, permissions, and approved spend."
   },
   "safetyState": {
     "crossAppPrivateData": "BLOCKED_BY_DEFAULT",
     "productionDeploymentMutation": "BLOCKED_WITHOUT_EXPLICIT_AUTHORIZATION",
     "thirdPartyModelWeightRetraining": "NOT_PART_OF_OLI_RUNTIME",
-    "secretsInClientOrRepository": "PROHIBITED"
+    "secretsInClientOrRepository": "PROHIBITED",
+    "customerDeveloperSurfaceSeparation": "SERVER_ENFORCED_ON_BRANCH",
+    "designClosetCustomerAccess": "BLOCKED",
+    "automaticPermissionExpansion": "PROHIBITED"
   },
   "nextChecks": [
-    "Run local registry verifier and production build on branch checkout.",
-    "Open reviewable pull request to main.",
-    "Verify Vercel preview generated from the branch/PR.",
-    "Promote daily GitHub schedule only after workflow exists on the default branch.",
-    "Connect an approved AI/research provider only after subscription-first entitlement review."
+    "Confirm the newest lunara-atlas preview for this branch reaches READY after the latest commits.",
+    "Run pnpm oli:verify and pnpm build on a branch checkout or CI runner.",
+    "Resolve coughlin-atlas Git linkage or intentionally configure its required environment before treating its deployment check as authoritative.",
+    "Set ADMIN_EMAILS and DEVELOPER_EMAILS in intended protected deployment environments.",
+    "Keep PR 5 in reviewable draft until owner approval to merge.",
+    "Promote the daily GitHub schedule only after the workflow exists on the default branch."
   ]
 }
