@@ -1,4 +1,6 @@
 import { capabilities, deploymentProjects, repositories, resolveAppProfile } from './registry'
+import { inferOliSpecialistStack } from './specialist-router'
+import { getOliSpecialistStack } from './specialist-stacks'
 import type { OliCommandRequest, OliCommandResponse } from './types'
 
 function capabilityState(id: string) {
@@ -13,13 +15,14 @@ export function routeOliCommand(request: OliCommandRequest): OliCommandResponse 
     'commander/MANUSCRIPT.md',
     'commander/OLI_APP_REGISTRY.json',
     'commander/OLI_CAPABILITIES.json',
+    'lib/oli/specialist-stacks.ts',
   ]
 
   if (!message) {
     return {
       kind: 'clarify',
       title: 'What should I help with?',
-      message: `I’m Oli for ${app.name}. Ask me about this app, its navigation, support path, subscription access, current build context, or a task you want routed.`,
+      message: `I’m Oli for ${app.name}. Ask me about this app, its navigation, support path, subscription access, or a task you want routed.`,
       appId: app.id,
       capabilityIds: ['support.first-line'],
       provenance: baseProvenance,
@@ -34,7 +37,6 @@ export function routeOliCommand(request: OliCommandRequest): OliCommandResponse 
       message: `The verified registry currently contains ${repositories.length} accessible GitHub repositories and ${deploymentProjects.length} Vercel projects for the SynchPathways team. ${app.name} is mapped to ${app.repository ?? 'an unverified repository relationship'}${linked.length ? ` with ${linked.length} verified Vercel project link${linked.length === 1 ? '' : 's'}` : ''}. A registry entry records discovery state; it does not grant private-data access by itself.`,
       appId: app.id,
       capabilityIds: ['commander.context', 'deployment.observe', 'repo.read'],
-      links: [{ label: 'Open Oli Hub', href: '/oli' }],
       provenance: baseProvenance,
     }
   }
@@ -66,23 +68,22 @@ export function routeOliCommand(request: OliCommandRequest): OliCommandResponse 
       message:
         state === 'LIVE'
           ? 'I can capture this as structured product feedback and keep it separate from public app-store ratings.'
-          : `Feedback capture is ${state}. The Manuscript requires a low-friction in-app path, but a verified storage destination still needs to be configured before I claim I saved anything.`,
+          : `Feedback capture is ${state}. A verified storage destination still needs to be configured before I claim I saved anything.`,
       appId: app.id,
       capabilityIds: ['feedback.capture', 'support.first-line'],
-      links: [{ label: 'Open Oli Hub', href: '/oli' }],
       provenance: baseProvenance,
     }
   }
 
-  if (/\b(search|research|web|latest|current|today|market|trend|compare)\b/.test(normalized)) {
+  if (/\b(search|research|web|latest|current|today|market|trend|compare|news)\b/.test(normalized)) {
     const state = capabilityState('research.web')
     return {
       kind: state === 'LIVE' ? 'answer' : 'route',
-      title: 'Current research',
+      title: 'Web Intelligence Oli',
       message:
         state === 'LIVE'
-          ? 'I can use the approved research connector and preserve sources for current factual claims.'
-          : `Current web research is ${state}. I can recognize and route the request now, but I need an approved server-side research connector and verified entitlement before I represent live search as connected.`,
+          ? 'I can use the approved research connector and preserve dated sources for current factual claims.'
+          : `I routed this to the Web Intelligence stack. Current web research is ${state}. I need an approved server-side research connector and verified entitlement before I represent live search as connected.`,
       appId: app.id,
       capabilityIds: ['research.web'],
       needsProvider: state !== 'LIVE',
@@ -101,7 +102,26 @@ export function routeOliCommand(request: OliCommandRequest): OliCommandResponse 
           : `I can provide first-line guidance for ${app.name}. Full screen-by-screen navigation is ${state} until this app registers its navigation map.`,
       appId: app.id,
       capabilityIds: ['support.first-line', 'navigation.app'],
-      links: [{ label: 'Oli Hub', href: '/oli' }],
+      provenance: baseProvenance,
+    }
+  }
+
+  const specialistId = inferOliSpecialistStack(message)
+  const specialist = getOliSpecialistStack(specialistId)
+  if (specialistId !== 'web') {
+    const aiState = capabilityState('ai.generative')
+    const links = specialistId === 'esoteric' && app.id === 'lunara'
+      ? [{ label: 'Open a reading', href: '/reading' }]
+      : undefined
+
+    return {
+      kind: 'route',
+      title: specialist.name,
+      message: `${specialist.mission} The specialist rules are loaded, but tool access still depends on the active app’s permissions and connector state. Shared generative AI is ${aiState}, so I will not pretend an external model or private data source is already connected.`,
+      appId: app.id,
+      capabilityIds: ['support.first-line', 'ai.generative'],
+      needsProvider: aiState !== 'LIVE',
+      links,
       provenance: baseProvenance,
     }
   }
@@ -117,7 +137,6 @@ export function routeOliCommand(request: OliCommandRequest): OliCommandResponse 
     appId: app.id,
     capabilityIds: ['support.first-line', 'ai.generative'],
     needsProvider: aiState !== 'LIVE',
-    links: [{ label: 'Open Oli Hub', href: '/oli' }],
     provenance: baseProvenance,
   }
 }
