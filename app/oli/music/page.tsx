@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { Music2, ArrowLeft, ShieldCheck } from 'lucide-react'
+import { MUSIC_PLUGIN_PERMISSIONS } from '@/lib/oli/music-plugin-permissions'
 import { listMusicOliAdminTools } from '@/lib/oli/music-tools'
 import { getSession, isAdminEmail } from '@/lib/session'
 
@@ -21,7 +22,7 @@ export default async function MusicOliAdminPage() {
             </div>
             <div>
               <p className="text-sm font-semibold">Music Oli Commander</p>
-              <p className="text-xs text-slate-500">Admin connector, capability, cost, and rights console</p>
+              <p className="text-xs text-slate-500">Admin connector, capability, cost, permission, and rights console</p>
             </div>
           </div>
           <Link href="/oli" className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold">
@@ -40,6 +41,27 @@ export default async function MusicOliAdminPage() {
                 ChatGPT plugin access, local DAWs, open-source engines, consumer music services, and production APIs are tracked as separate capability states. Connected chat access never silently becomes a reusable app credential.
               </p>
             </div>
+          </div>
+        </section>
+
+        <section className="mb-5 rounded-[30px] border border-white bg-white p-5 shadow-lg shadow-purple-950/5 sm:p-6">
+          <div className="mb-4">
+            <p className="text-sm font-semibold">Connected ChatGPT music permissions</p>
+            <p className="mt-1 text-xs leading-5 text-slate-500">
+              These are current ChatGPT app permissions only. They do not grant Bubblewrap, Vercel, mobile app, or developer API credentials.
+            </p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            {MUSIC_PLUGIN_PERMISSIONS.map((record) => (
+              <div key={record.plugin} className="rounded-[22px] border border-slate-200 bg-slate-50 p-4">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-sm font-semibold">{record.plugin}</p>
+                  <span className="rounded-full bg-emerald-50 px-2 py-1 text-[9px] font-bold tracking-wide text-emerald-700">CONNECTED</span>
+                </div>
+                <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-purple-700">{record.effectiveDefault}</p>
+                <p className="mt-2 text-xs leading-5 text-slate-500">{record.note}</p>
+              </div>
+            ))}
           </div>
         </section>
 
