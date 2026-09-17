@@ -33,6 +33,12 @@ export const appProfiles: OliAppProfile[] = [
       'deployment.observe',
     ],
     supportMode: 'internal',
+    surfaceAccess: {
+      user: 'NONE',
+      admin: 'ADMIN_ONLY',
+      developer: 'DEVELOPER_ONLY',
+      founder: 'FOUNDER_ONLY',
+    },
     notes: [
       'This profile is the shared Oli control surface implemented on the current Bubblewrap branch.',
       'The separately observed ACCA/Oli Vercel project is linked to cosmic-guide and is not claimed here as this branch’s canonical deployment.',
@@ -57,6 +63,12 @@ export const appProfiles: OliAppProfile[] = [
       'billing.explain',
     ],
     supportMode: 'consumer',
+    surfaceAccess: {
+      user: 'PUBLIC',
+      admin: 'ADMIN_ONLY',
+      developer: 'DEVELOPER_ONLY',
+      founder: 'FOUNDER_ONLY',
+    },
     notes: [
       'Reflective/divinatory content must stay distinct from factual claims or professional advice.',
       'Private reading/profile data is not eligible for advertising targeting.',
@@ -79,6 +91,12 @@ export const appProfiles: OliAppProfile[] = [
       'research.web',
     ],
     supportMode: 'client',
+    surfaceAccess: {
+      user: 'AUTHORIZED_CLIENT',
+      admin: 'ADMIN_ONLY',
+      developer: 'DEVELOPER_ONLY',
+      founder: 'FOUNDER_ONLY',
+    },
     notes: [
       'Case-specific private material must remain within authorized client scope.',
       'Oli must separate documented evidence, reported experience, analysis, and open questions.',
@@ -103,6 +121,12 @@ export const appProfiles: OliAppProfile[] = [
       'design.library',
     ],
     supportMode: 'mixed',
+    surfaceAccess: {
+      user: 'PUBLIC',
+      admin: 'ADMIN_ONLY',
+      developer: 'DEVELOPER_ONLY',
+      founder: 'FOUNDER_ONLY',
+    },
     notes: ['Commercial promises and pricing must come from verified app configuration.'],
   },
   {
@@ -124,6 +148,12 @@ export const appProfiles: OliAppProfile[] = [
       'deployment.observe',
     ],
     supportMode: 'internal',
+    surfaceAccess: {
+      user: 'NONE',
+      admin: 'ADMIN_ONLY',
+      developer: 'DEVELOPER_ONLY',
+      founder: 'FOUNDER_ONLY',
+    },
     notes: ['Mothership remains the upstream cross-agent authority.'],
   },
   {
@@ -138,6 +168,12 @@ export const appProfiles: OliAppProfile[] = [
     designFamily: 'App inherited',
     defaultCapabilities: ['support.first-line', 'navigation.app', 'feedback.capture'],
     supportMode: 'mixed',
+    surfaceAccess: {
+      user: 'PUBLIC',
+      admin: 'ADMIN_ONLY',
+      developer: 'DEVELOPER_ONLY',
+      founder: 'FOUNDER_ONLY',
+    },
     notes: [
       'Do not expose internal Commander topology from the public fallback profile.',
       'Resolve the exact app before using app-specific private data, pricing, or permissions.',
