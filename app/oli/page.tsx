@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import {
   Activity,
   Bot,
@@ -14,10 +15,15 @@ import {
   Sparkles,
 } from 'lucide-react'
 import { appProfiles, capabilities, deploymentProjects, repositories } from '@/lib/oli/registry'
+import { getSession, isAdminEmail } from '@/lib/session'
 
 const stateOrder = ['LIVE', 'READY', 'PLANNED', 'BLOCKED', 'GRAY'] as const
 
-export default function OliHubPage() {
+export default async function OliHubPage() {
+  const session = await getSession()
+  if (!session?.user) redirect('/sign-in')
+  if (!isAdminEmail(session.user.email)) redirect('/account')
+
   const capabilityCounts = stateOrder.map((state) => ({
     state,
     count: capabilities.filter((item) => item.state === state).length,
@@ -45,7 +51,7 @@ export default function OliHubPage() {
             </div>
             <div className="min-w-0">
               <p className="truncate text-sm font-semibold">Commander Training Hub</p>
-              <p className="truncate text-xs text-slate-500">Bubblewrap · Manuscript runtime</p>
+              <p className="truncate text-xs text-slate-500">Bubblewrap · private Manuscript runtime</p>
             </div>
           </div>
           <Link
@@ -67,7 +73,7 @@ export default function OliHubPage() {
                 One commander brain for every app skin.
               </h1>
               <p className="mt-4 max-w-2xl text-pretty text-base leading-7 text-slate-600 sm:text-lg">
-                Bubblewrap now holds Oli’s executable Manuscript, app profiles, capability flags, first-line support router, Commander context, and handoff rules. Upstream governance stays in Mothership and Commander source control.
+                Bubblewrap holds Oli’s executable Manuscript, app profiles, capability flags, first-line support router, Commander context, and handoff rules. Upstream governance stays in Mothership and Commander source control.
               </p>
 
               <div className="mt-7 grid grid-cols-3 gap-3">
