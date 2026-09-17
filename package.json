@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "verify:lunara": "node scripts/lunara-launch-verify.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
