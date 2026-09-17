@@ -16,10 +16,10 @@ export const appProfiles: OliAppProfile[] = [
   {
     id: 'oli-hub',
     name: 'Oli Commander Training Hub',
-    aliases: ['oli', 'commander', 'training hub', 'acca hub'],
-    hosts: ['acca-hub-oli-ai-creation-plugin-app', 'cosmic-guide'],
+    aliases: ['oli commander hub', 'oli training hub', 'commander training hub'],
+    hosts: [],
     repository: 'lovealways-bit/bubblewrap',
-    vercelProjects: ['acca-hub-oli-ai-creation-plugin-app'],
+    vercelProjects: [],
     audience: 'Owner, authorized collaborators, builders, and support operators',
     domain: 'Cross-app orchestration, training context, capability governance, and handoff',
     designFamily: 'AllPath / SynchPathways Commander',
@@ -33,7 +33,10 @@ export const appProfiles: OliAppProfile[] = [
       'deployment.observe',
     ],
     supportMode: 'internal',
-    notes: ['This profile is the shared Oli control surface.'],
+    notes: [
+      'This profile is the shared Oli control surface implemented on the current Bubblewrap branch.',
+      'The separately observed ACCA/Oli Vercel project is linked to cosmic-guide and is not claimed here as this branch’s canonical deployment.',
+    ],
   },
   {
     id: 'lunara',
@@ -123,9 +126,26 @@ export const appProfiles: OliAppProfile[] = [
     supportMode: 'internal',
     notes: ['Mothership remains the upstream cross-agent authority.'],
   },
+  {
+    id: 'bubblewrap-public',
+    name: 'Oli Product Guide',
+    aliases: [],
+    hosts: [],
+    repository: 'lovealways-bit/bubblewrap',
+    vercelProjects: [],
+    audience: 'Product users',
+    domain: 'Safe first-line product support when the active product host has not yet been mapped',
+    designFamily: 'App inherited',
+    defaultCapabilities: ['support.first-line', 'navigation.app', 'feedback.capture'],
+    supportMode: 'mixed',
+    notes: [
+      'Do not expose internal Commander topology from the public fallback profile.',
+      'Resolve the exact app before using app-specific private data, pricing, or permissions.',
+    ],
+  },
 ]
 
-const fallbackProfile = appProfiles[0]
+const fallbackProfile = appProfiles.find((profile) => profile.id === 'bubblewrap-public')!
 
 export function resolveAppProfile(input?: { host?: string; appId?: string; text?: string }): OliAppProfile {
   const appId = input?.appId?.toLowerCase().trim()
