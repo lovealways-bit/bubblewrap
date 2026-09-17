@@ -1,0 +1,39 @@
+{
+  "schema": "allpath.oli.heartbeat/v1",
+  "recordedAt": "2026-09-17T14:36:00-04:00",
+  "branch": "oli-commander-training-hub-20260917",
+  "runtime": {
+    "manuscript": "LIVE",
+    "localCommandRouter": "LIVE",
+    "contextApi": "LIVE",
+    "healthApi": "LIVE",
+    "customerDock": "LIVE_ON_BRANCH",
+    "adminTrainingHub": "LIVE_ON_BRANCH",
+    "dailyRepositoryVerifier": "PENDING_DEFAULT_BRANCH_MERGE"
+  },
+  "sourceState": {
+    "githubRepositoriesObserved": 16,
+    "vercelProjectsObserved": 50,
+    "vercelTeam": "SynchPathways",
+    "vercelPlanObserved": "pro",
+    "snapshot": "commander/OLI_APP_REGISTRY.json"
+  },
+  "providerState": {
+    "sharedGenerativeProvider": "READY_NOT_CONNECTED",
+    "sharedWebResearchProvider": "READY_NOT_CONNECTED",
+    "reason": "Provider/model entitlement, credentials, privacy configuration, and approved budget must be verified before activation."
+  },
+  "safetyState": {
+    "crossAppPrivateData": "BLOCKED_BY_DEFAULT",
+    "productionDeploymentMutation": "BLOCKED_WITHOUT_EXPLICIT_AUTHORIZATION",
+    "thirdPartyModelWeightRetraining": "NOT_PART_OF_OLI_RUNTIME",
+    "secretsInClientOrRepository": "PROHIBITED"
+  },
+  "nextChecks": [
+    "Run local registry verifier and production build on branch checkout.",
+    "Open reviewable pull request to main.",
+    "Verify Vercel preview generated from the branch/PR.",
+    "Promote daily GitHub schedule only after workflow exists on the default branch.",
+    "Connect an approved AI/research provider only after subscription-first entitlement review."
+  ]
+}
