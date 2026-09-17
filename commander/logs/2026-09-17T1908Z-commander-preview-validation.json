@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "entryId": "commander-preview-validation-2026-09-17T1908Z",
+  "recordedAt": "2026-09-17T19:08:00Z",
+  "recordedBy": "ChatGPT / Oli Commander validation",
+  "entryType": "deployment_validation",
+  "classification": "INTERNAL",
+  "branchCommit": "5e40ab8982fad2ba1f41e7b7d46881d04098ab35",
+  "lunaraAtlas": {
+    "project": "lunara-atlas",
+    "deploymentId": "dpl_C2cPaMHbyCj1fwM6jLcZcZR5YrsF",
+    "previewUrl": "https://lunara-atlas-rdo5ini2r-atlas333.vercel.app",
+    "state": "READY",
+    "commanderPageCheck": {
+      "url": "https://lunara-atlas-rdo5ini2r-atlas333.vercel.app/oli/commander",
+      "httpStatus": 200,
+      "result": "Protected route resolved and redirected unauthenticated request to /sign-in as intended."
+    },
+    "commanderApiCheck": {
+      "url": "https://lunara-atlas-rdo5ini2r-atlas333.vercel.app/api/oli/commander-log",
+      "httpStatus": 403,
+      "response": "Admin access required.",
+      "result": "API route is deployed and the server-side admin gate is enforced."
+    },
+    "databasePersistence": "UNVERIFIED_WITHOUT_AUTHENTICATED_ADMIN_SESSION"
+  },
+  "coughlinAtlas": {
+    "project": "coughlin-atlas",
+    "deploymentId": "dpl_9Wr4GTJZANA257gzRfrYU54DMpTs",
+    "state": "ERROR",
+    "failureClass": "PROJECT_ENVIRONMENT_CONFIGURATION",
+    "errors": [
+      "BETTER_AUTH_SECRET is missing or using the default secret.",
+      "STRIPE_SECRET_KEY is missing, causing Stripe construction to fail while collecting page data for /api/stripe/webhook."
+    ],
+    "result": "The same Bubblewrap commit builds on lunara-atlas, so the Coughlin failure is project-specific environment/configuration rather than a shared TypeScript compile failure.",
+    "requiredAction": "Either configure the required Coughlin environment variables intentionally or decouple Coughlin from the Bubblewrap runtime if that project should not host the Lunara subscription/auth stack."
+  },
+  "updatedEstateSummary": {
+    "productionReady": 32,
+    "productionError": 2,
+    "previewReady": 12,
+    "previewError": 1,
+    "previewBuilding": 0,
+    "previewBlocked": 3,
+    "totalProjects": 50
+  },
+  "commanderBoardState": "DEPLOYED_ON_LUNARA_PREVIEW_AUTH_GATE_VERIFIED_DB_WRITE_UNVERIFIED",
+  "nextActions": [
+    "Open the Lunara preview while signed in as an ADMIN_EMAILS account and post one Commander entry to verify database persistence end to end.",
+    "Resolve or intentionally separate coughlin-atlas environment requirements before using Bubblewrap branch previews there.",
+    "Keep PR 5 draft until preview validation and canonical deployment decisions are complete."
+  ]
+}

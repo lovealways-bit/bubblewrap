@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Cinzel, Cormorant_Garamond, Noto_Sans_Runic } from 'next/font/google'
 import { InstallPrompt } from '@/components/install-prompt'
+import { OliCommanderDock } from '@/components/oli/oli-commander-dock'
 import './globals.css'
 
 const cinzel = Cinzel({
@@ -52,6 +53,7 @@ export default function RootLayout({
     <html lang="en" className={`${cinzel.variable} ${cormorant.variable} ${runic.variable}`}>
       <body className="font-sans bg-background text-foreground antialiased">
         {children}
+        <OliCommanderDock />
         <InstallPrompt />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

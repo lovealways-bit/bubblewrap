@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "oli:verify": "node scripts/oli-verify.mjs"
   },
   "dependencies": {
     "@ai-sdk/gateway": "^4.0.85",

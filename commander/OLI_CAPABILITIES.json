@@ -1,0 +1,147 @@
+{
+  "schema": "allpath.oli.capabilities/v1",
+  "updated": "2026-09-17",
+  "states": ["LIVE","READY","PLANNED","BLOCKED","GRAY"],
+  "capabilities": [
+    {
+      "id":"commander.context",
+      "name":"Commander Context",
+      "state":"LIVE",
+      "scope":"shared",
+      "description":"Expose verified repository, deployment, app, and capability context to the Oli runtime.",
+      "costClass":"included-code"
+    },
+    {
+      "id":"commander.manuscript",
+      "name":"Manuscript Runtime",
+      "state":"LIVE",
+      "scope":"shared",
+      "description":"Compile the governed Oli behavior contract and app overlay into runtime instructions.",
+      "costClass":"included-code"
+    },
+    {
+      "id":"support.first-line",
+      "name":"First-line Product Support",
+      "state":"LIVE",
+      "scope":"shared",
+      "description":"Route routine navigation, product, subscription, privacy, feedback, and support intents using verified local context.",
+      "costClass":"included-code"
+    },
+    {
+      "id":"navigation.app",
+      "name":"App Navigation",
+      "state":"READY",
+      "scope":"per-app",
+      "description":"Navigate users to app screens once each app registers its navigation map.",
+      "dependency":"app navigation profile",
+      "costClass":"included-code"
+    },
+    {
+      "id":"research.web",
+      "name":"Current Web Research",
+      "state":"READY",
+      "scope":"shared-provider",
+      "description":"Use a server-side approved research provider when current external information materially matters.",
+      "dependency":"approved search/research connector and entitlement",
+      "costClass":"verify-before-enable"
+    },
+    {
+      "id":"ai.generative",
+      "name":"Generative AI Provider",
+      "state":"READY",
+      "scope":"shared-provider",
+      "description":"Route complex natural-language work to an approved server-side model provider through a replaceable adapter.",
+      "dependency":"approved provider, credentials, model, budget, privacy configuration",
+      "costClass":"verify-before-enable"
+    },
+    {
+      "id":"feedback.capture",
+      "name":"Feedback Capture",
+      "state":"READY",
+      "scope":"per-app",
+      "description":"Capture structured bug, feature, content, assistant, billing, and other feedback into the approved destination.",
+      "dependency":"feedback storage destination and consent rules",
+      "costClass":"depends-on-storage"
+    },
+    {
+      "id":"billing.explain",
+      "name":"Subscription and Entitlement Explanation",
+      "state":"READY",
+      "scope":"per-app",
+      "description":"Explain current plan and entitlement state without inventing prices or access.",
+      "dependency":"server-side entitlement source",
+      "costClass":"existing-billing-stack"
+    },
+    {
+      "id":"handoff.agent",
+      "name":"Agent Handoff",
+      "state":"READY",
+      "scope":"shared",
+      "description":"Create structured handoff packets for authorized human or AI specialists while preserving provenance and permission scope.",
+      "dependency":"authorized target connector",
+      "costClass":"connector-dependent"
+    },
+    {
+      "id":"design.library",
+      "name":"Approved Design Library",
+      "state":"READY",
+      "scope":"shared",
+      "description":"Reference approved AllPath/SynchPathways design source material without automatically redesigning locked assets.",
+      "dependency":"app design profile and accessible source asset",
+      "costClass":"included-source"
+    },
+    {
+      "id":"repo.read",
+      "name":"Repository Read",
+      "state":"READY",
+      "scope":"connector",
+      "description":"Read authorized source repositories through the connected GitHub app/session.",
+      "dependency":"GitHub permission",
+      "costClass":"existing-subscription"
+    },
+    {
+      "id":"repo.write",
+      "name":"Repository Write",
+      "state":"READY",
+      "scope":"connector",
+      "description":"Create reviewable branches, commits, and pull requests when the active task authorizes a write.",
+      "dependency":"GitHub contents/pull-request permission and task authorization",
+      "costClass":"existing-subscription"
+    },
+    {
+      "id":"deployment.observe",
+      "name":"Deployment Observation",
+      "state":"READY",
+      "scope":"connector",
+      "description":"Read current Vercel project/deployment state for the verified team.",
+      "dependency":"Vercel connector permission",
+      "costClass":"existing-subscription"
+    },
+    {
+      "id":"deployment.change",
+      "name":"Deployment Change",
+      "state":"BLOCKED",
+      "scope":"connector",
+      "description":"Production deployment mutations stay blocked until the task explicitly authorizes the target and deployment action.",
+      "dependency":"explicit deployment authorization and verified target",
+      "costClass":"existing-subscription-plus-runtime-usage"
+    },
+    {
+      "id":"crossapp.private-data",
+      "name":"Cross-app Private Data Sharing",
+      "state":"BLOCKED",
+      "scope":"privacy",
+      "description":"Private data is never shared across apps merely because both apps use Oli.",
+      "dependency":"explicit lawful/consensual sharing basis and app-specific permission",
+      "costClass":"n/a"
+    },
+    {
+      "id":"provider.self-training",
+      "name":"Foundation Model Weight Retraining",
+      "state":"BLOCKED",
+      "scope":"provider",
+      "description":"The Oli hub does not silently modify third-party model weights. Operational learning occurs through versioned prompts, retrieval, registries, tests, and approved feedback loops.",
+      "costClass":"n/a"
+    }
+  ]
+}

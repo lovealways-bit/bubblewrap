@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "entryId": "commander-vercel-audit-2026-09-17T1903Z",
+  "recordedAt": "2026-09-17T19:03:11Z",
+  "recordedBy": "ChatGPT / Oli Commander audit",
+  "entryType": "deployment_audit",
+  "classification": "INTERNAL",
+  "source": {
+    "provider": "Vercel",
+    "teamName": "SynchPathways",
+    "teamId": "team_9tUAYHLYN7H8mAKq39TqbIya",
+    "plan": "pro",
+    "projectsObserved": 50,
+    "method": "Connected Vercel project and deployment inspection"
+  },
+  "summary": {
+    "productionReady": 32,
+    "productionError": 2,
+    "previewReady": 11,
+    "previewBuilding": 2,
+    "previewBlocked": 3,
+    "totalProjects": 50
+  },
+  "canonicalMothership": {
+    "project": "mothership-design-studio",
+    "url": "https://mothership-um.vercel.app",
+    "httpStatus": 200,
+    "verifiedAt": "2026-09-17T19:03:11Z",
+    "deploymentState": "READY",
+    "deploymentTarget": null,
+    "repo": "lovealways-bit/Mothership",
+    "note": "Canonical URL is reachable. Latest Vercel deployment is READY but is not currently labeled as a production target by the project API."
+  },
+  "productionReady": [
+    {"project":"v0-games","url":"https://v0-games-roan.vercel.app"},
+    {"project":"cloudscape","url":"https://cloudscape-azure.vercel.app"},
+    {"project":"sudo-coughlin-full-atlas","url":"https://terrain-evidence-atlas-final.vercel.app"},
+    {"project":"ascension-atlas","url":"https://ascension-atlas.vercel.app"},
+    {"project":"world-chroniclez-brain-hub","url":"https://world-chroniclez-brain-hub.vercel.app"},
+    {"project":"synchpathways-commander-heart-draft-v2","url":"https://synchpathways-commander-heart-draft.vercel.app"},
+    {"project":"coughlin-terrain-resolution","url":"https://coughlin-terrain-resolution.vercel.app"},
+    {"project":"terrain-admin-all-view-9f14","url":"https://terrain-admin-all-view-9f14.vercel.app"},
+    {"project":"coughlin-terrain-pathways","url":"https://coughlin-terrain-pathways.vercel.app"},
+    {"project":"allpath-commander-hub","url":"https://allpath-commander-hub.vercel.app"},
+    {"project":"coughlin-terrain-frontdoor-smoke-915","url":"https://coughlin-terrain-frontdoor-smoke-91.vercel.app"},
+    {"project":"coughlin-review","url":"https://coughlin-review.vercel.app"},
+    {"project":"terrain-dtc-map","url":"https://terrain-dtc-map.vercel.app"},
+    {"project":"happy-birthday-trophy-cake","url":"https://happy-birthday-trophy-cake.vercel.app"},
+    {"project":"geistfather","url":"https://geistfather.vercel.app"},
+    {"project":"the-empire-oracle","url":"https://the-empire-oracle.vercel.app"},
+    {"project":"trophys-ascension","url":"https://trophys-ascension.vercel.app"},
+    {"project":"the-empire-reveal","url":"https://the-empire-reveal.vercel.app"},
+    {"project":"ascension-vault","url":"https://ascension-vault.vercel.app"},
+    {"project":"danielle-case-review","url":"https://danielle-case-review.vercel.app"},
+    {"project":"terrain-case-file","url":"https://terrain-case-file.vercel.app"},
+    {"project":"terrain-case-file-professional","url":"https://terrain-case-file-professional.vercel.app"},
+    {"project":"tower-ledger","url":"https://tower-ledger.vercel.app"},
+    {"project":"coughlin-terrain-evidence-review","url":"https://coughlin-terrain-evidence-review.vercel.app"},
+    {"project":"coughlin-terrain-evidence-review-final","url":"https://coughlin-terrain-evidence-review-fi.vercel.app"},
+    {"project":"coughlin-terrain-evidence-review-atlas333","url":"https://coughlin-terrain-evidence-review-at.vercel.app"},
+    {"project":"full-review","url":"https://full-review.vercel.app"},
+    {"project":"terrain-evidence","url":"https://terrain-evidence.vercel.app"},
+    {"project":"terrain-atlas-integrated","url":"https://terrain-atlas-integrated.vercel.app"},
+    {"project":"terrain-atlas-google-verify","url":"https://terrain-atlas-google-verify.vercel.app"},
+    {"project":"terrain-evidence-atlas-full-scope","url":"https://terrain-evidence-atlas-full-scope.vercel.app"},
+    {"project":"terrain-prezi-mobile-v5","url":"https://terrain-prezi-mobile-v5.vercel.app"}
+  ],
+  "productionErrors": [
+    {
+      "project": "delete-3",
+      "canonicalDomain": "https://terrain-atlas333.vercel.app",
+      "deploymentId": "dpl_8s8eecHaZTWoWKJM9Dp8c7P3MHFE",
+      "error": "Next.js routes-manifest.json was not found in /vercel/path0/out.",
+      "likelyRepairPath": "Verify Vercel Output Directory and build command versus Next.js .next output. If this is obsolete, retire it in favor of the newer READY Terrain/Coughlin deployment rather than repairing duplicate authority."
+    },
+    {
+      "project": "terrain-attorney-intake",
+      "canonicalDomain": "https://terrain-attorney-intake-atlas333.vercel.app",
+      "deploymentId": "dpl_AZDwU4xwu7aHAGBB6TNfXkhXkuRu",
+      "errorCode": "invalid_vercel_json",
+      "error": "Invalid JSON content inside vercel.json.",
+      "likelyRepairPath": "Repair or replace vercel.json, then redeploy and verify the production alias."
+    }
+  ],
+  "previewBuilding": [
+    {"project":"lunara-atlas","domain":"https://lunara-tarot-three.vercel.app","repo":"lovealways-bit/bubblewrap","state":"BUILDING"},
+    {"project":"coughlin-atlas","domain":"https://coughlin-atlas-atlas333.vercel.app","repo":"lovealways-bit/bubblewrap","state":"BUILDING"}
+  ],
+  "previewBlocked": [
+    {"project":"learning-lab-atlas-template-","domains":["https://atlas-alpha-kohl.vercel.app","https://atlas-tas19.vercel.app"],"state":"BLOCKED"},
+    {"project":"commandatlas-template-older","domains":["https://command-teal.vercel.app","https://command-tas19.vercel.app"],"state":"BLOCKED"},
+    {"project":"delete2","domains":["https://misfit-collab-portal.vercel.app","https://misfit-collab-portal-tas19.vercel.app"],"state":"BLOCKED"}
+  ],
+  "previewReady": [
+    {"project":"mothership-design-studio","domain":"https://mothership-um.vercel.app"},
+    {"project":"oli-keys-midi-library","domain":"https://oli-keys-midi-library.vercel.app"},
+    {"project":"aallpathproperties-com","domain":"https://aallpathproperties-com.vercel.app"},
+    {"project":"acca-hub-oli-ai-creation-plugin-app","domain":"https://cosmic-guide-theta.vercel.app"},
+    {"project":"terrain-systems-analysis-lab","domain":"https://terrain-systems-analysis-lab.vercel.app"},
+    {"project":"delete-7","domain":"https://terrain-evidence-atlas-360.vercel.app"},
+    {"project":"delete6","domain":"https://synchpathways-legal.vercel.app"},
+    {"project":"delete4","domain":"https://misfit-collab-ui-preview-live-atlas333.vercel.app"},
+    {"project":"atlas-template-1","domain":"https://atlas-partner-intel.vercel.app"},
+    {"project":"delete","domain":"https://allpath-home.vercel.app"},
+    {"project":"synchpathways-agency-packaging-atlas-draft","domain":"https://synchpathways-agency-packaging-atla.vercel.app"}
+  ],
+  "commanderState": {
+    "repo": "lovealways-bit/bubblewrap",
+    "branch": "oli-commander-training-hub-20260917",
+    "pullRequest": 5,
+    "pullRequestState": "OPEN_DRAFT",
+    "defaultBranch": "main",
+    "newCommanderRuntime": "LIVE_ON_BRANCH_ONLY",
+    "olderCommanderDeployment": "allpath-commander-hub is READY production",
+    "persistentCommanderBoardBeforeThisAudit": "NOT_IMPLEMENTED",
+    "evidence": [
+      "The Commander surface declares optional write scopes.",
+      "The /oli page renders status surfaces but no writable log/chat UI.",
+      "POST /api/oli/command routes a request and returns a response but does not persist conversation history.",
+      "The current database schema has no Commander log/message table."
+    ]
+  },
+  "priorityActions": [
+    "Finish and verify the in-progress Lunara and Coughlin Bubblewrap preview builds before promotion.",
+    "Add real persistent Commander Log / Daily Debrief read-write storage and UI before calling the time-board/chat live.",
+    "Keep Bubblewrap Commander PR #5 reviewable; do not merge blindly because bubblewrap/main is linked to live app projects.",
+    "Declare one canonical production deployment per product family and demote/archive duplicate historical Terrain/Coughlin builds.",
+    "Rename or reconcile Vercel projects still called delete/delete2/delete4/delete6/delete-7 because several serve meaningful live domains.",
+    "Repair or retire delete-3 / terrain-atlas333 production error.",
+    "Repair terrain-attorney-intake vercel.json and redeploy.",
+    "Investigate the three BLOCKED preview deployments before relying on those branches.",
+    "Promote the Commander daily verifier only after the Commander branch is intentionally merged to the default branch.",
+    "After canonicalization, update commander/OLI_APP_REGISTRY.json so project names, roles, aliases, repo links, and lifecycle state match verified Vercel truth."
+  ]
+}

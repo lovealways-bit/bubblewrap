@@ -1,0 +1,83 @@
+{
+  "schema": "allpath.oli.heartbeat/v1",
+  "recordedAt": "2026-09-17T15:08:00-04:00",
+  "branch": "oli-commander-training-hub-20260917",
+  "runtime": {
+    "manuscript": "LIVE",
+    "musicOliAddendum": "LIVE_ON_BRANCH",
+    "localCommandRouter": "LIVE",
+    "contextApi": "LIVE",
+    "healthApi": "LIVE",
+    "commandRateLimit": "LIVE_ON_BRANCH",
+    "contextRateLimit": "LIVE_ON_BRANCH",
+    "customerDock": "LIVE_ON_BRANCH",
+    "adminTrainingHub": "LIVE_ON_BRANCH",
+    "adminMusicCommander": "LIVE_ON_BRANCH",
+    "adminDesignCloset": "LIVE_ON_BRANCH",
+    "developerDiagnostics": "LIVE_ON_BRANCH",
+    "userAdminDeveloperContract": "LIVE_ON_BRANCH",
+    "persistentCommanderLogApi": "DEPLOYED_ON_LUNARA_PREVIEW_AUTH_GATE_VERIFIED",
+    "commanderLiveTimeBoard": "DEPLOYED_ON_LUNARA_PREVIEW_AUTH_GATE_VERIFIED",
+    "commanderAuditSeed": "DEPLOYED_ON_LUNARA_PREVIEW",
+    "commanderDatabaseWrite": "UNVERIFIED_WITHOUT_AUTHENTICATED_ADMIN_SESSION",
+    "dailyRepositoryVerifier": "PENDING_DEFAULT_BRANCH_MERGE"
+  },
+  "sourceState": {
+    "githubRepositoriesObserved": 16,
+    "vercelProjectsObserved": 50,
+    "vercelTeam": "SynchPathways",
+    "vercelPlanObserved": "pro",
+    "snapshot": "commander/OLI_APP_REGISTRY.json",
+    "latestDeploymentAudit": "commander/logs/2026-09-17T1903Z-vercel-deployment-audit.json",
+    "latestPreviewValidation": "commander/logs/2026-09-17T1908Z-commander-preview-validation.json",
+    "deploymentAuditCounts": {
+      "productionReady": 32,
+      "productionError": 2,
+      "previewReady": 12,
+      "previewError": 1,
+      "previewBuilding": 0,
+      "previewBlocked": 3
+    },
+    "canonicalMothershipUrl": "https://mothership-um.vercel.app",
+    "canonicalMothershipHttpStatus": 200,
+    "lunaraCommanderPreview": "READY",
+    "lunaraCommanderPreviewUrl": "https://lunara-atlas-rdo5ini2r-atlas333.vercel.app/oli/commander",
+    "coughlinAtlasLinkage": "BUBBLEWRAP_LINKED_ENVIRONMENT_INCOMPLETE",
+    "coughlinCommanderPreview": "ERROR_MISSING_BETTER_AUTH_SECRET_AND_STRIPE_SECRET_KEY"
+  },
+  "providerState": {
+    "sharedGenerativeProvider": "READY_NOT_CONNECTED_TO_BUBBLEWRAP_RUNTIME",
+    "sharedWebResearchProvider": "READY_NOT_CONNECTED_TO_BUBBLEWRAP_RUNTIME",
+    "verifiedOpenAIModelId": "gpt-5.6-luna",
+    "verifiedVercelGatewayModelString": "openai/gpt-5.6-luna",
+    "chatPluginsConnectedForCurrentCommanderRequest": [
+      "Midify",
+      "Background Music",
+      "Apple Music",
+      "Spotify"
+    ],
+    "chatPluginProductionCredentialRule": "CHATGPT_CONNECTION_DOES_NOT_IMPLY_REUSABLE_APP_API_CREDENTIALS",
+    "reason": "Production provider activation still requires app-specific entitlement, credentials, privacy configuration, permissions, and approved spend."
+  },
+  "safetyState": {
+    "crossAppPrivateData": "BLOCKED_BY_DEFAULT",
+    "productionDeploymentMutation": "BLOCKED_WITHOUT_EXPLICIT_AUTHORIZATION",
+    "thirdPartyModelWeightRetraining": "NOT_PART_OF_OLI_RUNTIME",
+    "secretsInClientOrRepository": "PROHIBITED",
+    "customerDeveloperSurfaceSeparation": "SERVER_ENFORCED_ON_BRANCH",
+    "designClosetCustomerAccess": "BLOCKED",
+    "automaticPermissionExpansion": "PROHIBITED",
+    "commanderLiveBoardAccess": "SERVER_ADMIN_GATED"
+  },
+  "nextChecks": [
+    "Sign in to the Lunara Commander preview with an ADMIN_EMAILS account and post one entry to verify PostgreSQL persistence end to end.",
+    "Decide whether coughlin-atlas should receive the Bubblewrap Lunara auth/subscription environment. If yes, configure BETTER_AUTH_SECRET and STRIPE_SECRET_KEY intentionally. If no, decouple that project from this runtime branch.",
+    "Repair or retire delete-3 / terrain-atlas333 production because its Next.js routes manifest is missing.",
+    "Repair terrain-attorney-intake vercel.json and redeploy.",
+    "Investigate the three BLOCKED preview deployments before relying on those branches.",
+    "Canonicalize duplicate historical Terrain and Coughlin deployments and reconcile Vercel projects still named delete variants.",
+    "Set ADMIN_EMAILS and DEVELOPER_EMAILS in intended protected deployment environments.",
+    "Keep PR 5 in reviewable draft until owner approval to merge.",
+    "Promote the daily GitHub schedule only after the workflow exists on the default branch."
+  ]
+}
