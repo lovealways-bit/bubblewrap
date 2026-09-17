@@ -19,6 +19,7 @@ export default async function SuccessPage({ searchParams }: Props) {
   const isMembership = type === 'membership'
   const isBirthChart = offer === 'birthChart'
   const isPersonalReading = offer === 'personalReading'
+  const isCustomDeck = offer === 'customDeck'
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-background px-5 py-16 text-foreground">
@@ -44,7 +45,12 @@ export default async function SuccessPage({ searchParams }: Props) {
             Your reader will reach out using the delivery method you chose at checkout.
           </p>
         )}
-        {!isMembership && !isBirthChart && !isPersonalReading && (
+        {isCustomDeck && (
+          <p className="mt-3 text-sm text-muted-foreground">
+            Your deck is unlocked. Head back to the atelier to paint the full 78-card set.
+          </p>
+        )}
+        {!isMembership && !isBirthChart && !isPersonalReading && !isCustomDeck && (
           <p className="mt-3 text-sm text-muted-foreground">Thank you — your order is confirmed.</p>
         )}
 
@@ -52,6 +58,10 @@ export default async function SuccessPage({ searchParams }: Props) {
           {isBirthChart ? (
             <Link href="/account?intake=birth-chart" className="empire-cta h-11 rounded-lg font-display text-xs uppercase tracking-[0.24em] leading-[2.75rem]">
               Enter my birth details
+            </Link>
+          ) : isCustomDeck ? (
+            <Link href="/deck-designer" className="empire-cta h-11 rounded-lg font-display text-xs uppercase tracking-[0.24em] leading-[2.75rem]">
+              Back to the atelier
             </Link>
           ) : (
             <Link href="/account" className="empire-cta h-11 rounded-lg font-display text-xs uppercase tracking-[0.24em] leading-[2.75rem]">

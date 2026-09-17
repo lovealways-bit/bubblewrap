@@ -34,6 +34,14 @@ export function canUsePremiumSpreads(tier: Tier) {
   return tier.premiumSpreads
 }
 
+export function canUseJournal(tier: Tier) {
+  return tier.journal
+}
+
+export function canUseCelestial(tier: Tier) {
+  return tier.celestial
+}
+
 // Ads must never render for a paid member. Free (and signed-out visitors)
 // see ads; every paid tier is fully ad-free.
 export function shouldShowAds(tier: Tier | null) {

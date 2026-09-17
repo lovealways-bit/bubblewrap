@@ -25,6 +25,15 @@ export function SiteFooter() {
 
       <div className="mt-3 flex flex-col items-center justify-center gap-1 sm:flex-row sm:gap-4">
         <a
+          href="mailto:inquiry@allpathproperties.com"
+          className="text-xs italic text-muted-foreground transition-colors hover:text-gold-bright"
+        >
+          inquiry@allpathproperties.com
+        </a>
+        <span aria-hidden className="hidden text-gold/30 sm:inline">
+          ·
+        </span>
+        <a
           href="mailto:lovealways@allpathproperties.com"
           className="text-xs italic text-muted-foreground transition-colors hover:text-gold-bright"
         >

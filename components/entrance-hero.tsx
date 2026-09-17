@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { SiteFooter } from '@/components/site-footer'
+import { AccountNav } from '@/components/account-nav'
 
 // The moonlit entrance to Lunara Ascension. The altar photograph carries the
 // atmosphere; layered scrims keep the left-anchored text legible at any aspect
@@ -28,9 +29,7 @@ export function EntranceHero() {
           <p className="font-display text-[0.6rem] uppercase tracking-[0.42em] text-gold/70 sm:text-xs">
             AllPath Edu
           </p>
-          <p className="font-display text-[0.6rem] uppercase tracking-[0.42em] text-gold/50 sm:text-xs">
-            SynchPathways
-          </p>
+          <AccountNav />
         </header>
 
         {/* Hero copy, anchored low-left over the open sky */}

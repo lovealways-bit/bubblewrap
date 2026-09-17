@@ -1,7 +1,8 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Shuffle, Sparkles, Hand, BookMarked, Trash2, FolderOpen, Clock, Sun, Star, Moon } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { Shuffle, Sparkles, Hand, BookMarked, Trash2, FolderOpen, Clock, Sun, Star, Moon, Lock } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { drawCards } from '@/lib/tarot/engine'
 import { getInterpretation, getReadingSummary } from '@/lib/tarot/interpretation'
@@ -66,7 +67,8 @@ function formatWhen(ts: number): string {
   }
 }
 
-export function ReadingBoard() {
+export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: boolean }) {
+  const router = useRouter()
   const [spreadId, setSpreadId] = useState<string>(SPREADS[0].id)
   const [cards, setCards] = useState<DrawnCard[]>([])
   const [question, setQuestion] = useState('')
@@ -242,20 +244,29 @@ export function ReadingBoard() {
         <div className="flex flex-wrap justify-center gap-3">
           {SPREADS.map((s) => {
             const active = s.id === spreadId
+            const locked = !!s.premium && !premiumSpreads
             return (
               <button
                 key={s.id}
                 type="button"
+                aria-label={locked ? `${s.name} — unlock with Lunara Plus` : s.name}
                 onClick={() => {
+                  if (locked) {
+                    router.push('/pricing')
+                    return
+                  }
                   setSpreadId(s.id)
                   handleReset()
                 }}
-                className={`rounded-md border px-5 py-2 font-display text-xs uppercase tracking-[0.15em] transition-all duration-300 ${
+                className={`inline-flex items-center gap-2 rounded-md border px-5 py-2 font-display text-xs uppercase tracking-[0.15em] transition-all duration-300 ${
                   active
                     ? 'border-gold bg-gold/15 text-gold-bright shadow-[0_0_18px_-6px_var(--gold)]'
-                    : 'border-gold/30 text-gold/70 hover:border-gold/60 hover:text-gold'
+                    : locked
+                      ? 'border-gold/20 text-gold/40 hover:border-gold/40 hover:text-gold/70'
+                      : 'border-gold/30 text-gold/70 hover:border-gold/60 hover:text-gold'
                 }`}
               >
+                {locked && <Lock className="h-3 w-3" aria-hidden="true" />}
                 {s.name}
               </button>
             )
@@ -264,6 +275,16 @@ export function ReadingBoard() {
         <p className="max-w-sm text-center text-sm italic text-muted-foreground text-pretty">
           {spread.tagline}
         </p>
+        {SPREADS.some((s) => s.premium) && !premiumSpreads && (
+          <button
+            type="button"
+            onClick={() => router.push('/pricing')}
+            className="inline-flex items-center gap-1.5 text-[0.7rem] uppercase tracking-[0.25em] text-gold/55 transition-colors hover:text-gold"
+          >
+            <Lock className="h-3 w-3" aria-hidden="true" />
+            The Celtic Cross is part of Lunara Plus
+          </button>
+        )}
       </div>
 
       {/* ---- Ask a question (situational) ---- */}
