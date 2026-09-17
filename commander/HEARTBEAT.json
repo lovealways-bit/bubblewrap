@@ -1,6 +1,6 @@
 {
   "schema": "allpath.oli.heartbeat/v1",
-  "recordedAt": "2026-09-17T15:03:00-04:00",
+  "recordedAt": "2026-09-17T15:03:11-04:00",
   "branch": "oli-commander-training-hub-20260917",
   "runtime": {
     "manuscript": "LIVE",
@@ -16,6 +16,9 @@
     "adminDesignCloset": "LIVE_ON_BRANCH",
     "developerDiagnostics": "LIVE_ON_BRANCH",
     "userAdminDeveloperContract": "LIVE_ON_BRANCH",
+    "persistentCommanderLogApi": "READY_ON_BRANCH_AWAITING_RUNTIME_VERIFY",
+    "commanderLiveTimeBoard": "READY_ON_BRANCH_AWAITING_RUNTIME_VERIFY",
+    "commanderAuditSeed": "READY_ON_BRANCH_AWAITING_RUNTIME_VERIFY",
     "dailyRepositoryVerifier": "PENDING_DEFAULT_BRANCH_MERGE"
   },
   "sourceState": {
@@ -24,6 +27,16 @@
     "vercelTeam": "SynchPathways",
     "vercelPlanObserved": "pro",
     "snapshot": "commander/OLI_APP_REGISTRY.json",
+    "latestDeploymentAudit": "commander/logs/2026-09-17T1903Z-vercel-deployment-audit.json",
+    "deploymentAuditCounts": {
+      "productionReady": 32,
+      "productionError": 2,
+      "previewReady": 11,
+      "previewBuilding": 2,
+      "previewBlocked": 3
+    },
+    "canonicalMothershipUrl": "https://mothership-um.vercel.app",
+    "canonicalMothershipHttpStatus": 200,
     "coughlinAtlasLinkage": "BUBBLEWRAP_LINKED_REQUIRES_RECONCILIATION"
   },
   "providerState": {
@@ -47,11 +60,17 @@
     "secretsInClientOrRepository": "PROHIBITED",
     "customerDeveloperSurfaceSeparation": "SERVER_ENFORCED_ON_BRANCH",
     "designClosetCustomerAccess": "BLOCKED",
-    "automaticPermissionExpansion": "PROHIBITED"
+    "automaticPermissionExpansion": "PROHIBITED",
+    "commanderLiveBoardAccess": "SERVER_ADMIN_GATED"
   },
   "nextChecks": [
-    "Confirm the newest lunara-atlas preview for this branch reaches READY after the latest commits.",
+    "Confirm the newest lunara-atlas and coughlin-atlas previews for this branch reach READY after the latest commits.",
+    "Verify /oli/commander loads in a Vercel preview with DATABASE_URL available and that GET and POST persist Commander entries.",
     "Run pnpm oli:verify and pnpm build on a branch checkout or CI runner.",
+    "Repair or retire delete-3 / terrain-atlas333 production because its Next.js routes manifest is missing.",
+    "Repair terrain-attorney-intake vercel.json and redeploy.",
+    "Investigate the three BLOCKED preview deployments before relying on those branches.",
+    "Canonicalize duplicate historical Terrain and Coughlin deployments and reconcile Vercel projects still named delete variants.",
     "Resolve coughlin-atlas Git linkage or intentionally configure its required environment before treating its deployment check as authoritative.",
     "Set ADMIN_EMAILS and DEVELOPER_EMAILS in intended protected deployment environments.",
     "Keep PR 5 in reviewable draft until owner approval to merge.",
