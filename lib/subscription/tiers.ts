@@ -25,6 +25,10 @@ export interface Tier {
   customization: boolean
   customDecks: boolean
   personalConsult: boolean
+  /** Private moon & sun journal — paid members only. */
+  journal: boolean
+  /** Celestial calendar: moon/sun phases, eclipses, esoteric events. */
+  celestial: boolean
   /** Free is ad-supported; every paid plan is ad-free. */
   adsEnabled: boolean
   rewardedAdsEnabled: boolean
@@ -49,6 +53,8 @@ export const TIERS: Record<TierId, Tier> = {
     customization: false,
     customDecks: false,
     personalConsult: false,
+    journal: false,
+    celestial: false,
     adsEnabled: true,
     rewardedAdsEnabled: true,
   },
@@ -63,7 +69,8 @@ export const TIERS: Record<TierId, Tier> = {
       'Everything in Free',
       'Personalized daily guidance',
       'Birth-chart insights',
-      'Monthly overview',
+      'Private moon & sun journal',
+      'Celestial calendar with eclipses & sabbats',
       'Ad-free',
     ],
     historyLimit: null,
@@ -71,6 +78,8 @@ export const TIERS: Record<TierId, Tier> = {
     customization: true,
     customDecks: false,
     personalConsult: false,
+    journal: true,
+    celestial: true,
     adsEnabled: false,
     rewardedAdsEnabled: false,
   },
@@ -93,6 +102,8 @@ export const TIERS: Record<TierId, Tier> = {
     customization: true,
     customDecks: true,
     personalConsult: false,
+    journal: true,
+    celestial: true,
     adsEnabled: false,
     rewardedAdsEnabled: false,
   },
@@ -115,6 +126,8 @@ export const TIERS: Record<TierId, Tier> = {
     customization: true,
     customDecks: true,
     personalConsult: true,
+    journal: true,
+    celestial: true,
     adsEnabled: false,
     rewardedAdsEnabled: false,
   },

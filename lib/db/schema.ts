@@ -117,6 +117,23 @@ export const customDeck = pgTable('custom_deck', {
   updatedAt: timestamp('updatedAt').notNull().defaultNow(),
 })
 
+export const journalEntry = pgTable('journal_entry', {
+  id: text('id').primaryKey(),
+  userId: text('userId').notNull(),
+  title: text('title'),
+  body: text('body').notNull(),
+  mood: text('mood'),
+  // Snapshot of the sky the moment the entry was written, so reflections stay
+  // anchored to their lunar context even as the moon moves on.
+  moonPhase: text('moonPhase'),
+  moonIllumination: integer('moonIllumination'),
+  // Optional link to a saved reading this reflection responds to.
+  readingId: text('readingId'),
+  entryDate: text('entryDate').notNull(),
+  createdAt: timestamp('createdAt').notNull().defaultNow(),
+  updatedAt: timestamp('updatedAt').notNull().defaultNow(),
+})
+
 export const designFrame = pgTable('design_frame', {
   id: text('id').primaryKey(),
   deckTheme: text('deckTheme').notNull(),
