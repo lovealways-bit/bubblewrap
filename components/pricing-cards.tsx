@@ -39,11 +39,11 @@ export function PricingCards({ currentTier, signedIn }: Props) {
 
   return (
     <div className="w-full">
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         {TIER_ORDER.map((id) => {
           const tier = TIERS[id]
           const isCurrent = currentTier === id
-          const featured = id === 'customization'
+          const featured = id === 'plus'
           return (
             <div
               key={id}
@@ -90,7 +90,7 @@ export function PricingCards({ currentTier, signedIn }: Props) {
                     ? 'Opening checkout…'
                     : id === 'free'
                       ? 'Start free'
-                      : `Choose ${tier.name}`}
+                      : `Choose ${tier.name.replace('Lunara ', '')}`}
               </button>
             </div>
           )

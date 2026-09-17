@@ -44,7 +44,7 @@ export function DeckPicker({ value, onChange }: Props) {
                 <img
                   src={previewSrc || '/placeholder.svg'}
                   alt={`${theme.name} deck preview`}
-                  className="h-full w-full object-cover"
+                  className="h-full w-full object-contain"
                   crossOrigin="anonymous"
                 />
               </span>

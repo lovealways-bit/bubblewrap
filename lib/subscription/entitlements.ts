@@ -33,3 +33,13 @@ export function canUseCustomDecks(tier: Tier) {
 export function canUsePremiumSpreads(tier: Tier) {
   return tier.premiumSpreads
 }
+
+// Ads must never render for a paid member. Free (and signed-out visitors)
+// see ads; every paid tier is fully ad-free.
+export function shouldShowAds(tier: Tier | null) {
+  return tier ? tier.adsEnabled : true
+}
+
+export function canUseRewardedAds(tier: Tier | null) {
+  return tier ? tier.rewardedAdsEnabled : true
+}

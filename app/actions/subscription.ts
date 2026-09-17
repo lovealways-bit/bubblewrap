@@ -5,7 +5,13 @@ import { subscription } from '@/lib/db/schema'
 import { getSession, getUserId } from '@/lib/session'
 import { stripe } from '@/lib/stripe'
 import { getUserTier } from '@/lib/subscription/entitlements'
-import { TIER_PRICE_ENV, type TierId } from '@/lib/subscription/tiers'
+import {
+  ONE_TIME_OFFERS,
+  TIERS,
+  type DeliveryPreference,
+  type OneTimeOfferId,
+  type TierId,
+} from '@/lib/subscription/tiers'
 import { and, desc, eq } from 'drizzle-orm'
 import { headers } from 'next/headers'
 
@@ -28,23 +34,7 @@ export async function getCurrentTier() {
   return tier.id
 }
 
-// Creates a Stripe Checkout Session for a paid tier and returns its URL.
-export async function createCheckout(tierId: Exclude<TierId, 'free'>) {
-  const session = await getSession()
-  if (!session?.user) throw new Error('Unauthorized')
-  const userId = session.user.id
-
-  const priceId = process.env[TIER_PRICE_ENV[tierId]]
-  if (!priceId) {
-    throw new Error(
-      `Missing Stripe price for the ${tierId} tier. Set ${TIER_PRICE_ENV[tierId]} in project env.`,
-    )
-  }
-
-  const h = await headers()
-  const base = origin(h)
-
-  // Reuse an existing Stripe customer if we have one on record.
+async function getOrCreateStripeCustomer(userId: string, email: string | null | undefined) {
   const existing = await db
     .select()
     .from(subscription)
@@ -52,23 +42,75 @@ export async function createCheckout(tierId: Exclude<TierId, 'free'>) {
     .orderBy(desc(subscription.updatedAt))
     .limit(1)
 
-  let customerId = existing[0]?.stripeCustomerId ?? undefined
-  if (!customerId) {
-    const customer = await stripe.customers.create({
-      email: session.user.email,
-      metadata: { userId },
-    })
-    customerId = customer.id
+  const customerId = existing[0]?.stripeCustomerId
+  if (customerId) return customerId
+
+  const customer = await stripe.customers.create({
+    email: email ?? undefined,
+    metadata: { userId },
+  })
+  return customer.id
+}
+
+// Creates a Stripe Checkout Session for a paid membership tier and returns its URL.
+export async function createCheckout(tierId: Exclude<TierId, 'free'>) {
+  const session = await getSession()
+  if (!session?.user) throw new Error('Unauthorized')
+  const userId = session.user.id
+
+  const priceId = TIERS[tierId].stripePriceId
+  if (!priceId) {
+    throw new Error(`Missing Stripe price for the ${tierId} plan.`)
   }
+
+  const h = await headers()
+  const base = origin(h)
+  const customerId = await getOrCreateStripeCustomer(userId, session.user.email)
 
   const checkout = await stripe.checkout.sessions.create({
     mode: 'subscription',
     customer: customerId,
     line_items: [{ price: priceId, quantity: 1 }],
-    success_url: `${base}/account?checkout=success`,
+    success_url: `${base}/success?type=membership&tier=${tierId}`,
     cancel_url: `${base}/pricing?checkout=cancelled`,
     metadata: { userId, tier: tierId },
     subscription_data: { metadata: { userId, tier: tierId } },
+  })
+
+  return checkout.url
+}
+
+// Creates a one-time Checkout Session for the Birth Chart or Personal Reading
+// offer. Personal Reading requires a delivery preference collected in-app
+// (never inside Stripe checkout).
+export async function createOneTimeCheckout(
+  offerId: OneTimeOfferId,
+  deliveryPreference?: DeliveryPreference,
+) {
+  const session = await getSession()
+  if (!session?.user) throw new Error('Unauthorized')
+  const userId = session.user.id
+  const offer = ONE_TIME_OFFERS[offerId]
+
+  if (offer.requiresDeliveryPreference && !deliveryPreference) {
+    throw new Error('Please choose how you would like your reading delivered.')
+  }
+
+  const h = await headers()
+  const base = origin(h)
+  const customerId = await getOrCreateStripeCustomer(userId, session.user.email)
+
+  const checkout = await stripe.checkout.sessions.create({
+    mode: 'payment',
+    customer: customerId,
+    line_items: [{ price: offer.stripePriceId, quantity: 1 }],
+    success_url: `${base}/success?type=offer&offer=${offerId}`,
+    cancel_url: `${base}/pricing?checkout=cancelled`,
+    metadata: {
+      userId,
+      offer: offerId,
+      ...(deliveryPreference ? { deliveryPreference } : {}),
+    },
   })
 
   return checkout.url
