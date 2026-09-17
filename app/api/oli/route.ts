@@ -82,7 +82,7 @@ export async function POST(request: Request) {
       input: message,
       tools: [
         {
-          type: 'web_search_preview',
+          type: 'web_search',
           search_context_size: 'low',
         },
       ],
