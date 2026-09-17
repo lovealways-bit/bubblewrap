@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Cinzel, Cormorant_Garamond, Noto_Sans_Runic } from 'next/font/google'
 import { InstallPrompt } from '@/components/install-prompt'
+import { OliAssistant } from '@/components/oli-assistant'
 import './globals.css'
 
 const cinzel = Cinzel({
@@ -28,6 +29,9 @@ export const metadata: Metadata = {
     'Lunara Ascension — a moonlit tarot divination sanctuary by AllPath Edu & SynchPathways. Cut the deck and read the path written among your stars.',
   generator: 'v0.app',
   applicationName: 'Lunara Ascension',
+  other: {
+    'google-adsense-account': 'ca-pub-4805370280965046',
+  },
   appleWebApp: {
     capable: true,
     title: 'Lunara',
@@ -52,6 +56,7 @@ export default function RootLayout({
     <html lang="en" className={`${cinzel.variable} ${cormorant.variable} ${runic.variable}`}>
       <body className="font-sans bg-background text-foreground antialiased">
         {children}
+        <OliAssistant />
         <InstallPrompt />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

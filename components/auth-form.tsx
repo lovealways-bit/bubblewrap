@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { signIn, signUp } from '@/lib/auth-client'
@@ -50,7 +50,7 @@ export function AuthForm({ mode }: Props) {
     setError(null)
 
     if (isSignUp && !acceptTerms) {
-      setError('Please accept the terms to continue.')
+      setError('Please accept the Terms and acknowledge the Privacy Notice to continue.')
       return
     }
 
@@ -62,7 +62,6 @@ export function AuthForm({ mode }: Props) {
           setError('Could not create your account. Try a different email.')
           return
         }
-        // Record consent choices now that the session exists.
         await saveConsent({
           dataPersonalization: personalization,
           dataAnalytics: analytics,
@@ -157,8 +156,24 @@ export function AuthForm({ mode }: Props) {
             <Consent
               checked={acceptTerms}
               onChange={setAcceptTerms}
-              label="I accept the terms of service and privacy policy"
               required
+              label={
+                <>
+                  I agree to the{' '}
+                  <Link href="/terms" className="text-gold-bright underline underline-offset-4">
+                    Terms of Use
+                  </Link>
+                  , acknowledge the{' '}
+                  <Link href="/privacy" className="text-gold-bright underline underline-offset-4">
+                    Privacy Notice
+                  </Link>
+                  , and understand that recurring purchases are also governed by the{' '}
+                  <Link href="/subscription-terms" className="text-gold-bright underline underline-offset-4">
+                    Subscription Terms
+                  </Link>
+                  .
+                </>
+              }
             />
           </fieldset>
         )}
@@ -223,7 +238,7 @@ function Consent({
 }: {
   checked: boolean
   onChange: (v: boolean) => void
-  label: string
+  label: ReactNode
   required?: boolean
 }) {
   return (

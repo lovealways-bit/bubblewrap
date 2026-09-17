@@ -1,6 +1,6 @@
-// App-wide footer: brand line, copyright, and contact addresses.
-// Shared between the entrance hero and the reading experience so the
-// legal + contact information appears consistently across the app.
+import Link from 'next/link'
+
+// App-wide footer: brand line, copyright, legal links, and contact addresses.
 export function SiteFooter() {
   const year = new Date().getFullYear()
 
@@ -23,16 +23,22 @@ export function SiteFooter() {
         {' · AllPath Edu'}
       </p>
 
-      <div className="mt-3 flex flex-col items-center justify-center gap-1 sm:flex-row sm:gap-4">
+      <nav className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
+        <Link href="/terms" className="transition-colors hover:text-gold-bright">Terms</Link>
+        <Link href="/privacy" className="transition-colors hover:text-gold-bright">Privacy</Link>
+        <Link href="/subscription-terms" className="transition-colors hover:text-gold-bright">Subscription Terms</Link>
+        <Link href="/pricing" className="transition-colors hover:text-gold-bright">Pricing</Link>
+        <Link href="/account" className="transition-colors hover:text-gold-bright">Manage Subscription</Link>
+      </nav>
+
+      <div className="mt-4 flex flex-col items-center justify-center gap-1 sm:flex-row sm:gap-4">
         <a
           href="mailto:lovealways@allpathproperties.com"
           className="text-xs italic text-muted-foreground transition-colors hover:text-gold-bright"
         >
           lovealways@allpathproperties.com
         </a>
-        <span aria-hidden className="hidden text-gold/30 sm:inline">
-          ·
-        </span>
+        <span aria-hidden className="hidden text-gold/30 sm:inline">·</span>
         <a
           href="mailto:kj@allpathproperties.com"
           className="text-xs italic text-muted-foreground transition-colors hover:text-gold-bright"

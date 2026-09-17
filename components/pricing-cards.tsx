@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { TIER_ORDER, TIERS, type TierId } from '@/lib/subscription/tiers'
@@ -14,6 +15,7 @@ export function PricingCards({ currentTier, signedIn }: Props) {
   const router = useRouter()
   const [loading, setLoading] = useState<TierId | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [legalAccepted, setLegalAccepted] = useState(false)
 
   async function choose(tierId: TierId) {
     setError(null)
@@ -25,9 +27,13 @@ export function PricingCards({ currentTier, signedIn }: Props) {
       router.push('/account')
       return
     }
+    if (!legalAccepted) {
+      setError('Please accept the Terms, Privacy Notice, and Subscription Terms before subscribing.')
+      return
+    }
     setLoading(tierId)
     try {
-      const url = await createCheckout(tierId as Exclude<TierId, 'free'>)
+      const url = await createCheckout(tierId as Exclude<TierId, 'free'>, legalAccepted)
       if (url) window.location.href = url
       else setError('Checkout is not configured yet. Please try again shortly.')
     } catch (e) {
@@ -96,6 +102,32 @@ export function PricingCards({ currentTier, signedIn }: Props) {
           )
         })}
       </div>
+
+      <label className="mx-auto mt-7 flex max-w-3xl cursor-pointer items-start gap-3 rounded-lg border border-border/70 bg-background/35 p-4 text-sm text-foreground/85">
+        <input
+          type="checkbox"
+          checked={legalAccepted}
+          onChange={(e) => setLegalAccepted(e.target.checked)}
+          className="mt-0.5 size-4 shrink-0 accent-[var(--gold)]"
+        />
+        <span>
+          I agree to Lunara&apos;s{' '}
+          <Link href="/terms" className="text-gold-bright underline underline-offset-4">
+            Terms of Use
+          </Link>
+          , acknowledge the{' '}
+          <Link href="/privacy" className="text-gold-bright underline underline-offset-4">
+            Privacy Notice
+          </Link>
+          , and agree to the{' '}
+          <Link href="/subscription-terms" className="text-gold-bright underline underline-offset-4">
+            Subscription Terms
+          </Link>
+          . Paid memberships renew monthly at the displayed price until canceled. Cancellation is
+          available through the Lunara account billing portal.
+        </span>
+      </label>
+
       {error && <p className="mt-6 text-center text-sm text-destructive">{error}</p>}
     </div>
   )
