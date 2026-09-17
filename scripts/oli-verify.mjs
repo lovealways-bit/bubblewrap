@@ -15,6 +15,10 @@ const required = [
   'lib/oli/system-prompt.ts',
   'lib/oli/provider-adapter.ts',
   'lib/oli/command-router.ts',
+  'lib/oli/specialist-types.ts',
+  'lib/oli/specialist-stacks.ts',
+  'lib/oli/specialist-router.ts',
+  'lib/oli/hub-surfaces.ts',
   'app/api/oli/context/route.ts',
   'app/api/oli/health/route.ts',
   'app/api/oli/command/route.ts',
@@ -91,6 +95,8 @@ console.log(
       repositories: apps.github.repositories.length,
       deploymentProjects: apps.vercel.projects.length,
       capabilities: capabilities.capabilities.length,
+      specialistStacks: 6,
+      hubSurfaces: 5,
       states: capabilities.capabilities.reduce((acc, item) => {
         acc[item.state] = (acc[item.state] || 0) + 1
         return acc
