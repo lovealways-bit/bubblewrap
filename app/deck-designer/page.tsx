@@ -2,21 +2,23 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { getSession } from '@/lib/session'
 import { getUserTier, canUseCustomDecks } from '@/lib/subscription/entitlements'
+import { CUSTOM_DECK_UNLOCK_PRICE_LABEL } from '@/lib/subscription/tiers'
+import { FULL_DECK_SIZE } from '@/lib/deck/preview'
 import { listMyDecks } from '@/app/actions/custom-deck'
 import { DeckDesigner } from '@/components/deck-designer'
 import { Starfield } from '@/components/starfield'
 import { AccountNav } from '@/components/account-nav'
 
-// Preview generation can take a little while (4 images).
-export const maxDuration = 120
+// Preview and full-deck batches each generate several images.
+export const maxDuration = 300
 
 export default async function DeckDesignerPage() {
   const session = await getSession()
   if (!session?.user) redirect('/sign-in')
 
   const tier = await getUserTier(session.user.id)
-  const allowed = canUseCustomDecks(tier)
-  const decks = allowed ? await listMyDecks() : []
+  const entitledFree = canUseCustomDecks(tier)
+  const decks = await listMyDecks()
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-background">
@@ -39,26 +41,18 @@ export default async function DeckDesignerPage() {
           Design your own deck
         </h1>
         <p className="mt-2 max-w-xl text-sm italic text-muted-foreground text-pretty">
-          Describe a visual world and Lunara paints a preview — the card back and
-          three signature arcana. Save it, then commission the full 78 cards when
-          you are ready.
+          Describe a visual world and Lunara paints a free preview — the card back
+          and three signature arcana. Love it? Unlock the full{' '}
+          {FULL_DECK_SIZE}-card deck for {CUSTOM_DECK_UNLOCK_PRICE_LABEL}
+          {entitledFree ? ' — included with your membership.' : ', one time per deck.'}
         </p>
 
-        {allowed ? (
-          <DeckDesigner initialDecks={decks} />
-        ) : (
-          <div className="empire-panel mt-8 p-6">
-            <p className="text-sm italic text-muted-foreground">
-              The deck atelier is part of Lunara Plus and above.
-            </p>
-            <Link
-              href="/pricing"
-              className="empire-cta mt-5 inline-flex h-10 items-center rounded-lg px-5 font-display text-xs uppercase tracking-[0.24em]"
-            >
-              Unlock the atelier
-            </Link>
-          </div>
-        )}
+        <DeckDesigner
+          initialDecks={decks}
+          entitledFree={entitledFree}
+          unlockPriceLabel={CUSTOM_DECK_UNLOCK_PRICE_LABEL}
+          fullDeckSize={FULL_DECK_SIZE}
+        />
       </div>
     </main>
   )

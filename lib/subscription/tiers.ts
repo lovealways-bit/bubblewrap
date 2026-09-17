@@ -45,6 +45,7 @@ export const TIERS: Record<TierId, Tier> = {
     features: [
       'Single-card and three-card spreads',
       'All four preset deck themes',
+      'Design a deck — free preview, $5 to unlock the full set',
       'Up to 10 saved readings, synced across devices',
       'Ad-supported, with optional rewarded-ad bonus content',
     ],
@@ -71,6 +72,7 @@ export const TIERS: Record<TierId, Tier> = {
       'Birth-chart insights',
       'Private moon & sun journal',
       'Celestial calendar with eclipses & sabbats',
+      'Design a deck — free preview, $5 to unlock the full set',
       'Ad-free',
     ],
     historyLimit: null,
@@ -94,7 +96,7 @@ export const TIERS: Record<TierId, Tier> = {
       'Everything in Core',
       'All deep spreads including the Celtic Cross',
       'Unlimited synced reading history + Growth insights',
-      'Design your own deck with professional AI card art',
+      'Design unlimited decks — full AI card art included (no $5 unlock)',
       'Ad-free',
     ],
     historyLimit: null,
@@ -151,7 +153,14 @@ export const DELIVERY_PREFERENCES: { id: DeliveryPreference; label: string }[] =
   { id: 'in_app', label: 'In app' },
 ]
 
-export type OneTimeOfferId = 'birthChart' | 'personalReading'
+// A single custom deck's full-art unlock, charged once per deck. Plus &
+// Personal members get this included and never hit checkout. Test-mode price
+// created in this project's connected Stripe account.
+export const CUSTOM_DECK_UNLOCK_PRICE_ID = 'price_1UGk9gK2NOJSv83Daswx7RtK'
+export const CUSTOM_DECK_UNLOCK_PRICE_CENTS = 500
+export const CUSTOM_DECK_UNLOCK_PRICE_LABEL = '$5'
+
+export type OneTimeOfferId = 'birthChart' | 'personalReading' | 'customDeck'
 
 export interface OneTimeOffer {
   id: OneTimeOfferId
@@ -162,6 +171,13 @@ export interface OneTimeOffer {
   description: string
   /** Personal Reading requires picking how the reading is delivered. */
   requiresDeliveryPreference: boolean
+  /**
+   * When set, the pricing card links here instead of starting Stripe checkout
+   * directly. Used by the custom deck offer, which is purchased per-deck from
+   * inside the atelier rather than as a standalone product.
+   */
+  ctaHref?: string
+  ctaLabel?: string
 }
 
 export const ONE_TIME_OFFERS: Record<OneTimeOfferId, OneTimeOffer> = {
@@ -182,5 +198,17 @@ export const ONE_TIME_OFFERS: Record<OneTimeOfferId, OneTimeOffer> = {
     stripePriceId: 'price_1UGjLCK2NOJSv83DLgzLgT5w',
     description: 'A one-to-one reading with a live reader, delivered your way.',
     requiresDeliveryPreference: true,
+  },
+  customDeck: {
+    id: 'customDeck',
+    name: 'Custom Deck',
+    priceLabel: CUSTOM_DECK_UNLOCK_PRICE_LABEL,
+    priceCents: CUSTOM_DECK_UNLOCK_PRICE_CENTS,
+    stripePriceId: CUSTOM_DECK_UNLOCK_PRICE_ID,
+    description:
+      'Design your own deck with AI card art. Preview it free, then unlock the full deck for $5 — one time, per deck. Included free with Plus and Personal.',
+    requiresDeliveryPreference: false,
+    ctaHref: '/deck-designer',
+    ctaLabel: 'Open the atelier',
   },
 }

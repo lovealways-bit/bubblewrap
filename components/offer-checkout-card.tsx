@@ -48,6 +48,15 @@ export function OfferCheckoutCard({ offer, signedIn }: Props) {
       </div>
       <p className="mt-2 text-sm text-muted-foreground">{offer.description}</p>
 
+      {offer.ctaHref ? (
+        <button
+          onClick={() => router.push(signedIn ? offer.ctaHref! : '/sign-up')}
+          className="empire-cta mt-5 h-11 w-full rounded-lg font-display text-xs uppercase tracking-[0.24em]"
+        >
+          {offer.ctaLabel ?? 'Open'}
+        </button>
+      ) : (
+        <>
       {offer.requiresDeliveryPreference && (
         <label className="mt-4 flex flex-col gap-1.5">
           <span className="font-display text-[0.6rem] uppercase tracking-[0.3em] text-gold/70">
@@ -78,6 +87,8 @@ export function OfferCheckoutCard({ offer, signedIn }: Props) {
         {loading ? 'Opening checkout…' : `Purchase ${offer.name}`}
       </button>
       {error && <p className="mt-3 text-sm text-destructive">{error}</p>}
+        </>
+      )}
     </article>
   )
 }

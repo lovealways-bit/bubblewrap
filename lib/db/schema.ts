@@ -111,7 +111,12 @@ export const customDeck = pgTable('custom_deck', {
   palette: jsonb('palette'),
   borderStyle: text('borderStyle'),
   coverImageUrl: text('coverImageUrl'),
+  // The free 4-card preview (back + three signature arcana).
   cardArt: jsonb('cardArt'),
+  // The paid full-deck art, accumulated in batches after unlock.
+  fullCardArt: jsonb('fullCardArt'),
+  // 'preview' = free teaser only, 'unlocked' = paid/entitled (full art
+  // available to generate), 'complete' = all full-deck cards generated.
   status: text('status').notNull().default('draft'),
   createdAt: timestamp('createdAt').notNull().defaultNow(),
   updatedAt: timestamp('updatedAt').notNull().defaultNow(),

@@ -1,5 +1,8 @@
 import { stripe } from '@/lib/stripe'
 import { upsertSubscriptionRecord } from '@/app/actions/subscription'
+import { db } from '@/lib/db'
+import { customDeck } from '@/lib/db/schema'
+import { and, eq, ne } from 'drizzle-orm'
 import type { TierId } from '@/lib/subscription/tiers'
 import type Stripe from 'stripe'
 
@@ -49,17 +52,38 @@ export async function POST(req: Request) {
           break
         }
 
-        // One-time offer checkout (Birth Chart / Personal Reading). These do
-        // not change the member's tier; fulfillment happens in-app.
+        // One-time offer checkout. These do not change the member's tier;
+        // fulfillment happens in-app.
         if (s.mode === 'payment') {
-          console.log(
-            '[v0] One-time offer purchased:',
-            s.metadata?.offer,
-            'user:',
-            s.metadata?.userId,
-            'delivery:',
-            s.metadata?.deliveryPreference,
-          )
+          const offer = s.metadata?.offer
+          const userId = s.metadata?.userId
+          const deckId = s.metadata?.deckId
+
+          // A paid custom-deck unlock: flip that specific deck to 'unlocked'
+          // so its owner can generate the full-deck art. Scoped to the paying
+          // user and never downgrades a deck that is already complete.
+          if (offer === 'customDeck' && userId && deckId) {
+            await db
+              .update(customDeck)
+              .set({ status: 'unlocked', updatedAt: new Date() })
+              .where(
+                and(
+                  eq(customDeck.id, deckId),
+                  eq(customDeck.userId, userId),
+                  ne(customDeck.status, 'complete'),
+                ),
+              )
+            console.log('[v0] Custom deck unlocked via payment:', deckId, 'user:', userId)
+          } else {
+            console.log(
+              '[v0] One-time offer purchased:',
+              offer,
+              'user:',
+              userId,
+              'delivery:',
+              s.metadata?.deliveryPreference,
+            )
+          }
         }
         break
       }

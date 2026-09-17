@@ -104,31 +104,17 @@ export default async function AccountPage() {
           <h2 className="mt-1 font-display text-xl font-bold text-gold-bright">
             Design your own deck
           </h2>
-          {canDesignDecks ? (
-            <>
-              <p className="mt-1 text-sm italic text-muted-foreground">
-                Paint a custom deck preview with AI — your style, your palette.
-              </p>
-              <Link
-                href="/deck-designer"
-                className="empire-cta mt-5 inline-flex h-10 items-center rounded-lg px-5 font-display text-xs uppercase tracking-[0.24em]"
-              >
-                Open the atelier
-              </Link>
-            </>
-          ) : (
-            <>
-              <p className="mt-1 text-sm italic text-muted-foreground">
-                Designing your own decks is part of Lunara Plus and above.
-              </p>
-              <Link
-                href="/pricing"
-                className="empire-cta mt-5 inline-flex h-10 items-center rounded-lg px-5 font-display text-xs uppercase tracking-[0.24em]"
-              >
-                Unlock the atelier
-              </Link>
-            </>
-          )}
+          <p className="mt-1 text-sm italic text-muted-foreground">
+            {canDesignDecks
+              ? 'Paint a custom deck with AI — your style, your palette. Full sets included with your membership.'
+              : 'Paint a free preview with AI — your style, your palette. Unlock any deck’s full 78-card set for $5.'}
+          </p>
+          <Link
+            href="/deck-designer"
+            className="empire-cta mt-5 inline-flex h-10 items-center rounded-lg px-5 font-display text-xs uppercase tracking-[0.24em]"
+          >
+            Open the atelier
+          </Link>
         </div>
 
         <div className="empire-panel mt-8 p-6">

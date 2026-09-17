@@ -1,13 +1,14 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { subscription } from '@/lib/db/schema'
+import { subscription, customDeck } from '@/lib/db/schema'
 import { getSession, getUserId } from '@/lib/session'
 import { stripe } from '@/lib/stripe'
 import { getUserTier } from '@/lib/subscription/entitlements'
 import {
   ONE_TIME_OFFERS,
   TIERS,
+  CUSTOM_DECK_UNLOCK_PRICE_ID,
   type DeliveryPreference,
   type OneTimeOfferId,
   type TierId,
@@ -111,6 +112,42 @@ export async function createOneTimeCheckout(
       offer: offerId,
       ...(deliveryPreference ? { deliveryPreference } : {}),
     },
+  })
+
+  return checkout.url
+}
+
+// Creates a one-time $5 Checkout Session that unlocks the full art for one
+// specific custom deck. Ownership is verified server-side and the deckId is
+// carried in metadata so the webhook can unlock exactly that deck. Callers
+// must confirm the deck is not already unlocked and that the member is not
+// entitled for free before invoking this.
+export async function createDeckUnlockCheckout(deckId: string) {
+  const session = await getSession()
+  if (!session?.user) throw new Error('Unauthorized')
+  const userId = session.user.id
+
+  const rows = await db
+    .select({ id: customDeck.id, status: customDeck.status })
+    .from(customDeck)
+    .where(and(eq(customDeck.id, deckId), eq(customDeck.userId, userId)))
+    .limit(1)
+  if (!rows[0]) throw new Error('Deck not found.')
+
+  const h = await headers()
+  const base = origin(h)
+  const customerId = await getOrCreateStripeCustomer(userId, session.user.email)
+
+  const checkout = await stripe.checkout.sessions.create({
+    mode: 'payment',
+    customer: customerId,
+    line_items: [{ price: CUSTOM_DECK_UNLOCK_PRICE_ID, quantity: 1 }],
+    success_url: `${base}/success?type=offer&offer=customDeck&deck=${deckId}`,
+    cancel_url: `${base}/deck-designer?checkout=cancelled`,
+    // idempotent metadata so a webhook retry cannot double-unlock or confuse
+    // which deck was paid for.
+    metadata: { userId, offer: 'customDeck', deckId },
+    payment_intent_data: { metadata: { userId, offer: 'customDeck', deckId } },
   })
 
   return checkout.url
