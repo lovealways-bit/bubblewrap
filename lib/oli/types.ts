@@ -24,6 +24,13 @@ export type OliDeploymentProject = {
   repo: string | null
 }
 
+export type OliSurfaceAccess = {
+  user: 'PUBLIC' | 'SIGNED_IN' | 'AUTHORIZED_CLIENT' | 'NONE'
+  admin: 'ADMIN_ONLY'
+  developer: 'DEVELOPER_ONLY'
+  founder: 'FOUNDER_ONLY'
+}
+
 export type OliAppProfile = {
   id: string
   name: string
@@ -36,6 +43,7 @@ export type OliAppProfile = {
   designFamily: string
   defaultCapabilities: string[]
   supportMode: 'consumer' | 'client' | 'internal' | 'mixed'
+  surfaceAccess: OliSurfaceAccess
   notes: string[]
 }
 
