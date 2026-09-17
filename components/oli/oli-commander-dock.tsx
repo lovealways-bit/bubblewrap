@@ -81,10 +81,10 @@ export function OliCommanderDock({ appId }: { appId?: string }) {
           <div className="space-y-4 px-5 py-5">
             <div className="rounded-2xl border border-purple-100 bg-purple-50/60 p-4">
               <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-purple-700">
-                <Sparkles className="h-3.5 w-3.5" /> Local Oli
+                <Sparkles className="h-3.5 w-3.5" /> Oli
               </div>
               <p className="text-sm leading-6 text-slate-700">
-                Ask about the app, support, Commander context, plans, feedback, navigation, or a task you want routed.
+                Ask about this app, support, plans, feedback, navigation, or a task you want routed.
               </p>
             </div>
 
@@ -107,7 +107,7 @@ export function OliCommanderDock({ appId }: { appId?: string }) {
                 ) : null}
                 {response.needsProvider ? (
                   <p className="mt-3 rounded-xl bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900">
-                    This request needs an approved provider/connector before Oli can execute the external step.
+                    This request needs an approved provider or connector before Oli can execute the external step.
                   </p>
                 ) : null}
               </div>
@@ -133,10 +133,7 @@ export function OliCommanderDock({ appId }: { appId?: string }) {
               </button>
             </form>
 
-            <div className="flex items-center justify-between text-[11px] text-slate-400">
-              <span>Local routing first</span>
-              <Link href="/oli" className="font-medium text-purple-700 hover:underline">Open training hub</Link>
-            </div>
+            <div className="text-[11px] text-slate-400">Local product routing first · external providers only when approved</div>
           </div>
         </section>
       )}
