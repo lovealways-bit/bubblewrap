@@ -1,9 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getRuntimeContext } from '@/lib/oli/registry'
+import { checkOliRateLimit, oliRateLimitHeaders, OLI_RATE_LIMITS } from '@/lib/oli/rate-limit'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: NextRequest) {
+  const rate = checkOliRateLimit(request, OLI_RATE_LIMITS.context)
+  if (!rate.allowed) {
+    return NextResponse.json(
+      { error: 'Too many context requests. Please try again shortly.' },
+      { status: 429, headers: { ...oliRateLimitHeaders(rate), 'Cache-Control': 'no-store' } },
+    )
+  }
+
   const host = request.headers.get('x-forwarded-host') || request.headers.get('host') || undefined
   const appId = request.nextUrl.searchParams.get('app') || undefined
   const context = getRuntimeContext({ host, appId })
@@ -30,6 +39,6 @@ export async function GET(request: NextRequest) {
         description: capability.description,
       })),
     },
-    { headers: { 'Cache-Control': 'no-store' } },
+    { headers: { ...oliRateLimitHeaders(rate), 'Cache-Control': 'no-store' } },
   )
 }
