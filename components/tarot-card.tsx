@@ -278,7 +278,7 @@ export function TarotCard({
               <img
                 src={proofImageSrc || '/placeholder.svg'}
                 alt={`${card.name}${isReversed ? ', reversed' : ''}`}
-                className="h-full w-full object-cover"
+                className="h-full w-full object-contain"
                 crossOrigin="anonymous"
               />
               {isReversed && (

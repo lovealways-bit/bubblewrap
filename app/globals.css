@@ -134,6 +134,26 @@
     border-color: rgba(212, 175, 55, 0.5);
   }
 
+  /* Shared form input: dark plum well with a gold hairline and focus ring. */
+  .lunara-input {
+    width: 100%;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(212, 175, 55, 0.28);
+    background: rgba(21, 10, 38, 0.55);
+    padding: 0.6rem 0.85rem;
+    font-size: 0.95rem;
+    color: var(--foreground);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .lunara-input::placeholder {
+    color: rgba(169, 155, 199, 0.6);
+  }
+  .lunara-input:focus {
+    outline: none;
+    border-color: rgba(212, 175, 55, 0.65);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.18);
+  }
+
   /* The signature primary action: solid gold with dark ink. */
   .empire-cta {
     background: linear-gradient(180deg, var(--gold-bright) 0%, var(--gold) 55%, #b8932e 100%);
