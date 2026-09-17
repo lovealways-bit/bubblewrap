@@ -1,8 +1,18 @@
 import Link from 'next/link'
+import { AccountNav } from '@/components/account-nav'
 
 export function SiteHeader() {
   return (
-    <header className="relative z-10 flex flex-col items-center px-6 pt-14 text-center">
+    <header className="relative z-10 flex flex-col items-center px-6 pt-6 text-center">
+      <div className="mb-8 flex w-full items-center justify-between">
+        <Link
+          href="/"
+          className="font-display text-[0.6rem] uppercase tracking-[0.42em] text-gold/70 transition-colors hover:text-gold-bright sm:text-xs"
+        >
+          AllPath Edu
+        </Link>
+        <AccountNav />
+      </div>
       <p className="font-display text-[0.65rem] uppercase tracking-[0.5em] text-gold/70">
         AllPath Edu · SynchPathways
       </p>
