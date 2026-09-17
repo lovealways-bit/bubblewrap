@@ -16,7 +16,7 @@ const TABS: { id: TabId; label: string }[] = [
   { id: 'growth', label: 'Growth' },
 ]
 
-export function ExperienceTabs() {
+export function ExperienceTabs({ premiumSpreads = false }: { premiumSpreads?: boolean }) {
   const [tab, setTab] = useState<TabId>('cards')
 
   return (
@@ -54,7 +54,7 @@ export function ExperienceTabs() {
       </div>
 
       {/* ---- Active panel ---- */}
-      {tab === 'cards' && <ReadingBoard />}
+      {tab === 'cards' && <ReadingBoard premiumSpreads={premiumSpreads} />}
       {tab === 'runes' && <RuneOracle />}
       {tab === 'codex' && <CardMeanings />}
       {tab === 'growth' && <GrowthConstellation />}

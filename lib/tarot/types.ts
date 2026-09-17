@@ -51,4 +51,6 @@ export interface Spread {
   name: string
   tagline: string
   positions: SpreadPosition[]
+  /** Deep spreads reserved for Lunara Plus and above. */
+  premium?: boolean
 }

@@ -30,6 +30,7 @@ export const SPREADS: Spread[] = [
     id: 'celtic-cross',
     name: 'The Celtic Cross',
     tagline: 'Ten layers deep. Lunara lays your whole map bare.',
+    premium: true,
     positions: [
       { id: 'heart', label: 'The Heart', hint: 'The matter at the center of it all.' },
       { id: 'crossing', label: 'The Crossing', hint: 'What challenges or crosses you.' },
