@@ -1,7 +1,11 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { getSession } from '@/lib/session'
-import { getUserTier, canUseCustomization } from '@/lib/subscription/entitlements'
+import {
+  getUserTier,
+  canUseCustomization,
+  canUseCustomDecks,
+} from '@/lib/subscription/entitlements'
 import { AccountActions } from '@/components/account-actions'
 import { CustomizationForm } from '@/components/customization-form'
 import { getCustomizationProfile } from '@/app/actions/customization'
@@ -13,6 +17,7 @@ export default async function AccountPage() {
   const tier = await getUserTier(session.user.id)
   const isFree = tier.id === 'free'
   const canCustomize = canUseCustomization(tier)
+  const canDesignDecks = canUseCustomDecks(tier)
   const rawProfile = canCustomize ? await getCustomizationProfile() : null
   const profile = rawProfile
     ? {
@@ -83,6 +88,40 @@ export default async function AccountPage() {
                 className="empire-cta mt-5 inline-flex h-10 items-center rounded-lg px-5 font-display text-xs uppercase tracking-[0.24em]"
               >
                 Unlock personalization
+              </Link>
+            </>
+          )}
+        </div>
+
+        <div className="empire-panel mt-8 p-6">
+          <p className="font-display text-[0.6rem] uppercase tracking-[0.3em] text-gold/70">
+            Lunara Atelier
+          </p>
+          <h2 className="mt-1 font-display text-xl font-bold text-gold-bright">
+            Design your own deck
+          </h2>
+          {canDesignDecks ? (
+            <>
+              <p className="mt-1 text-sm italic text-muted-foreground">
+                Paint a custom deck preview with AI — your style, your palette.
+              </p>
+              <Link
+                href="/deck-designer"
+                className="empire-cta mt-5 inline-flex h-10 items-center rounded-lg px-5 font-display text-xs uppercase tracking-[0.24em]"
+              >
+                Open the atelier
+              </Link>
+            </>
+          ) : (
+            <>
+              <p className="mt-1 text-sm italic text-muted-foreground">
+                Designing your own decks is part of Lunara Plus and above.
+              </p>
+              <Link
+                href="/pricing"
+                className="empire-cta mt-5 inline-flex h-10 items-center rounded-lg px-5 font-display text-xs uppercase tracking-[0.24em]"
+              >
+                Unlock the atelier
               </Link>
             </>
           )}
