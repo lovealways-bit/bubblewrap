@@ -30,6 +30,17 @@ export function routeOliCommand(request: OliCommandRequest): OliCommandResponse 
   }
 
   if (/\b(repo|repository|github|build|deployment|vercel|status|commander|heartbeat)\b/.test(normalized)) {
+    if (!request.isAdmin) {
+      return {
+        kind: 'blocked',
+        title: 'Internal Commander context',
+        message: 'That control-plane detail is restricted to authorized operators. I can still help with this app, its support path, navigation, subscriptions, feedback, or customer-facing features.',
+        appId: app.id,
+        capabilityIds: ['support.first-line'],
+        provenance: ['commander/MANUSCRIPT.md'],
+      }
+    }
+
     const linked = deploymentProjects.filter((project) => project.repo === app.repository)
     return {
       kind: 'answer',
@@ -133,7 +144,7 @@ export function routeOliCommand(request: OliCommandRequest): OliCommandResponse 
     message:
       aiState === 'LIVE'
         ? `I can handle this in ${app.name} using the approved generative provider.`
-        : `I understand the request and the active app context. Generative AI is ${aiState} in this shared runtime until an approved server-side provider, entitlement, privacy configuration, and budget are verified. I can still handle registered product support and Commander context without pretending that provider is already connected.`,
+        : `I understand the request and the active app context. Generative AI is ${aiState} in this shared runtime until an approved server-side provider, entitlement, privacy configuration, and budget are verified. I can still handle registered product support without pretending that provider is already connected.`,
     appId: app.id,
     capabilityIds: ['support.first-line', 'ai.generative'],
     needsProvider: aiState !== 'LIVE',
