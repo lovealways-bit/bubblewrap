@@ -21,6 +21,7 @@ const required = [
   'lib/oli/rate-limit.ts',
   'lib/oli/access.ts',
   'lib/oli/music-tools.ts',
+  'lib/oli/music-adapter.ts',
   'lib/oli/specialist-types.ts',
   'lib/oli/specialist-stacks.ts',
   'lib/oli/specialist-router.ts',
@@ -46,6 +47,7 @@ const noEmDashFiles = [
   'lib/oli/rate-limit.ts',
   'lib/oli/access.ts',
   'lib/oli/music-tools.ts',
+  'lib/oli/music-adapter.ts',
   'app/api/oli/context/route.ts',
   'app/api/oli/command/route.ts',
   'app/oli/music/page.tsx',
@@ -131,6 +133,7 @@ console.log(
       specialistStacks: 6,
       hubSurfaces: 6,
       musicToolRecords: true,
+      musicAdapterContract: true,
       userDevSeparation: true,
       emDashGovernedFilesClean: true,
       states: capabilities.capabilities.reduce((acc, item) => {
