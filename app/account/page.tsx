@@ -5,6 +5,8 @@ import {
   getUserTier,
   canUseCustomization,
   canUseCustomDecks,
+  canUseJournal,
+  canUseCelestial,
 } from '@/lib/subscription/entitlements'
 import { AccountActions } from '@/components/account-actions'
 import { CustomizationForm } from '@/components/customization-form'
@@ -18,6 +20,8 @@ export default async function AccountPage() {
   const isFree = tier.id === 'free'
   const canCustomize = canUseCustomization(tier)
   const canDesignDecks = canUseCustomDecks(tier)
+  const canJournal = canUseJournal(tier)
+  const canCelestial = canUseCelestial(tier)
   const rawProfile = canCustomize ? await getCustomizationProfile() : null
   const profile = rawProfile
     ? {
@@ -122,6 +126,74 @@ export default async function AccountPage() {
                 className="empire-cta mt-5 inline-flex h-10 items-center rounded-lg px-5 font-display text-xs uppercase tracking-[0.24em]"
               >
                 Unlock the atelier
+              </Link>
+            </>
+          )}
+        </div>
+
+        <div className="empire-panel mt-8 p-6">
+          <p className="font-display text-[0.6rem] uppercase tracking-[0.3em] text-gold/70">
+            Moon &amp; Sun Journal
+          </p>
+          <h2 className="mt-1 font-display text-xl font-bold text-gold-bright">
+            Your reflections
+          </h2>
+          {canJournal ? (
+            <>
+              <p className="mt-1 text-sm italic text-muted-foreground">
+                A private journal, every entry stamped with the moon it was written under.
+              </p>
+              <Link
+                href="/journal"
+                className="empire-cta mt-5 inline-flex h-10 items-center rounded-lg px-5 font-display text-xs uppercase tracking-[0.24em]"
+              >
+                Open the journal
+              </Link>
+            </>
+          ) : (
+            <>
+              <p className="mt-1 text-sm italic text-muted-foreground">
+                The private journal is part of Lunara Core and above.
+              </p>
+              <Link
+                href="/pricing"
+                className="empire-cta mt-5 inline-flex h-10 items-center rounded-lg px-5 font-display text-xs uppercase tracking-[0.24em]"
+              >
+                Unlock the journal
+              </Link>
+            </>
+          )}
+        </div>
+
+        <div className="empire-panel mt-8 p-6">
+          <p className="font-display text-[0.6rem] uppercase tracking-[0.3em] text-gold/70">
+            Celestial Calendar
+          </p>
+          <h2 className="mt-1 font-display text-xl font-bold text-gold-bright">
+            The turning sky
+          </h2>
+          {canCelestial ? (
+            <>
+              <p className="mt-1 text-sm italic text-muted-foreground">
+                Moon phases, eclipses, solstices, and the old sabbats — mapped ahead for you.
+              </p>
+              <Link
+                href="/calendar"
+                className="empire-cta mt-5 inline-flex h-10 items-center rounded-lg px-5 font-display text-xs uppercase tracking-[0.24em]"
+              >
+                View the calendar
+              </Link>
+            </>
+          ) : (
+            <>
+              <p className="mt-1 text-sm italic text-muted-foreground">
+                The celestial calendar is part of Lunara Core and above.
+              </p>
+              <Link
+                href="/pricing"
+                className="empire-cta mt-5 inline-flex h-10 items-center rounded-lg px-5 font-display text-xs uppercase tracking-[0.24em]"
+              >
+                Unlock the calendar
               </Link>
             </>
           )}
