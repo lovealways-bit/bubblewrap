@@ -28,6 +28,9 @@ export const metadata: Metadata = {
     'Lunara Ascension — a moonlit tarot divination sanctuary by AllPath Edu & SynchPathways. Cut the deck and read the path written among your stars.',
   generator: 'v0.app',
   applicationName: 'Lunara Ascension',
+  other: {
+    'google-adsense-account': 'ca-pub-4805370280965046',
+  },
   appleWebApp: {
     capable: true,
     title: 'Lunara',
