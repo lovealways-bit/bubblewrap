@@ -2,6 +2,7 @@
 
 import Script from 'next/script'
 import { useEffect } from 'react'
+import { ADSENSE_CLIENT_ID } from '@/lib/adsense'
 
 declare global {
   interface Window {
@@ -20,15 +21,16 @@ interface AdSenseSlotProps {
 // Guarded AdSense unit. Renders nothing — and never initializes an ad
 // request — unless the viewer is ad-eligible AND both the publisher client
 // ID and slot ID are configured. No fake IDs are ever shipped: until the
-// owner adds NEXT_PUBLIC_ADSENSE_CLIENT_ID / _SLOT env vars in Vercel after
-// AdSense site approval, this renders null everywhere in the app.
+// publisher identity is shared through the canonical AllPath AdSense config.
+// Ad-unit slot IDs stay deployment-specific env vars; without a real slot this
+// renders null, so verification can be correct without inventing inventory.
 export function AdSenseSlot({
   enabled,
   slot = process.env.NEXT_PUBLIC_ADSENSE_FREE_FEED_SLOT,
   className,
   format = 'auto',
 }: AdSenseSlotProps) {
-  const client = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID
+  const client = ADSENSE_CLIENT_ID
   const canRender = enabled && Boolean(client) && Boolean(slot)
 
   useEffect(() => {
