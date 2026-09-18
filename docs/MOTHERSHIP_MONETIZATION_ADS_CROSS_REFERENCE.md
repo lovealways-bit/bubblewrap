@@ -16,4 +16,4 @@ Product rules:
 - Private account, billing, auth and sensitive/internal routes should not be used as ad surfaces without separate review.
 - Mothership receives aggregate/status reporting, not private payment credentials.
 
-Verification status after 2026-09-17 source reconciliation: YELLOW until the latest production deployment confirms page metadata and `/ads.txt`.
+Verification status after 2026-09-17 source reconciliation: GREEN. The latest production deployment confirms the canonical page metadata and `/ads.txt`; paid-tier ad suppression remains defined in the existing entitlement source.
