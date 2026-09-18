@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Cinzel, Cormorant_Garamond, Noto_Sans_Runic } from 'next/font/google'
 import { InstallPrompt } from '@/components/install-prompt'
+import { ADSENSE_CLIENT_ID } from '@/lib/adsense'
 import './globals.css'
 
 const cinzel = Cinzel({
@@ -35,6 +36,9 @@ export const metadata: Metadata = {
   },
   formatDetection: {
     telephone: false,
+  },
+  other: {
+    'google-adsense-account': ADSENSE_CLIENT_ID,
   },
 }
 
