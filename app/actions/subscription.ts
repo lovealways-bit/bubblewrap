@@ -48,7 +48,7 @@ async function getOrCreateStripeCustomer(userId: string, email: string | null | 
 
   const customer = await stripe.customers.create({
     email: email ?? undefined,
-    metadata: { userId },
+    metadata: { userId, identity_uid: userId, app: 'lunara' },
   })
   return customer.id
 }
@@ -74,8 +74,11 @@ export async function createCheckout(tierId: Exclude<TierId, 'free'>) {
     line_items: [{ price: priceId, quantity: 1 }],
     success_url: `${base}/success?type=membership&tier=${tierId}`,
     cancel_url: `${base}/pricing?checkout=cancelled`,
-    metadata: { userId, tier: tierId },
-    subscription_data: { metadata: { userId, tier: tierId } },
+    client_reference_id: userId,
+    metadata: { userId, identity_uid: userId, app: 'lunara', tier: tierId },
+    subscription_data: {
+      metadata: { userId, identity_uid: userId, app: 'lunara', tier: tierId },
+    },
   })
 
   return checkout.url
@@ -107,8 +110,11 @@ export async function createOneTimeCheckout(
     line_items: [{ price: offer.stripePriceId, quantity: 1 }],
     success_url: `${base}/success?type=offer&offer=${offerId}`,
     cancel_url: `${base}/pricing?checkout=cancelled`,
+    client_reference_id: userId,
     metadata: {
       userId,
+      identity_uid: userId,
+      app: 'lunara',
       offer: offerId,
       ...(deliveryPreference ? { deliveryPreference } : {}),
     },
@@ -146,8 +152,23 @@ export async function createDeckUnlockCheckout(deckId: string) {
     cancel_url: `${base}/deck-designer?checkout=cancelled`,
     // idempotent metadata so a webhook retry cannot double-unlock or confuse
     // which deck was paid for.
-    metadata: { userId, offer: 'customDeck', deckId },
-    payment_intent_data: { metadata: { userId, offer: 'customDeck', deckId } },
+    client_reference_id: userId,
+    metadata: {
+      userId,
+      identity_uid: userId,
+      app: 'lunara',
+      offer: 'customDeck',
+      deckId,
+    },
+    payment_intent_data: {
+      metadata: {
+        userId,
+        identity_uid: userId,
+        app: 'lunara',
+        offer: 'customDeck',
+        deckId,
+      },
+    },
   })
 
   return checkout.url
