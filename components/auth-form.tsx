@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { signIn, signUp } from '@/lib/auth-client'
 import { saveConsent } from '@/app/actions/consent'
-import { ensureTestViewerAccount } from '@/app/actions/test-viewer'
 
 interface Props {
   mode: 'sign-in' | 'sign-up'
@@ -24,26 +23,6 @@ export function AuthForm({ mode }: Props) {
   const [acceptTerms, setAcceptTerms] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  const [viewerLoading, setViewerLoading] = useState(false)
-
-  async function handleTestViewer() {
-    setError(null)
-    setViewerLoading(true)
-    try {
-      const { email: viewerEmail, password: viewerPassword } = await ensureTestViewerAccount()
-      const { error } = await signIn.email({ email: viewerEmail, password: viewerPassword })
-      if (error) {
-        setError('Could not open the test viewer right now. Please try again.')
-        return
-      }
-      router.push('/account')
-      router.refresh()
-    } catch {
-      setError('Could not open the test viewer right now. Please try again.')
-    } finally {
-      setViewerLoading(false)
-    }
-  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -169,27 +148,6 @@ export function AuthForm({ mode }: Props) {
       <button type="submit" disabled={loading} className="empire-cta mt-6 h-11 w-full rounded-lg font-display text-xs uppercase tracking-[0.28em] disabled:opacity-60">
         {loading ? 'One moment…' : isSignUp ? 'Create account' : 'Sign in'}
       </button>
-
-      {!isSignUp && (
-        <>
-          <div className="mt-5 flex items-center gap-3 text-[0.65rem] uppercase tracking-[0.3em] text-muted-foreground/60">
-            <span className="h-px flex-1 bg-border/60" />
-            <span>or</span>
-            <span className="h-px flex-1 bg-border/60" />
-          </div>
-          <button
-            type="button"
-            onClick={handleTestViewer}
-            disabled={viewerLoading}
-            className="mt-5 h-11 w-full rounded-lg border border-gold/40 bg-gold/5 font-display text-xs uppercase tracking-[0.24em] text-gold-bright transition-colors hover:bg-gold/10 disabled:opacity-60"
-          >
-            {viewerLoading ? 'Opening test viewer…' : 'Continue as test viewer'}
-          </button>
-          <p className="mt-2 text-center text-xs text-muted-foreground">
-            A shared demo account on the Free plan — no signup required, for exploring the app only.
-          </p>
-        </>
-      )}
 
       <p className="mt-5 text-center text-sm text-muted-foreground">
         {isSignUp ? 'Already initiated?' : 'New to the sanctuary?'}{' '}

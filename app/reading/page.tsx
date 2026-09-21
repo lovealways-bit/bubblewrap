@@ -9,9 +9,11 @@ import {
   shouldShowAds,
   canUsePremiumSpreads,
 } from '@/lib/subscription/entitlements'
+import { redirect } from 'next/navigation'
 
 export default async function ReadingPage() {
   const session = await getSession()
+  if (!session?.user) redirect('/sign-in')
   const tier = session?.user ? await getUserTier(session.user.id) : null
   const showAds = shouldShowAds(tier)
   const premiumSpreads = tier ? canUsePremiumSpreads(tier) : false

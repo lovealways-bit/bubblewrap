@@ -3,6 +3,7 @@ import { getUserTier } from '@/lib/subscription/entitlements'
 import { ONE_TIME_OFFERS } from '@/lib/subscription/tiers'
 import { PricingCards } from '@/components/pricing-cards'
 import { OfferCheckoutCard } from '@/components/offer-checkout-card'
+import { redirect } from 'next/navigation'
 
 export const metadata = {
   title: 'Membership & Pricing — Lunara',
@@ -11,6 +12,7 @@ export const metadata = {
 
 export default async function PricingPage() {
   const session = await getSession()
+  if (!session?.user) redirect('/sign-in')
   const tier = session?.user ? await getUserTier(session.user.id) : null
 
   return (
