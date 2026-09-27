@@ -5,7 +5,7 @@
 // Cards without themed art yet fall back to the classic gold-frame proof,
 // then to the procedural pip illustration — the reading experience never
 // breaks while a theme's art is still rolling out.
-export type DeckThemeId = 'classic' | 'mermaid' | 'fairy' | 'creature'
+export type DeckThemeId = 'classic' | 'mermaid' | 'fairy' | 'creature' | 'blonde'
 
 export interface DeckTheme {
   id: DeckThemeId
@@ -21,6 +21,12 @@ export const DECK_THEMES: DeckTheme[] = [
     name: 'Lunara Classic',
     tagline: 'The original gold-frame Empire deck.',
     folder: 'proofs',
+  },
+  {
+    id: 'blonde',
+    name: 'Lunara Blonde Court',
+    tagline: 'The blonde-court variant already on disk. Missing cards fall back to Classic.',
+    folder: 'blonde',
   },
   {
     id: 'mermaid',
@@ -46,17 +52,23 @@ export function getDeckTheme(id: string | null | undefined): DeckTheme {
   return DECK_THEMES.find((t) => t.id === id) ?? DECK_THEMES[0]
 }
 
-// Cards with themed art delivered so far. Extend each set as more art is
-// generated — the full rollout is 78 cards per theme.
 const THEME_CARD_IDS: Record<DeckThemeId, Set<string>> = {
-  classic: new Set(), // classic uses PROOF_CARD_IDS from proofs.ts instead
+  classic: new Set(),
+  blonde: new Set([
+    'major-00', 'major-01', 'major-02', 'major-03', 'major-04', 'major-05',
+    'major-08', 'major-09', 'major-11', 'major-12', 'major-13', 'major-14',
+    'cups-11', 'cups-12', 'cups-13', 'cups-14',
+    'pentacles-11', 'pentacles-12', 'pentacles-13', 'pentacles-14',
+    'swords-11', 'swords-12', 'swords-13', 'swords-14',
+    'wands-11', 'wands-12', 'wands-13', 'wands-14',
+  ]),
   mermaid: new Set(['major-00', 'major-01', 'wands-01', 'cups-01', 'swords-01', 'pentacles-01']),
   fairy: new Set(['major-00', 'major-01', 'wands-01', 'cups-01', 'swords-01', 'pentacles-01']),
   creature: new Set(['major-00', 'major-01', 'wands-01', 'cups-01', 'swords-01', 'pentacles-01']),
 }
 
 export function hasThemeArt(themeId: DeckThemeId, cardId: string): boolean {
-  if (themeId === 'classic') return false // handled by hasProof()
+  if (themeId === 'classic') return false
   return THEME_CARD_IDS[themeId]?.has(cardId) ?? false
 }
 
