@@ -14,12 +14,8 @@ const ROMAN = [
 ]
 
 const PIP = ['', 'Ace', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'Page', 'Knight', 'Queen', 'King']
-
-// Spelled-out rank words shown at the top of number cards, matching the deck.
 const WORD = ['', 'Ace', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten']
 
-// Per-suit magik-world identity: aura color for the frame glow, cosmic face
-// gradient, and the element name that labels each layer.
 const SUIT_META: Record<string, { glow: string; element: string; suitName: string; face: string }> = {
   wands: {
     glow: 'rgba(232,145,45,0.45)',
@@ -59,7 +55,6 @@ function rankLabel(drawn: DrawnCard): string {
   return PIP[card.number] ?? String(card.number)
 }
 
-// Ornate gold filigree at each corner of the frame, echoing the painted deck.
 function CornerFlourishes() {
   const corner = (
     <svg viewBox="0 0 40 40" className="h-full w-full" fill="none" aria-hidden="true">
@@ -78,7 +73,6 @@ function CornerFlourishes() {
   )
 }
 
-// A single suit hero standing in front of the Empire's wingset.
 function WingedEmblem({
   suit,
   emblemSize,
@@ -98,8 +92,6 @@ function WingedEmblem({
   )
 }
 
-// Fallback art when no painted illustration exists yet: winged suit heroes,
-// one per point of the rank, or a single grand hero for courts and Majors.
 function PipHost({
   card,
   isMajor,
@@ -131,8 +123,6 @@ function PipHost({
   )
 }
 
-// The painted illustration for the card, falling back to procedural art if the
-// image has not been generated yet.
 function CardArt({
   card,
   isMajor,
@@ -141,7 +131,7 @@ function CardArt({
   reversed,
   blonde,
 }: {
-  card: TarotCard
+  card: TarotCardData
   isMajor: boolean
   isCourt: boolean
   pipCount: number
@@ -149,13 +139,8 @@ function CardArt({
   blonde: boolean
 }) {
   const [failed, setFailed] = useState(false)
-  // Prefer the blonde variant illustration when this draw is flagged blonde and
-  // a variant exists; otherwise fall back to the card's own illustration.
   const artSrc = blonde && hasBlondeVariant(card.id) ? blondeSrc(card.id) : card.imageRef
   const showImage = artSrc && !failed
-
-  // Illustrations always render right side up to match the printed proof decks.
-  // Reversed orientation is conveyed by the flag/label, never by flipping art.
   void reversed
 
   return (
@@ -182,7 +167,6 @@ interface Props {
   onSelect?: () => void
   selected?: boolean
   compact?: boolean
-  /** Which deck theme's art to prefer for this card. Defaults to classic. */
   deckTheme?: DeckThemeId
 }
 
@@ -203,13 +187,7 @@ export function TarotCard({
   const meta = SUIT_META[card.suit ?? 'major']
   const numeral = isMajor || isCourt ? rankLabel(drawn) : WORD[pipCount] ?? String(pipCount)
   const themeLabel = card.theme ?? card.keywords[0]
-  // This draw shows blonde variant art when flagged AND a variant exists. The
-  // blonde art is illustration-only, so it renders inside the app frame and
-  // takes precedence over the baked full-card proof for this draw.
   const showBlonde = Boolean(drawn.blonde) && hasBlondeVariant(card.id) && deckTheme === 'classic'
-  // Themed deck art (mermaid/fairy/creature) takes precedence over the
-  // classic proof when it exists for this card; both render as a full baked
-  // face. Cards a theme hasn't reached yet fall back to the classic proof.
   const themedArt = hasThemeArt(deckTheme, card.id)
   const proof = (themedArt || hasProof(card.id)) && !showBlonde
   const proofImageSrc = themedArt ? themeArtSrc(deckTheme, card.id) : proofSrc(card.id)
@@ -251,7 +229,6 @@ export function TarotCard({
             revealed ? 'rotate-y-180' : ''
           }`}
         >
-          {/* ---- Card back (face down) ---- */}
           <div className="backface-hidden absolute inset-0 overflow-hidden rounded-xl border border-gold/40 bg-surface">
             <div
               className="absolute inset-0"
@@ -272,13 +249,12 @@ export function TarotCard({
             </div>
           </div>
 
-          {/* ---- Card face (revealed) ---- */}
           {proof ? (
             <div className="backface-hidden rotate-y-180 absolute inset-0 overflow-hidden rounded-xl bg-black">
               <img
                 src={proofImageSrc || '/placeholder.svg'}
                 alt={`${card.name}${isReversed ? ', reversed' : ''}`}
-                className="h-full w-full object-contain"
+                className={`h-full w-full object-cover ${isReversed ? 'rotate-180' : ''}`}
                 crossOrigin="anonymous"
               />
               {isReversed && (
@@ -295,13 +271,11 @@ export function TarotCard({
             <div className="absolute inset-0 rounded-xl border-2 border-gold/70" />
             <div className="absolute inset-[5px] rounded-lg border border-gold/25" />
             <CornerFlourishes />
-
             <div
               className={`relative flex h-full flex-col items-center ${
                 compact ? 'gap-1 p-2.5' : 'gap-1.5 p-3.5'
               }`}
             >
-              {/* top: numeral + reversed flag */}
               <div className="flex w-full items-center justify-center">
                 {isReversed && (
                   <span className="absolute left-2.5 rounded-full border border-teal/50 px-1 text-[0.45rem] uppercase tracking-[0.15em] text-teal">
@@ -316,8 +290,6 @@ export function TarotCard({
                   {numeral}
                 </span>
               </div>
-
-              {/* illustration */}
               <div className="relative w-full flex-1 overflow-hidden rounded-md border border-gold/50 bg-black/30">
                 <CardArt
                   card={card}
@@ -328,8 +300,6 @@ export function TarotCard({
                   blonde={showBlonde}
                 />
               </div>
-
-              {/* title + theme */}
               <div className="w-full text-center">
                 <h3
                   className={`font-display uppercase leading-tight text-gold-bright text-balance ${
@@ -344,8 +314,6 @@ export function TarotCard({
                   </p>
                 )}
               </div>
-
-              {/* footer keyword trio */}
               <div
                 className={`flex w-full items-center justify-center overflow-hidden border-t border-gold/20 pt-1 uppercase text-gold/60 ${
                   compact ? 'gap-0.5 text-[0.4rem] tracking-[0.08em]' : 'gap-1 text-[0.45rem] tracking-[0.12em]'
@@ -367,8 +335,6 @@ export function TarotCard({
   )
 }
 
-// The winged-lotus Empire emblem used on the card back, falling back to the
-// suit emblem if the art has not been generated.
 function EmblemBack({ compact }: { compact: boolean }) {
   const [failed, setFailed] = useState(false)
   const size = compact ? 'h-14 w-14' : 'h-24 w-24'
@@ -384,7 +350,7 @@ function EmblemBack({ compact }: { compact: boolean }) {
   return (
     <img
       src="/cards/the-empire.png"
-          alt="Lunara emblem"
+      alt="Lunara emblem"
       className={`${size} object-contain drop-shadow-[0_0_12px_rgba(242,201,76,0.35)] transition-transform duration-500 group-hover:scale-105`}
       crossOrigin="anonymous"
       onError={() => setFailed(true)}
