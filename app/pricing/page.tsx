@@ -3,6 +3,7 @@ import { getUserTier } from '@/lib/subscription/entitlements'
 import { ONE_TIME_OFFERS } from '@/lib/subscription/tiers'
 import { PricingCards } from '@/components/pricing-cards'
 import { OfferCheckoutCard } from '@/components/offer-checkout-card'
+import { LegalLinks } from '@/components/checkout-disclosure'
 
 export const metadata = {
   title: 'Membership & Pricing — Lunara',
@@ -47,10 +48,7 @@ export default async function PricingPage() {
           </div>
         </div>
 
-        <p className="mx-auto mt-14 max-w-xl text-center text-xs text-muted-foreground">
-          Checkout is currently in Stripe test mode. No real charges will occur until the owner
-          connects a live Stripe account.
-        </p>
+        <LegalLinks className="mx-auto mt-14 max-w-xl text-center text-xs text-muted-foreground" />
       </section>
     </main>
   )
