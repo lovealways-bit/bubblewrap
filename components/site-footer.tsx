@@ -1,3 +1,5 @@
+import { LegalLinks } from '@/components/checkout-disclosure'
+
 // App-wide footer: brand line, copyright, and contact addresses.
 // Shared between the entrance hero and the reading experience so the
 // legal + contact information appears consistently across the app.
@@ -49,6 +51,8 @@ export function SiteFooter() {
           kj@allpathproperties.com
         </a>
       </div>
+
+      <LegalLinks className="mt-4 text-xs text-muted-foreground" />
     </footer>
   )
 }

@@ -53,6 +53,15 @@ async function getOrCreateStripeCustomer(userId: string, email: string | null | 
   return customer.id
 }
 
+// Requires the shopper to accept the Terms of Service inside Stripe Checkout.
+// Stripe rejects this unless a Terms of Service URL is saved in the Stripe
+// Dashboard (Settings, Public details), so it is opt-in via env var.
+function tosConsent() {
+  return process.env.STRIPE_REQUIRE_TOS_CONSENT === 'true'
+    ? { consent_collection: { terms_of_service: 'required' as const } }
+    : {}
+}
+
 // Creates a Stripe Checkout Session for a paid membership tier and returns its URL.
 export async function createCheckout(tierId: Exclude<TierId, 'free'>) {
   const session = await getSession()
@@ -69,6 +78,7 @@ export async function createCheckout(tierId: Exclude<TierId, 'free'>) {
   const customerId = await getOrCreateStripeCustomer(userId, session.user.email)
 
   const checkout = await stripe.checkout.sessions.create({
+    ...tosConsent(),
     mode: 'subscription',
     customer: customerId,
     line_items: [{ price: priceId, quantity: 1 }],
@@ -102,6 +112,7 @@ export async function createOneTimeCheckout(
   const customerId = await getOrCreateStripeCustomer(userId, session.user.email)
 
   const checkout = await stripe.checkout.sessions.create({
+    ...tosConsent(),
     mode: 'payment',
     customer: customerId,
     line_items: [{ price: offer.stripePriceId, quantity: 1 }],
@@ -139,6 +150,7 @@ export async function createDeckUnlockCheckout(deckId: string) {
   const customerId = await getOrCreateStripeCustomer(userId, session.user.email)
 
   const checkout = await stripe.checkout.sessions.create({
+    ...tosConsent(),
     mode: 'payment',
     customer: customerId,
     line_items: [{ price: CUSTOM_DECK_UNLOCK_PRICE_ID, quantity: 1 }],

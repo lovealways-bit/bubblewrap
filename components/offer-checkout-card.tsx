@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createOneTimeCheckout } from '@/app/actions/subscription'
+import { CheckoutDisclosure } from '@/components/checkout-disclosure'
 import { DELIVERY_PREFERENCES, type OneTimeOffer, type DeliveryPreference } from '@/lib/subscription/tiers'
 
 interface Props {
@@ -55,6 +56,9 @@ export function OfferCheckoutCard({ offer, signedIn }: Props) {
         >
           {offer.ctaLabel ?? 'Open'}
         </button>
+      ) : null}
+      {offer.ctaHref ? (
+        <CheckoutDisclosure kind="one-time" priceCents={offer.priceCents} className="mt-3" />
       ) : (
         <>
       {offer.requiresDeliveryPreference && (
@@ -86,6 +90,7 @@ export function OfferCheckoutCard({ offer, signedIn }: Props) {
       >
         {loading ? 'Opening checkout…' : `Purchase ${offer.name}`}
       </button>
+      <CheckoutDisclosure kind="one-time" priceCents={offer.priceCents} className="mt-3" />
       {error && <p className="mt-3 text-sm text-destructive">{error}</p>}
         </>
       )}

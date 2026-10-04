@@ -65,7 +65,7 @@ export const TIERS: Record<TierId, Tier> = {
     tagline: 'Personalized daily guidance.',
     priceLabel: '$9.99 / mo',
     priceCents: 999,
-    stripePriceId: 'price_1UGjLAK2NOJSv83D4DYmZsgL',
+    stripePriceId: 'price_1UMqnpFa8lKpl3byN6xQ1Nsr',
     features: [
       'Everything in Free',
       'Personalized daily guidance',
@@ -91,7 +91,7 @@ export const TIERS: Record<TierId, Tier> = {
     tagline: 'Readings shaped to your stars.',
     priceLabel: '$19.99 / mo',
     priceCents: 1999,
-    stripePriceId: 'price_1UGjLBK2NOJSv83D40mHcvnJ',
+    stripePriceId: 'price_1UMqonFa8lKpl3by4slPEWPS',
     features: [
       'Everything in Core',
       'All deep spreads including the Celtic Cross',
@@ -115,7 +115,7 @@ export const TIERS: Record<TierId, Tier> = {
     tagline: 'Guidance, one to one.',
     priceLabel: '$49.99 / mo',
     priceCents: 4999,
-    stripePriceId: 'price_1UGjLBK2NOJSv83D2N60MXAo',
+    stripePriceId: 'price_1UMqp7Fa8lKpl3byNMqDXIzd',
     features: [
       'Everything in Plus',
       'Direct personal consults with a live reader',
@@ -156,7 +156,7 @@ export const DELIVERY_PREFERENCES: { id: DeliveryPreference; label: string }[] =
 // A single custom deck's full-art unlock, charged once per deck. Plus &
 // Personal members get this included and never hit checkout. Test-mode price
 // created in this project's connected Stripe account.
-export const CUSTOM_DECK_UNLOCK_PRICE_ID = 'price_1UGk9gK2NOJSv83Daswx7RtK'
+export const CUSTOM_DECK_UNLOCK_PRICE_ID = 'price_1UMqpxFa8lKpl3byccKFhgDQ'
 export const CUSTOM_DECK_UNLOCK_PRICE_CENTS = 500
 export const CUSTOM_DECK_UNLOCK_PRICE_LABEL = '$5'
 
@@ -186,7 +186,7 @@ export const ONE_TIME_OFFERS: Record<OneTimeOfferId, OneTimeOffer> = {
     name: 'Birth Chart',
     priceLabel: '$33.33',
     priceCents: 3333,
-    stripePriceId: 'price_1UGjLBK2NOJSv83D3yunl9HO',
+    stripePriceId: 'price_1UMqpQFa8lKpl3bybEvWOyWB',
     description: 'A bespoke natal chart reading, one time.',
     requiresDeliveryPreference: false,
   },
@@ -195,7 +195,7 @@ export const ONE_TIME_OFFERS: Record<OneTimeOfferId, OneTimeOffer> = {
     name: 'Personal Reading',
     priceLabel: '$49.99',
     priceCents: 4999,
-    stripePriceId: 'price_1UGjLCK2NOJSv83DLgzLgT5w',
+    stripePriceId: 'price_1UMqphFa8lKpl3byrZWZ75vL',
     description: 'A one-to-one reading with a live reader, delivered your way.',
     requiresDeliveryPreference: true,
   },

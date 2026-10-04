@@ -3,6 +3,8 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { Sparkles, Trash2, Loader2, Plus, X, Lock, Check } from 'lucide-react'
+import { CheckoutDisclosure } from '@/components/checkout-disclosure'
+import { CUSTOM_DECK_UNLOCK_PRICE_CENTS } from '@/lib/subscription/tiers'
 import {
   createCustomDeckPreview,
   deleteCustomDeck,
@@ -329,6 +331,7 @@ export function DeckDesigner({
 
                   <div className="mt-5 border-t border-gold/15 pt-4">
                     {!unlocked ? (
+                      <>
                       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                         <p className="text-xs text-muted-foreground">
                           {entitledFree
@@ -353,6 +356,14 @@ export function DeckDesigner({
                           )}
                         </button>
                       </div>
+                      {!entitledFree && (
+                        <CheckoutDisclosure
+                          kind="one-time"
+                          priceCents={CUSTOM_DECK_UNLOCK_PRICE_CENTS}
+                          className="mt-2"
+                        />
+                      )}
+                      </>
                     ) : (
                       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                         <p className="text-xs text-muted-foreground">
