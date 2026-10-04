@@ -194,3 +194,19 @@
     transform: translateY(0);
   }
 }
+
+/* Mobile bottom sheet (components/mobile-sheet.tsx) */
+@keyframes lunara-sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [style*='lunara-sheet-up'] {
+    animation: none !important;
+  }
+}

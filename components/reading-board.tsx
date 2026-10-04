@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Shuffle, Sparkles, Hand, BookMarked, Trash2, FolderOpen, Clock, Sun, Star, Moon, Lock } from 'lucide-react'
+import { Shuffle, Sparkles, Hand, BookMarked, Trash2, FolderOpen, Clock, Sun, Star, Moon, Lock, Layers, LayoutGrid, BookOpen } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { drawCards } from '@/lib/tarot/engine'
 import { getInterpretation, getReadingSummary } from '@/lib/tarot/interpretation'
@@ -16,11 +16,12 @@ import {
 } from '@/lib/tarot/history'
 import type { DrawnCard } from '@/lib/tarot/types'
 import { type DeckThemeId, getDeckTheme } from '@/lib/tarot/decks'
+import { DECK_THEME_STORAGE_KEY } from '@/lib/tarot/deck-preference'
 import { TarotCard } from './tarot-card'
 import { DeckPicker } from './deck-picker'
+import { MobileSheet, SheetLauncher } from './mobile-sheet'
 
 const STORAGE_KEY = 'empire-tarot-reading-v1'
-const DECK_THEME_STORAGE_KEY = 'empire-tarot-deck-theme-v1'
 
 const SUIT_ELEMENT: Record<string, string> = {
   wands: 'Fire',
@@ -28,6 +29,9 @@ const SUIT_ELEMENT: Record<string, string> = {
   swords: 'Air',
   pentacles: 'Earth',
 }
+
+// Which phone sheet (page within a page) is open, if any.
+type SheetId = 'deck' | 'spread' | 'card' | 'saved'
 
 interface PersistedReading {
   spreadId: string
@@ -79,6 +83,8 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
   const [history, setHistory] = useState<SavedReading[]>([])
   const [savedId, setSavedId] = useState<string | null>(null)
   const [deckTheme, setDeckTheme] = useState<DeckThemeId>('classic')
+  const [sheet, setSheet] = useState<SheetId | null>(null)
+  const closeSheet = useCallback(() => setSheet(null), [])
 
   const spread = getSpread(spreadId) ?? SPREADS[0]
 
@@ -154,9 +160,20 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
     }, 450)
   }, [spreadId])
 
-  const handleReveal = useCallback((index: number) => {
-    setCards((prev) => prev.map((c, i) => (i === index ? { ...c, revealed: true } : c)))
+  const handleReveal = useCallback(
+    (index: number) => {
+      setCards((prev) => prev.map((c, i) => (i === index ? { ...c, revealed: true } : c)))
+      setSelectedIndex(index)
+      // Single-card draws open the meaning straight away on phones. Larger
+      // spreads let the seeker turn every card first, then tap one to read it.
+      if (spread.positions.length === 1) setSheet('card')
+    },
+    [spread.positions.length],
+  )
+
+  const handleSelect = useCallback((index: number) => {
     setSelectedIndex(index)
+    setSheet('card')
   }, [])
 
   const handleReset = useCallback(() => {
@@ -198,6 +215,7 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
     const firstRevealed = r.cards.findIndex((c) => c.revealed)
     setSelectedIndex(firstRevealed >= 0 ? firstRevealed : 0)
     setSavedId(r.id)
+    setSheet(null)
     if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [])
 
@@ -231,12 +249,46 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
         </p>
       </div>
 
-      {/* ---- Deck theme selector ---- */}
-      <div className="mb-10">
-        <DeckPicker value={deckTheme} onChange={setDeckTheme} />
+      {/* ---- Phone controls: each opens its section in a sheet ---- */}
+      <div className="mx-auto mb-8 flex max-w-md flex-col gap-2.5 md:hidden">
+        <SheetLauncher
+          icon={Layers}
+          label="Your deck"
+          value={getDeckTheme(deckTheme).name}
+          onOpen={() => setSheet('deck')}
+        />
+        <SheetLauncher
+          icon={LayoutGrid}
+          label="Your spread"
+          value={spread.name}
+          hint={spread.tagline}
+          onOpen={() => setSheet('spread')}
+        />
+        {history.length > 0 && (
+          <SheetLauncher
+            icon={Clock}
+            label="Saved readings"
+            value={`${history.length} on this device`}
+            onOpen={() => setSheet('saved')}
+          />
+        )}
       </div>
 
+      {/* ---- Deck theme selector ---- */}
+      <MobileSheet open={sheet === 'deck'} onClose={closeSheet} eyebrow="The Cards" title="Your deck">
+        <div className="mb-10">
+          <DeckPicker
+            value={deckTheme}
+            onChange={(id) => {
+              setDeckTheme(id)
+              setSheet(null)
+            }}
+          />
+        </div>
+      </MobileSheet>
+
       {/* ---- Spread selector ---- */}
+      <MobileSheet open={sheet === 'spread'} onClose={closeSheet} eyebrow="The Cards" title="Choose your spread">
       <div className="flex flex-col items-center gap-4">
         <p className="font-display text-xs uppercase tracking-[0.4em] text-gold/70">
           Choose your spread
@@ -249,7 +301,7 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
               <button
                 key={s.id}
                 type="button"
-                aria-label={locked ? `${s.name} — unlock with Lunara Plus` : s.name}
+                aria-label={locked ? `${s.name}, unlock with Lunara Plus` : s.name}
                 onClick={() => {
                   if (locked) {
                     router.push('/pricing')
@@ -257,6 +309,7 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
                   }
                   setSpreadId(s.id)
                   handleReset()
+                  setSheet(null)
                 }}
                 className={`inline-flex items-center gap-2 rounded-md border px-5 py-2 font-display text-xs uppercase tracking-[0.15em] transition-all duration-300 ${
                   active
@@ -286,6 +339,7 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
           </button>
         )}
       </div>
+      </MobileSheet>
 
       {/* ---- Ask a question (situational) ---- */}
       <div className="mx-auto mt-8 flex max-w-md flex-col items-center gap-2">
@@ -350,7 +404,7 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
                 drawn={drawn}
                 positionLabel={spread.positions[i]?.label ?? 'The Card'}
                 onReveal={() => handleReveal(i)}
-                onSelect={() => setSelectedIndex(i)}
+                onSelect={() => handleSelect(i)}
                 selected={selectedIndex === i}
                 compact={compact}
                 deckTheme={deckTheme}
@@ -383,7 +437,7 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
                     <button
                       key={`row-${drawn.card.id}-${i}`}
                       type="button"
-                      onClick={() => setSelectedIndex(i)}
+                      onClick={() => handleSelect(i)}
                       className={`empire-row flex items-center gap-4 p-4 text-left ${
                         isSelected ? 'border-gold/60' : ''
                       }`}
@@ -420,6 +474,23 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
           {anyRevealed && (
             <div className="mt-10">
               {selected && selected.revealed && selectedPosition ? (
+                <>
+                <div className="mx-auto max-w-md md:hidden">
+                  <SheetLauncher
+                    icon={BookOpen}
+                    label={`Read ${selectedPosition.label}`}
+                    value={selected.card.name}
+                    hint="Opens the full meaning"
+                    onOpen={() => setSheet('card')}
+                  />
+                </div>
+                <MobileSheet
+                  open={sheet === 'card'}
+                  onClose={closeSheet}
+                  eyebrow={selectedPosition.label}
+                  title={selected.card.name}
+                  backLabel="Cards"
+                >
                 <div
                   key={selectedIndex}
                   className="empire-panel p-6"
@@ -512,6 +583,8 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
                     {selected.card.layer && <span>Layer {selected.card.layer} / 78</span>}
                   </div>
                 </div>
+                </MobileSheet>
+                </>
               ) : (
                 <p className="flex items-center justify-center gap-2 text-center text-sm italic text-muted-foreground">
                   <Hand className="h-4 w-4 text-gold/60" />
@@ -562,7 +635,8 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
 
       {/* ---- Saved readings, stored on this device ---- */}
       {history.length > 0 && (
-        <div className="mt-16 border-t border-gold/15 pt-10">
+        <MobileSheet open={sheet === 'saved'} onClose={closeSheet} eyebrow="This device" title="Saved readings">
+        <div className="md:mt-16 md:border-t md:border-gold/15 md:pt-10">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <p className="flex items-center gap-2 font-display text-xs uppercase tracking-[0.35em] text-gold/70">
               <Clock className="h-4 w-4 text-gold/60" />
@@ -633,6 +707,7 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
             })}
           </ul>
         </div>
+        </MobileSheet>
       )}
     </section>
   )
