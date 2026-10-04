@@ -252,8 +252,8 @@ export function DeckDesigner({
           </button>
           <p className="text-xs text-muted-foreground">
             {entitledFree
-              ? 'The full 78-card set is included with your membership — unlock any deck for free.'
-              : `The preview is free. Unlock a deck's full 78-card set for ${unlockPriceLabel}, one time.`}
+              ? `The full ${fullDeckSize}-card set is included with your membership. Unlock any deck for free.`
+              : `The preview is free. Unlock a deck's full ${fullDeckSize}-card set for ${unlockPriceLabel}, one time.`}
           </p>
         </div>
       </section>
@@ -318,7 +318,7 @@ export function DeckDesigner({
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={`/api/file?pathname=${encodeURIComponent(c.pathname)}`}
-                            alt={`${deck.name} — ${c.cardName}`}
+                            alt={`${deck.name}, ${c.cardName}`}
                             className="h-full w-full object-contain"
                           />
                         </div>
@@ -335,7 +335,7 @@ export function DeckDesigner({
                       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                         <p className="text-xs text-muted-foreground">
                           {entitledFree
-                            ? `Unlock the full ${fullDeckSize}-card deck — included with your membership.`
+                            ? `Unlock the full ${fullDeckSize}-card deck, included with your membership.`
                             : `Unlock the full ${fullDeckSize}-card deck for ${unlockPriceLabel}, one time.`}
                         </p>
                         <button
@@ -351,7 +351,7 @@ export function DeckDesigner({
                           ) : (
                             <>
                               <Lock className="h-4 w-4" />
-                              {entitledFree ? 'Unlock full deck' : `Unlock — ${unlockPriceLabel}`}
+                              {entitledFree ? 'Unlock full deck' : `Unlock for ${unlockPriceLabel}`}
                             </>
                           )}
                         </button>

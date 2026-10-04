@@ -39,7 +39,7 @@ export async function listMyDecks() {
 }
 
 // The free teaser: anyone signed in can paint a 4-card preview of a deck.
-// Unlocking the full 78-card set is a separate, paid ($5) or entitled step.
+// Unlocking the full set is a separate, paid ($5) or entitled step.
 export async function createCustomDeckPreview(input: CreateDeckInput) {
   const userId = await getUserId()
 
@@ -139,7 +139,7 @@ export async function unlockDeck(deckId: string) {
 
 // Paints the next batch of full-deck cards for an unlocked deck. Idempotent
 // and resumable: it only generates cards not already stored, and marks the
-// deck 'complete' once all 78 are done.
+// deck 'complete' once every card in FULL_DECK_CARDS is done.
 export async function generateFullDeckBatch(deckId: string) {
   const userId = await getUserId()
 
@@ -192,7 +192,10 @@ export async function generateFullDeckBatch(deckId: string) {
   }
 
   const merged = [...done, ...painted]
-  const complete = merged.length >= FULL_DECK_SIZE
+  // Count only cards still in the set, so art painted for a card that is now
+  // held does not finish a deck early.
+  const fullIds = new Set(FULL_DECK_CARDS.map((c) => c.id))
+  const complete = merged.filter((c) => fullIds.has(c.cardId)).length >= FULL_DECK_SIZE
 
   await db
     .update(customDeck)
