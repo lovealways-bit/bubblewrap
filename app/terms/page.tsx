@@ -8,8 +8,8 @@ export default function Page() {
   return (
     <LegalPage title="Terms of Service" updated="October 4, 2026">
         <p>
-          These terms cover your use of Lunara, a service run by AllPath, based in Columbus,
-          Ohio. By creating an account or making a purchase you agree to these terms.
+          These terms cover your use of Lunara, a service run by AllPath, operated by ALLPATH (AP)
+          EDUCATION SOLUTIONS LLC, based in Columbus, Ohio. By creating an account or making a purchase you agree to these terms.
         </p>
         <H2>Your account</H2>
         <p>
@@ -42,7 +42,7 @@ export default function Page() {
         </p>
         <H2>Contact</H2>
         <p>
-          AllPath, Columbus, Ohio. Email{' '}
+          AllPath, operated by ALLPATH (AP) EDUCATION SOLUTIONS LLC, Columbus, Ohio. Email{' '}
           <a href={`mailto:${LEGAL_CONTACT_EMAIL}`} className="underline underline-offset-2">
             {LEGAL_CONTACT_EMAIL}
           </a>
