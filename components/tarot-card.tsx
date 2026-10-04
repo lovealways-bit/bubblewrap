@@ -349,7 +349,7 @@ function EmblemBack({ compact }: { compact: boolean }) {
   }
   return (
     <img
-      src="/cards/the-empire.png"
+      src="/cards/card-back-sunflower-compass.png"
       alt="Lunara emblem"
       className={`${size} object-contain drop-shadow-[0_0_12px_rgba(242,201,76,0.35)] transition-transform duration-500 group-hover:scale-105`}
       crossOrigin="anonymous"
