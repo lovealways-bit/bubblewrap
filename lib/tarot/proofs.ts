@@ -3,11 +3,13 @@
 // Each entry is a card ID whose printed proof (gold frame, title, and keywords
 // already baked into the image) lives at `/cards/proofs/<id>.png`. When a card
 // is listed here, the app renders that image as the ENTIRE card face and draws
-// none of its own frame, numeral, title, theme, or keyword footer over it — so
+// none of its own frame, numeral, title, theme, or keyword footer over it, so
 // the artist's design is used exactly as delivered, right side up.
 //
 // This set is intentionally empty until proofs are dropped in. Add each card ID
 // here as its `/cards/proofs/<id>.png` file is added.
+import { isDeckEnabled } from './decks'
+
 export const PROOF_CARD_IDS = new Set<string>([
   // Wands (full suit)
   'wands-01', 'wands-02', 'wands-03', 'wands-04', 'wands-05', 'wands-06', 'wands-07',
@@ -35,14 +37,16 @@ export function proofSrc(cardId: string): string {
   return `/cards/proofs/${cardId}.png`
 }
 
-// Blonde-haired variant art (illustration only, no baked frame/text). These are
-// generated alternates for figure-driven cards, referencing the blonde figures
-// already present in the delivered proofs (e.g. the Two of Cups, Six of Cups,
-// and Queen of Swords). At draw time each card is randomly flagged blonde; the
-// renderer swaps in this illustration inside the app's gold frame only when the
-// card has a variant listed here. Non-figure cards are intentionally excluded.
-export const BLONDE_VARIANT_IDS = new Set<string>([
-  // Court figures — one prominent person whose hair reads clearly
+// Summer Court variant art (illustration only, no baked frame/text). These are
+// generated alternates for figure-driven cards, kept in /cards/summer-court/.
+// At draw time each card is randomly flagged for the variant (the DrawnCard
+// field is still named `blonde` so readings saved on devices keep loading);
+// the renderer swaps in this illustration inside the app's gold frame only
+// when the card has a variant listed here AND the Summer Court deck is
+// enabled in lib/tarot/decks.ts. While that deck is hidden, its art never
+// appears anywhere, including mixed into the main deck.
+export const SUMMER_COURT_VARIANT_IDS = new Set<string>([
+  // Court figures: one prominent person whose hair reads clearly
   'wands-11', 'wands-12', 'wands-13', 'wands-14',
   'cups-11', 'cups-12', 'cups-13', 'cups-14',
   'swords-11', 'swords-12', 'swords-13', 'swords-14',
@@ -50,15 +54,15 @@ export const BLONDE_VARIANT_IDS = new Set<string>([
   // Figure-driven Major Arcana
   'major-00', 'major-01', 'major-02', 'major-03', 'major-04', 'major-05',
   'major-08', 'major-09', 'major-11',
-  // The Devil (major-15) already features a prominent blonde figure in its
-  // proof, so it is intentionally excluded here.
+  // The Devil (major-15) is intentionally excluded.
   'major-12', 'major-13', 'major-14',
 ])
 
-export function hasBlondeVariant(cardId: string): boolean {
-  return BLONDE_VARIANT_IDS.has(cardId)
+export function hasSummerCourtVariant(cardId: string): boolean {
+  if (!isDeckEnabled('summer-court')) return false
+  return SUMMER_COURT_VARIANT_IDS.has(cardId)
 }
 
-export function blondeSrc(cardId: string): string {
-  return `/cards/blonde/${cardId}.png`
+export function summerCourtSrc(cardId: string): string {
+  return `/cards/summer-court/${cardId}.png`
 }

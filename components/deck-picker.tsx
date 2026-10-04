@@ -1,25 +1,29 @@
 'use client'
 
 import { Check } from 'lucide-react'
-import { DECK_THEMES, type DeckThemeId, hasThemeArt, themeArtSrc } from '@/lib/tarot/decks'
+import { DECK_THEMES, type DeckThemeId, getDeckTheme, hasThemeArt, themeArtSrc } from '@/lib/tarot/decks'
 import { proofSrc } from '@/lib/tarot/proofs'
 
 // Representative preview card shown on each theme's swatch: The Fool for
 // every theme, since it is the first card every theme's rollout includes.
+// Only decks switched on in lib/tarot/decks.ts (DECK_THEMES) are listed.
 const PREVIEW_CARD_ID = 'major-00'
 
 interface Props {
   value: DeckThemeId
   onChange: (id: DeckThemeId) => void
+  /** Larger swatches, used on the dedicated deck page. */
+  size?: 'default' | 'large'
 }
 
-export function DeckPicker({ value, onChange }: Props) {
+export function DeckPicker({ value, onChange, size = 'default' }: Props) {
+  const current = getDeckTheme(value)
   return (
     <div className="flex flex-col items-center gap-4">
       <p className="font-display text-xs uppercase tracking-[0.4em] text-gold/70">Choose your deck</p>
       <div className="flex flex-wrap justify-center gap-4">
         {DECK_THEMES.map((theme) => {
-          const active = theme.id === value
+          const active = theme.id === current.id
           const previewSrc = hasThemeArt(theme.id, PREVIEW_CARD_ID)
             ? themeArtSrc(theme.id, PREVIEW_CARD_ID)
             : proofSrc(PREVIEW_CARD_ID)
@@ -29,7 +33,7 @@ export function DeckPicker({ value, onChange }: Props) {
               type="button"
               onClick={() => onChange(theme.id)}
               aria-pressed={active}
-              className={`group relative flex w-28 flex-col items-center gap-2 rounded-lg border p-2.5 text-center transition-all duration-300 ${
+              className={`group relative flex ${size === 'large' ? 'w-44' : 'w-28'} flex-col items-center gap-2 rounded-lg border p-2.5 text-center transition-all duration-300 ${
                 active
                   ? 'border-gold bg-gold/10 shadow-[0_0_18px_-6px_var(--gold)]'
                   : 'border-gold/25 hover:border-gold/50'
@@ -55,12 +59,15 @@ export function DeckPicker({ value, onChange }: Props) {
               >
                 {theme.name}
               </span>
+              <span className="text-[0.6rem] uppercase tracking-[0.2em] text-gold/45">
+                {theme.cardCount} cards
+              </span>
             </button>
           )
         })}
       </div>
       <p className="max-w-sm text-center text-xs italic text-muted-foreground text-pretty">
-        {DECK_THEMES.find((t) => t.id === value)?.tagline}
+        {current.tagline}
       </p>
     </div>
   )
