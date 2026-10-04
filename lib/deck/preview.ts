@@ -2,6 +2,7 @@ import 'server-only'
 import { generateImage } from 'ai'
 import { gateway } from '@ai-sdk/gateway'
 import { put } from '@vercel/blob'
+import { isCardHeld } from '@/lib/tarot/held-cards'
 
 export interface DeckCard {
   id: string
@@ -10,7 +11,7 @@ export interface DeckCard {
 }
 
 // A small, curated preview set: the card back plus three iconic faces.
-// Free for everyone — the teaser before a $5 full-deck unlock.
+// Free for everyone, the teaser before a $5 full-deck unlock.
 export const PREVIEW_CARDS: DeckCard[] = [
   {
     id: 'back',
@@ -103,8 +104,13 @@ function buildMinorArcana(): DeckCard[] {
   return cards
 }
 
-// The complete 78-card deck (22 Major + 56 Minor Arcana), in traditional order.
-export const FULL_DECK_CARDS: DeckCard[] = [...MAJOR_ARCANA, ...buildMinorArcana()]
+// Every card (22 Major + 56 Minor Arcana), in traditional order.
+export const ALL_DECK_CARDS: DeckCard[] = [...MAJOR_ARCANA, ...buildMinorArcana()]
+
+// The set the builder paints: every card except those held out of production
+// in lib/tarot/held-cards.ts. Minor ids here (e.g. 'pentacles-06') use the
+// same ids as the reading deck.
+export const FULL_DECK_CARDS: DeckCard[] = ALL_DECK_CARDS.filter((c) => !isCardHeld(c.id))
 export const FULL_DECK_SIZE = FULL_DECK_CARDS.length
 
 export interface PreviewStyle {

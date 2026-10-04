@@ -1,4 +1,5 @@
 import { buildDeck } from './deck'
+import { isCardHeld } from './held-cards'
 import type { DrawnCard, Orientation, TarotCard } from './types'
 
 // ---------------------------------------------------------------------------
@@ -27,6 +28,15 @@ function rollOrientation(reversalChance: number): Orientation {
   return Math.random() < reversalChance ? 'reversed' : 'upright'
 }
 
+/**
+ * The deck readings are dealt from: the full deck minus any card held out of
+ * production in lib/tarot/held-cards.ts. Same order and layer numbers as
+ * buildDeck(), just without the held cards.
+ */
+export function buildPlayableDeck(): TarotCard[] {
+  return buildDeck().filter((card) => !isCardHeld(card.id))
+}
+
 export interface DrawOptions {
   count: number
   reversalChance?: number
@@ -35,8 +45,9 @@ export interface DrawOptions {
 }
 
 /**
- * Shuffles a full 78-card deck (unless one is supplied) and draws `count`
+ * Shuffles the playable deck (unless one is supplied) and draws `count`
  * cards off the top, each independently rolled for upright vs reversed.
+ * Held cards (lib/tarot/held-cards.ts) are never in the playable deck.
  * Cards start face down (`revealed: false`).
  */
 export function drawCards({
@@ -44,7 +55,7 @@ export function drawCards({
   reversalChance = DEFAULT_REVERSAL_CHANCE,
   deck,
 }: DrawOptions): DrawnCard[] {
-  const shuffled = shuffleDeck(deck ?? buildDeck())
+  const shuffled = shuffleDeck(deck ?? buildPlayableDeck())
   return shuffled.slice(0, count).map((card) => ({
     card,
     orientation: rollOrientation(reversalChance),

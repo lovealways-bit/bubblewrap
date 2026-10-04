@@ -1,9 +1,11 @@
+import { isCardHeld } from './held-cards'
+
 // Full-card design proofs supplied by the deck artist.
 //
 // Each entry is a card ID whose printed proof (gold frame, title, and keywords
 // already baked into the image) lives at `/cards/proofs/<id>.png`. When a card
 // is listed here, the app renders that image as the ENTIRE card face and draws
-// none of its own frame, numeral, title, theme, or keyword footer over it — so
+// none of its own frame, numeral, title, theme, or keyword footer over it, so
 // the artist's design is used exactly as delivered, right side up.
 //
 // This set is intentionally empty until proofs are dropped in. Add each card ID
@@ -28,7 +30,8 @@ export const PROOF_CARD_IDS = new Set<string>([
 ])
 
 export function hasProof(cardId: string): boolean {
-  return PROOF_CARD_IDS.has(cardId)
+  // Held cards keep their proof file on disk but it is never shown.
+  return PROOF_CARD_IDS.has(cardId) && !isCardHeld(cardId)
 }
 
 export function proofSrc(cardId: string): string {
