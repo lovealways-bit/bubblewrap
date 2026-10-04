@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { TIER_ORDER, TIERS, type TierId } from '@/lib/subscription/tiers'
 import { createCheckout } from '@/app/actions/subscription'
+import { CheckoutDisclosure } from '@/components/checkout-disclosure'
 
 interface Props {
   currentTier: TierId | null
@@ -92,6 +93,9 @@ export function PricingCards({ currentTier, signedIn }: Props) {
                       ? 'Start free'
                       : `Choose ${tier.name.replace('Lunara ', '')}`}
               </button>
+              {tier.priceCents != null && (
+                <CheckoutDisclosure kind="monthly" priceCents={tier.priceCents} className="mt-3" />
+              )}
             </div>
           )
         })}
