@@ -82,7 +82,7 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
   const [drawing, setDrawing] = useState(false)
   const [history, setHistory] = useState<SavedReading[]>([])
   const [savedId, setSavedId] = useState<string | null>(null)
-  const [deckTheme, setDeckTheme] = useState<DeckThemeId>(DECK_THEMES[0]?.id ?? 'summer-court')
+  const [deckTheme, setDeckTheme] = useState<DeckThemeId>(DECK_THEMES[0]?.id ?? 'hallow-court')
   const [sheet, setSheet] = useState<SheetId | null>(null)
   const closeSheet = useCallback(() => setSheet(null), [])
 
