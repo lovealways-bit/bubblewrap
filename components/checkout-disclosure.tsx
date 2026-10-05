@@ -24,6 +24,9 @@ export function CheckoutDisclosure({ kind, priceCents, className }: Props) {
       ) : (
         <p>One-time charge of {price}. This is not a subscription.</p>
       )}
+      <p className="mt-1">
+        Readings are for entertainment and personal reflection only, not advice.
+      </p>
       <LegalLinks className="mt-1" />
     </div>
   )
