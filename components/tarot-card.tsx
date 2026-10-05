@@ -3,8 +3,8 @@
 import { useState } from 'react'
 import { Crown } from 'lucide-react'
 import type { DrawnCard, TarotCard as TarotCardData } from '@/lib/tarot/types'
-import { hasProof, proofSrc, hasBlondeVariant, blondeSrc } from '@/lib/tarot/proofs'
-import { type DeckThemeId, hasThemeArt, themeArtSrc } from '@/lib/tarot/decks'
+import { hasProof, proofSrc, hasSummerCourtVariant, summerCourtSrc } from '@/lib/tarot/proofs'
+import { type DeckThemeId, getDeckTheme, hasThemeArt, themeArtSrc } from '@/lib/tarot/decks'
 import { SuitEmblem } from './suit-emblem'
 import { Wings } from './wings'
 
@@ -129,17 +129,17 @@ function CardArt({
   isCourt,
   pipCount,
   reversed,
-  blonde,
+  summerCourt,
 }: {
   card: TarotCardData
   isMajor: boolean
   isCourt: boolean
   pipCount: number
   reversed: boolean
-  blonde: boolean
+  summerCourt: boolean
 }) {
   const [failed, setFailed] = useState(false)
-  const artSrc = blonde && hasBlondeVariant(card.id) ? blondeSrc(card.id) : card.imageRef
+  const artSrc = summerCourt && hasSummerCourtVariant(card.id) ? summerCourtSrc(card.id) : card.imageRef
   const showImage = artSrc && !failed
   void reversed
 
@@ -177,7 +177,7 @@ export function TarotCard({
   onSelect,
   selected = false,
   compact = false,
-  deckTheme = 'classic',
+  deckTheme = getDeckTheme(null).id,
 }: Props) {
   const { card, orientation, revealed } = drawn
   const isReversed = orientation === 'reversed'
@@ -187,9 +187,9 @@ export function TarotCard({
   const meta = SUIT_META[card.suit ?? 'major']
   const numeral = isMajor || isCourt ? rankLabel(drawn) : WORD[pipCount] ?? String(pipCount)
   const themeLabel = card.theme ?? card.keywords[0]
-  const showBlonde = Boolean(drawn.blonde) && hasBlondeVariant(card.id) && deckTheme === 'classic'
+  const showSummerCourt = Boolean(drawn.blonde) && hasSummerCourtVariant(card.id) && deckTheme === 'classic'
   const themedArt = hasThemeArt(deckTheme, card.id)
-  const proof = (themedArt || hasProof(card.id)) && !showBlonde
+  const proof = (themedArt || hasProof(card.id)) && !showSummerCourt
   const proofImageSrc = themedArt ? themeArtSrc(deckTheme, card.id) : proofSrc(card.id)
 
   const handleClick = () => {
@@ -297,7 +297,7 @@ export function TarotCard({
                   isCourt={isCourt}
                   pipCount={pipCount}
                   reversed={isReversed}
-                  blonde={showBlonde}
+                  summerCourt={showSummerCourt}
                 />
               </div>
               <div className="w-full text-center">
@@ -349,7 +349,7 @@ function EmblemBack({ compact }: { compact: boolean }) {
   }
   return (
     <img
-      src="/cards/the-empire.png"
+      src="/cards/card-back-sunflower-compass.png"
       alt="Lunara emblem"
       className={`${size} object-contain drop-shadow-[0_0_12px_rgba(242,201,76,0.35)] transition-transform duration-500 group-hover:scale-105`}
       crossOrigin="anonymous"

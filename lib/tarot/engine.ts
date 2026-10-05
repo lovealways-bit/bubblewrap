@@ -48,8 +48,9 @@ export function drawCards({
   return shuffled.slice(0, count).map((card) => ({
     card,
     orientation: rollOrientation(reversalChance),
-    // Randomized per draw: half the time we show the blonde-haired variant.
-    // The renderer only honors this when a variant actually exists for the card.
+    // Randomized per draw: half the time we ask for the Summer Court variant.
+    // The renderer only honors this when a variant exists for the card and the
+    // Summer Court deck is enabled in lib/tarot/decks.ts.
     blonde: Math.random() < 0.5,
     revealed: false,
   }))

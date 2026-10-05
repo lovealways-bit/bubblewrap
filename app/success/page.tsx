@@ -51,7 +51,7 @@ export default async function SuccessPage({ searchParams }: Props) {
           </p>
         )}
         {!isMembership && !isBirthChart && !isPersonalReading && !isCustomDeck && (
-          <p className="mt-3 text-sm text-muted-foreground">Thank you — your order is confirmed.</p>
+          <p className="mt-3 text-sm text-muted-foreground">Thank you, your order is confirmed.</p>
         )}
 
         <div className="mt-7 flex flex-col gap-3">
@@ -63,8 +63,17 @@ export default async function SuccessPage({ searchParams }: Props) {
             <Link href="/deck-designer" className="empire-cta h-11 rounded-lg font-display text-xs uppercase tracking-[0.24em] leading-[2.75rem]">
               Back to the atelier
             </Link>
+          ) : isMembership ? (
+            <Link href="/choose-deck?from=membership" className="empire-cta h-11 rounded-lg font-display text-xs uppercase tracking-[0.24em] leading-[2.75rem]">
+              Choose your deck
+            </Link>
           ) : (
             <Link href="/account" className="empire-cta h-11 rounded-lg font-display text-xs uppercase tracking-[0.24em] leading-[2.75rem]">
+              Go to my account
+            </Link>
+          )}
+          {isMembership && (
+            <Link href="/account" className="text-sm text-gold-bright underline-offset-4 hover:underline">
               Go to my account
             </Link>
           )}

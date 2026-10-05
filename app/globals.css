@@ -153,24 +153,50 @@
     border-color: rgba(212, 175, 55, 0.65);
     box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.18);
   }
+}
 
-  /* The signature primary action: solid gold with dark ink. */
-  .empire-cta {
-    background: linear-gradient(180deg, var(--gold-bright) 0%, var(--gold) 55%, #b8932e 100%);
-    color: #1a0f2e;
+
+/* ---- Magical CTA glow / shimmer (gold + cyan cosmic) ---- */
+@keyframes lunara-glow-pulse {
+  0%,
+  100% {
     box-shadow:
-      0 12px 34px -10px rgba(212, 175, 55, 0.6),
+      0 12px 34px -10px rgba(212, 175, 55, 0.55),
+      0 0 22px -4px rgba(63, 214, 200, 0.28),
+      0 0 48px -12px rgba(212, 175, 55, 0.45),
       inset 0 1px 0 rgba(255, 255, 255, 0.35);
-    transition: filter 0.3s ease, box-shadow 0.3s ease, transform 0.15s ease;
   }
-  .empire-cta:hover:not(:disabled) {
-    filter: brightness(1.06);
+  50% {
     box-shadow:
-      0 16px 44px -10px rgba(212, 175, 55, 0.72),
-      inset 0 1px 0 rgba(255, 255, 255, 0.42);
+      0 16px 44px -8px rgba(242, 212, 120, 0.72),
+      0 0 32px -2px rgba(63, 214, 200, 0.42),
+      0 0 64px -8px rgba(212, 175, 55, 0.65),
+      inset 0 1px 0 rgba(255, 255, 255, 0.45);
   }
-  .empire-cta:active:not(:disabled) {
-    transform: translateY(1px);
+}
+
+@keyframes lunara-shimmer {
+  0% {
+    background-position: 120% 0, 0 0;
+  }
+  100% {
+    background-position: -120% 0, 0 0;
+  }
+}
+
+@keyframes lunara-launcher-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 0 rgba(212, 175, 55, 0),
+      0 0 18px -10px rgba(63, 214, 200, 0.2),
+      inset 0 1px 0 rgba(242, 212, 120, 0.06);
+  }
+  50% {
+    box-shadow:
+      0 0 22px -6px rgba(212, 175, 55, 0.45),
+      0 0 28px -8px rgba(63, 214, 200, 0.35),
+      inset 0 1px 0 rgba(242, 212, 120, 0.12);
   }
 }
 
@@ -192,5 +218,116 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Mobile bottom sheet (components/mobile-sheet.tsx) */
+@keyframes lunara-sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@layer utilities {
+  /* Signature primary action: gold with cosmic outer glow + shimmer. */
+  .empire-cta {
+    background-image:
+      linear-gradient(
+        105deg,
+        transparent 0%,
+        transparent 40%,
+        rgba(255, 255, 255, 0.42) 49%,
+        rgba(63, 214, 200, 0.35) 52%,
+        transparent 62%,
+        transparent 100%
+      ),
+      linear-gradient(180deg, var(--gold-bright) 0%, var(--gold) 55%, #b8932e 100%);
+    background-size: 220% 100%, 100% 100%;
+    background-position: 120% 0, 0 0;
+    color: #1a0f2e;
+    box-shadow:
+      0 12px 34px -10px rgba(212, 175, 55, 0.6),
+      0 0 22px -4px rgba(63, 214, 200, 0.28),
+      0 0 48px -12px rgba(212, 175, 55, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    transition: filter 0.3s ease, box-shadow 0.3s ease, transform 0.15s ease;
+    animation:
+      lunara-glow-pulse 3.2s ease-in-out infinite,
+      lunara-shimmer 4.2s ease-in-out infinite;
+  }
+  .empire-cta:hover:not(:disabled) {
+    filter: brightness(1.08);
+    box-shadow:
+      0 18px 48px -8px rgba(242, 212, 120, 0.8),
+      0 0 36px -2px rgba(63, 214, 200, 0.5),
+      0 0 72px -6px rgba(212, 175, 55, 0.7),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  }
+  .empire-cta:active:not(:disabled) {
+    transform: translateY(1px) scale(0.985);
+    filter: brightness(0.98);
+  }
+
+  /* Soft enchanted row for mobile sheet launchers / section nav. */
+  .lunara-sheet-launcher {
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    background:
+      linear-gradient(
+        100deg,
+        rgba(58, 28, 92, 0.72) 0%,
+        rgba(44, 28, 77, 0.48) 55%,
+        rgba(26, 15, 46, 0.4) 100%
+      );
+    box-shadow:
+      0 0 18px -10px rgba(63, 214, 200, 0.22),
+      inset 0 1px 0 rgba(242, 212, 120, 0.08);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, transform 0.15s ease;
+    animation: lunara-launcher-pulse 3.6s ease-in-out infinite;
+  }
+  .lunara-sheet-launcher:hover {
+    border-color: rgba(242, 212, 120, 0.65);
+    box-shadow:
+      0 0 28px -6px rgba(212, 175, 55, 0.55),
+      0 0 32px -8px rgba(63, 214, 200, 0.4),
+      inset 0 1px 0 rgba(242, 212, 120, 0.14);
+  }
+  .lunara-sheet-launcher:active {
+    transform: scale(0.985);
+    background: rgba(212, 175, 55, 0.12);
+  }
+
+  /* Subtle gold/cyan halo for sheet Back / Close chrome. */
+  .lunara-sheet-chrome {
+    transition: color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  }
+  .lunara-sheet-chrome:hover {
+    color: var(--gold-bright);
+    background: rgba(212, 175, 55, 0.1);
+    box-shadow: 0 0 16px -4px rgba(212, 175, 55, 0.45), 0 0 12px -4px rgba(63, 214, 200, 0.3);
+  }
+  .lunara-sheet-chrome:active {
+    background: rgba(212, 175, 55, 0.16);
+  }
+}
+
+@layer utilities {
+  .lunara-deck-swipe {
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    touch-action: pan-x;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [style*='lunara-sheet-up'],
+  [style*='empire-rise'] {
+    animation: none !important;
+  }
+  .empire-cta,
+  .lunara-sheet-launcher {
+    animation: none !important;
   }
 }

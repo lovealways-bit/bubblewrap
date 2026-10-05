@@ -13,3 +13,6 @@ Preview branch only. Do not promote lunara-atlas production until founder QA.
 - Picker lists all five themes. Incomplete themes still fall back to Classic proofs.
 
 Live production remains `lunara-tarot-three.vercel.app` until this branch is approved.
+
+
+> Update 2026-10-04: the Blonde Court deck is now named Summer Court, its art folder is `public/cards/summer-court/`, and it is hidden from users until it has all 78 cards. See `docs/LUNARA_CARD_FIX_LIST.md`.

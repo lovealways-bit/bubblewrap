@@ -76,7 +76,8 @@ export function AuthForm({ mode }: Props) {
           return
         }
       }
-      router.push('/account')
+      // New accounts go straight to the deck picker; returning seekers to their account.
+      router.push(isSignUp ? '/choose-deck?from=signup' : '/account')
       router.refresh()
     } catch {
       setError('Something went wrong. Please try again.')
@@ -186,7 +187,7 @@ export function AuthForm({ mode }: Props) {
             {viewerLoading ? 'Opening test viewer…' : 'Continue as test viewer'}
           </button>
           <p className="mt-2 text-center text-xs text-muted-foreground">
-            A shared demo account on the Free plan — no signup required, for exploring the app only.
+            A shared demo account on the Free plan, no signup required, for exploring the app only.
           </p>
         </>
       )}

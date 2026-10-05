@@ -36,7 +36,7 @@ export interface DrawnCard {
   card: TarotCard
   orientation: Orientation
   revealed: boolean
-  /** Whether this draw shows the blonde-haired variant art (when one exists). */
+  /** Whether this draw shows the Summer Court variant art (when one exists and that deck is enabled). */
   blonde?: boolean
 }
 
