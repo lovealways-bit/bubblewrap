@@ -53,6 +53,10 @@ export function ExperienceTabs({ premiumSpreads = false }: { premiumSpreads?: bo
         </div>
       </div>
 
+      <p className="mx-auto max-w-2xl px-5 pt-4 text-center text-xs text-muted-foreground">
+        Readings are for entertainment and personal reflection only, not advice.
+      </p>
+
       {/* ---- Active panel ---- */}
       {tab === 'cards' && <ReadingBoard premiumSpreads={premiumSpreads} />}
       {tab === 'runes' && <RuneOracle />}
