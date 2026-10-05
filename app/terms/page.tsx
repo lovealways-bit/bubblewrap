@@ -6,7 +6,7 @@ export const metadata = { title: 'Terms of Service | Lunara' }
 
 export default function Page() {
   return (
-    <LegalPage title="Terms of Service" updated="October 4, 2026">
+    <LegalPage title="Terms of Service" updated="October 5, 2026">
         <p>
           These terms cover your use of Lunara, a service run by AllPath, operated by ALLPATH (AP)
           EDUCATION SOLUTIONS LLC, based in Columbus, Ohio. By creating an account or making a purchase you agree to these terms.
@@ -25,9 +25,15 @@ export default function Page() {
         <p>
           Refunds follow our <Link href="/refund" className="underline underline-offset-2">Refund policy</Link>.
         </p>
+        <H2>Readings and guidance</H2>
+        <p>
+          Tarot readings, rune draws, and related Lunara experiences are for entertainment and
+          personal reflection only. They are not medical, legal, financial, therapeutic, or other
+          professional advice. You decide how to use what you see here.
+        </p>
         <H2>Acceptable use</H2>
         <p>
-          Do not misuse the service, try to break or overload it, access other people&apos;s
+          Do not misuse the service, try to break or overload it, access other people's
           accounts, or use it for anything unlawful.
         </p>
         <H2>Content and availability</H2>
