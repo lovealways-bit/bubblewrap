@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Crown } from 'lucide-react'
 import type { DrawnCard, TarotCard as TarotCardData } from '@/lib/tarot/types'
 import { hasProof, proofSrc, hasSummerCourtVariant, summerCourtSrc } from '@/lib/tarot/proofs'
-import { type DeckThemeId, getDeckTheme, hasThemeArt, themeArtSrc } from '@/lib/tarot/decks'
+import { type DeckThemeId, getDeckTheme, hasThemeArt, themeArtSrc, themeBackSrc } from '@/lib/tarot/decks'
 import { SuitEmblem } from './suit-emblem'
 import { Wings } from './wings'
 
@@ -229,6 +229,16 @@ export function TarotCard({
             revealed ? 'rotate-y-180' : ''
           }`}
         >
+          {themeBackSrc(deckTheme) ? (
+            <div className="backface-hidden absolute inset-0 overflow-hidden rounded-xl bg-black">
+              <img
+                src={themeBackSrc(deckTheme) || '/placeholder.svg'}
+                alt="Card back"
+                className="h-full w-full object-cover"
+                crossOrigin="anonymous"
+              />
+            </div>
+          ) : (
           <div className="backface-hidden absolute inset-0 overflow-hidden rounded-xl border border-gold/40 bg-surface">
             <div
               className="absolute inset-0"
@@ -248,6 +258,7 @@ export function TarotCard({
               )}
             </div>
           </div>
+          )}
 
           {proof ? (
             <div className="backface-hidden rotate-y-180 absolute inset-0 overflow-hidden rounded-xl bg-black">

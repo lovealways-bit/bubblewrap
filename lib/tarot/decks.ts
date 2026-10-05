@@ -10,7 +10,7 @@
 // every user-facing surface (picker, saved preference, random variants) until
 // it is switched on. Only switch a deck on once `cardCount` reaches
 // FULL_DECK_CARD_COUNT and its art has been approved.
-export type DeckThemeId = 'classic' | 'mermaid' | 'fairy' | 'creature' | 'summer-court'
+export type DeckThemeId = 'classic' | 'mermaid' | 'fairy' | 'creature' | 'summer-court' | 'hallow-court'
 
 export const FULL_DECK_CARD_COUNT = 78
 
@@ -26,9 +26,7 @@ export interface DeckTheme {
   cardCount: number
 }
 
-const THEME_CARD_IDS: Record<DeckThemeId, Set<string>> = {
-  classic: new Set(),
-  'summer-court': new Set([
+const FULL_THEME_CARD_IDS = new Set<string>([
     'major-00',
     'major-01',
     'major-02',
@@ -107,20 +105,26 @@ const THEME_CARD_IDS: Record<DeckThemeId, Set<string>> = {
     'wands-12',
     'wands-13',
     'wands-14',
-  ]),
+])
+
+const THEME_CARD_IDS: Record<DeckThemeId, Set<string>> = {
+  classic: new Set(),
+  'hallow-court': FULL_THEME_CARD_IDS,
+  'summer-court': FULL_THEME_CARD_IDS,
   mermaid: new Set(['major-00', 'major-01', 'wands-01', 'cups-01', 'swords-01', 'pentacles-01']),
   fairy: new Set(['major-00', 'major-01', 'wands-01', 'cups-01', 'swords-01', 'pentacles-01']),
   creature: new Set(['major-00', 'major-01', 'wands-01', 'cups-01', 'swords-01', 'pentacles-01']),
 }
 
-/** Every registered deck, including hidden ones. Do not render this list directly. */
+/** Every registered deck, including hidden ones. Do not render this list directly.
+ *  Order of enabled decks here is the picker order: first enabled = default. */
 export const ALL_DECK_THEMES: DeckTheme[] = [
   {
-    id: 'classic',
-    name: 'Lunara Classic',
-    tagline: 'The original gold-frame Empire deck.',
-    folder: 'proofs',
-    enabled: false,
+    id: 'hallow-court',
+    name: 'Hallow Court',
+    tagline: 'A Halloween court of lanterns, cauldrons, scythes, and seals.',
+    folder: 'hallow-court',
+    enabled: true,
     cardCount: FULL_DECK_CARD_COUNT,
   },
   {
@@ -129,6 +133,14 @@ export const ALL_DECK_THEMES: DeckTheme[] = [
     tagline: 'A sunlit court of golden figures.',
     folder: 'summer-court',
     enabled: true,
+    cardCount: FULL_DECK_CARD_COUNT,
+  },
+  {
+    id: 'classic',
+    name: 'Lunara Classic',
+    tagline: 'The original gold-frame Empire deck.',
+    folder: 'proofs',
+    enabled: false,
     cardCount: FULL_DECK_CARD_COUNT,
   },
   {
@@ -184,4 +196,12 @@ export function hasThemeArt(themeId: DeckThemeId, cardId: string): boolean {
 export function themeArtSrc(themeId: DeckThemeId, cardId: string): string {
   const theme = ALL_DECK_THEMES.find((t) => t.id === themeId) ?? ALL_DECK_THEMES[0]
   return `/cards/${theme.folder}/${cardId}.png`
+}
+
+/** Optional full-bleed card back shipped with a LIVE theme folder. */
+export function themeBackSrc(themeId: DeckThemeId): string | null {
+  if (themeId === 'hallow-court' && isDeckEnabled('hallow-court')) {
+    return '/cards/hallow-court/back.png'
+  }
+  return null
 }

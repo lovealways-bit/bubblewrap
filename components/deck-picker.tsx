@@ -175,7 +175,7 @@ export function DeckPicker({ value, onChange, size = 'default' }: Props) {
                   {theme.name}
                 </span>
                 <span className="text-[0.6rem] uppercase tracking-[0.2em] text-gold/45">
-                  {theme.id === 'summer-court' ? 'LIVE · 78 cards' : theme.cardCount === FULL_DECK_CARD_COUNT ? '78 cards' : `${theme.cardCount} cards`}
+                  {theme.id === 'hallow-court' || theme.id === 'summer-court' ? 'LIVE · 78 cards' : theme.cardCount === FULL_DECK_CARD_COUNT ? '78 cards' : `${theme.cardCount} cards`}
                 </span>
                 <span className="sr-only">
                   Deck {idx + 1} of {DECK_THEMES.length}
