@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Crown } from 'lucide-react'
 import type { DrawnCard, TarotCard as TarotCardData } from '@/lib/tarot/types'
 import { hasProof, proofSrc, hasSummerCourtVariant, summerCourtSrc } from '@/lib/tarot/proofs'
-import { type DeckThemeId, hasThemeArt, themeArtSrc } from '@/lib/tarot/decks'
+import { type DeckThemeId, getDeckTheme, hasThemeArt, themeArtSrc } from '@/lib/tarot/decks'
 import { SuitEmblem } from './suit-emblem'
 import { Wings } from './wings'
 
@@ -177,7 +177,7 @@ export function TarotCard({
   onSelect,
   selected = false,
   compact = false,
-  deckTheme = 'classic',
+  deckTheme = getDeckTheme(null).id,
 }: Props) {
   const { card, orientation, revealed } = drawn
   const isReversed = orientation === 'reversed'

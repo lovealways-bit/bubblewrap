@@ -15,7 +15,7 @@ import {
   type SavedReading,
 } from '@/lib/tarot/history'
 import type { DrawnCard } from '@/lib/tarot/types'
-import { type DeckThemeId, getDeckTheme } from '@/lib/tarot/decks'
+import { DECK_THEMES, type DeckThemeId, getDeckTheme } from '@/lib/tarot/decks'
 import { DECK_THEME_STORAGE_KEY } from '@/lib/tarot/deck-preference'
 import { TarotCard } from './tarot-card'
 import { DeckPicker } from './deck-picker'
@@ -82,7 +82,7 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
   const [drawing, setDrawing] = useState(false)
   const [history, setHistory] = useState<SavedReading[]>([])
   const [savedId, setSavedId] = useState<string | null>(null)
-  const [deckTheme, setDeckTheme] = useState<DeckThemeId>('classic')
+  const [deckTheme, setDeckTheme] = useState<DeckThemeId>(DECK_THEMES[0]?.id ?? 'summer-court')
   const [sheet, setSheet] = useState<SheetId | null>(null)
   const closeSheet = useCallback(() => setSheet(null), [])
 

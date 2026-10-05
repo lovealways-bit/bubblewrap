@@ -86,26 +86,27 @@ export function MobileSheet({
         role="dialog"
         aria-modal="true"
         aria-label={title}
-        className="absolute inset-x-0 bottom-0 flex max-h-[88dvh] flex-col overflow-hidden rounded-t-2xl border-t border-gold/40 bg-background shadow-[0_-12px_40px_-10px_rgba(0,0,0,0.8)]"
+        className="absolute inset-x-0 bottom-0 flex max-h-[min(92dvh,100%)] flex-col overflow-hidden rounded-t-2xl border-t border-gold/40 bg-background shadow-[0_-12px_40px_-10px_rgba(0,0,0,0.8),0_0_40px_-16px_rgba(212,175,55,0.35)]"
         style={{ animation: 'lunara-sheet-up 0.28s ease-out both' }}
       >
         <div className="mx-auto mt-2 h-1 w-10 shrink-0 rounded-full bg-gold/30" aria-hidden="true" />
+        {/* Fixed header: Back / title / Close stay put while body scrolls. */}
         <div className="flex shrink-0 items-center justify-between gap-2 border-b border-gold/20 px-3 py-2">
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex min-h-11 items-center gap-1 rounded-md px-2 font-display text-[0.65rem] uppercase tracking-[0.2em] text-gold/80 hover:text-gold-bright"
+            className="lunara-sheet-chrome inline-flex min-h-11 items-center gap-1 rounded-md px-2 font-display text-[0.65rem] uppercase tracking-[0.2em] text-gold/80"
           >
             <ChevronLeft className="h-4 w-4" aria-hidden="true" />
             {backLabel}
           </button>
-          <div className="min-w-0 flex-1 text-center">
+          <div className="min-w-0 flex-1 px-1 text-center">
             {eyebrow && (
               <p className="truncate font-display text-[0.55rem] uppercase tracking-[0.3em] text-gold/55">
                 {eyebrow}
               </p>
             )}
-            <p className="truncate font-display text-sm uppercase tracking-[0.12em] text-gold-bright">
+            <p className="truncate font-display text-sm uppercase tracking-[0.12em] text-gold-bright text-glow-gold">
               {title}
             </p>
           </div>
@@ -113,12 +114,15 @@ export function MobileSheet({
             type="button"
             onClick={onClose}
             aria-label={`Close ${title}`}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-md text-gold/80 hover:text-gold-bright"
+            className="lunara-sheet-chrome inline-flex h-11 w-11 items-center justify-center rounded-md text-gold/80"
           >
             <X className="h-5 w-5" aria-hidden="true" />
           </button>
         </div>
-        <div className="overflow-y-auto overscroll-contain px-5 pb-10 pt-5">{children}</div>
+        {/* Scrollable page body: nested content stays inside the drawer. */}
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pb-[max(2.5rem,env(safe-area-inset-bottom))] pt-4 sm:px-5">
+          {children}
+        </div>
       </div>
     </div>,
     document.body,
@@ -139,9 +143,9 @@ export function SheetLauncher({ label, value, hint, icon: Icon, onOpen }: Launch
     <button
       type="button"
       onClick={onOpen}
-      className="flex min-h-14 w-full items-center gap-3 rounded-lg border border-gold/30 bg-surface/50 px-4 py-3 text-left transition-colors hover:border-gold/60 active:bg-gold/10 md:hidden"
+      className="lunara-sheet-launcher flex min-h-14 w-full items-center gap-3 rounded-lg px-4 py-3 text-left md:hidden"
     >
-      {Icon && <Icon className="h-5 w-5 shrink-0 text-gold" aria-hidden="true" />}
+      {Icon && <Icon className="h-5 w-5 shrink-0 text-gold drop-shadow-[0_0_8px_rgba(212,175,55,0.55)]" aria-hidden="true" />}
       <span className="min-w-0 flex-1">
         <span className="block font-display text-[0.6rem] uppercase tracking-[0.3em] text-gold/60">
           {label}
