@@ -120,7 +120,7 @@ export const ALL_DECK_THEMES: DeckTheme[] = [
     name: 'Lunara Classic',
     tagline: 'The original gold-frame Empire deck.',
     folder: 'proofs',
-    enabled: false,
+    enabled: true,
     cardCount: FULL_DECK_CARD_COUNT,
   },
   {
