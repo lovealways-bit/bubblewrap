@@ -29,7 +29,7 @@ export function ExperienceTabs({ premiumSpreads = false }: { premiumSpreads?: bo
         <div
           role="tablist"
           aria-label="Choose an oracle"
-          className="flex flex-wrap justify-center gap-2 px-4"
+          className="grid w-full max-w-xl grid-cols-2 gap-2 px-4 md:flex md:w-auto md:max-w-none md:flex-wrap md:justify-center"
         >
           {TABS.map((t) => {
             const active = t.id === tab
@@ -40,7 +40,7 @@ export function ExperienceTabs({ premiumSpreads = false }: { premiumSpreads?: bo
                 role="tab"
                 aria-selected={active}
                 onClick={() => setTab(t.id)}
-                className={`rounded-md border px-5 py-2 font-display text-xs uppercase tracking-[0.18em] transition-all duration-300 ${
+                className={`min-h-11 rounded-md border px-3 py-2 font-display text-sm md:px-5 md:text-xs uppercase tracking-[0.18em] transition-all duration-300 ${
                   active
                     ? 'border-gold bg-gold/15 text-gold-bright shadow-[0_0_18px_-6px_var(--gold)]'
                     : 'border-transparent text-gold/60 hover:text-gold'

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 import { Check, ChevronLeft, ChevronRight } from 'lucide-react'
 import {
   DECK_THEMES,
@@ -55,35 +56,24 @@ export function DeckPicker({ value, onChange, size = 'default' }: Props) {
     el.scrollTo({ left: Math.max(0, left), behavior: 'smooth' })
   }, [current.id])
 
-  const settleTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  useEffect(() => {
-    return () => {
-      if (settleTimer.current) clearTimeout(settleTimer.current)
-    }
-  }, [])
-
+  // Browsing the carousel never commits a deck or closes the phone drawer.
+  // Only a deliberate tap selects it.
   const onScroll = () => {
     const el = scrollerRef.current
-    if (!el || DECK_THEMES.length === 0) return
-    const center = el.scrollLeft + el.clientWidth / 2
+    if (!el) return
+    const bounds = el.getBoundingClientRect()
+    const center = bounds.left + bounds.width / 2
     let best = 0
     let bestDist = Infinity
     Array.from(el.children).forEach((child, i) => {
-      const node = child as HTMLElement
-      const mid = node.offsetLeft + node.clientWidth / 2
-      const dist = Math.abs(mid - center)
+      const rect = child.getBoundingClientRect()
+      const dist = Math.abs(rect.left + rect.width / 2 - center)
       if (dist < bestDist) {
         bestDist = dist
         best = i
       }
     })
-    if (best !== activeIndex) setActiveIndex(best)
-    if (settleTimer.current) clearTimeout(settleTimer.current)
-    settleTimer.current = setTimeout(() => {
-      const theme = DECK_THEMES[best]
-      if (theme && theme.id !== current.id) onChange(theme.id)
-    }, 140)
+    setActiveIndex(best)
   }
 
   const selectIndex = (idx: number) => {
@@ -159,22 +149,24 @@ export function DeckPicker({ value, onChange, size = 'default' }: Props) {
                   </span>
                 )}
                 <span className="relative aspect-[2/3] w-full overflow-hidden rounded-md border border-gold/30 bg-black">
-                  <img
+                  <Image
                     src={previewSrc || '/placeholder.svg'}
                     alt={`${theme.name} deck preview`}
                     className="h-full w-full object-contain"
-                    crossOrigin="anonymous"
+                    width={1024}
+                    height={1536}
+                    sizes={size === 'large' ? '184px' : '136px'}
                     draggable={false}
                   />
                 </span>
                 <span
-                  className={`font-display text-[0.6rem] uppercase leading-tight tracking-[0.1em] ${
+                  className={`font-display text-xs uppercase leading-tight tracking-[0.1em] ${
                     active ? 'text-gold-bright text-glow-gold' : 'text-gold/70'
                   }`}
                 >
                   {theme.name}
                 </span>
-                <span className="text-[0.6rem] uppercase tracking-[0.2em] text-gold/45">
+                <span className="text-xs uppercase tracking-[0.2em] text-gold/45">
                   {theme.id === 'hallow-court' || theme.id === 'summer-court' ? 'LIVE · 78 cards' : theme.cardCount === FULL_DECK_CARD_COUNT ? '78 cards' : `${theme.cardCount} cards`}
                 </span>
                 <span className="sr-only">
@@ -187,17 +179,20 @@ export function DeckPicker({ value, onChange, size = 'default' }: Props) {
       </div>
 
       {DECK_THEMES.length > 1 && (
-        <div className="flex items-center gap-1.5" aria-hidden="true">
+        <div className="flex items-center gap-1.5">
           {DECK_THEMES.map((theme, i) => (
             <button
               key={theme.id}
               type="button"
               onClick={() => onChange(theme.id)}
-              className={`h-1.5 rounded-full transition-all ${
-                i === activeIndex ? 'w-5 bg-gold' : 'w-1.5 bg-gold/35'
+              aria-pressed={theme.id === current.id}
+              className={`flex h-11 w-11 items-center justify-center rounded-full border transition-all ${
+                theme.id === current.id ? 'border-gold bg-gold/20 text-gold-bright' : 'border-gold/25 text-gold/70'
               }`}
-              aria-label={`Go to ${theme.name}`}
-            />
+              aria-label={`Choose ${theme.name}`}
+            >
+              {i + 1}
+            </button>
           ))}
         </div>
       )}
@@ -225,7 +220,7 @@ function LunaraVaultStrip({
 
   return (
     <div className="mt-1 w-full">
-      <p className="mb-2 text-center font-display text-[0.55rem] uppercase tracking-[0.35em] text-gold/55">
+      <p className="mb-2 text-center font-display text-xs uppercase tracking-[0.35em] text-gold/55">
         Lunara vault · {theme.name}
       </p>
       <div
@@ -242,11 +237,13 @@ function LunaraVaultStrip({
               className={`relative ${size === 'large' ? 'w-20' : 'w-16'} shrink-0 snap-center overflow-hidden rounded-md border border-gold/35 bg-black shadow-[0_0_18px_-8px_rgba(212,175,55,0.55)]`}
             >
               <div className="aspect-[2/3] w-full">
-                <img
+                <Image
                   src={src}
                   alt={`${theme.name} ${id}`}
                   className="h-full w-full object-contain"
-                  crossOrigin="anonymous"
+                  width={1024}
+                  height={1536}
+                  sizes={size === 'large' ? '80px' : '64px'}
                   draggable={false}
                   loading="lazy"
                 />
@@ -255,7 +252,7 @@ function LunaraVaultStrip({
           )
         })}
       </div>
-      <p className="mt-2 text-center text-[0.65rem] italic text-muted-foreground/80">
+      <p className="mt-2 text-center text-sm italic text-muted-foreground/80">
         Swipe sideways to browse. Only LIVE decks appear here.
       </p>
     </div>

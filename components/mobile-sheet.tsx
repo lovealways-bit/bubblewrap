@@ -67,6 +67,8 @@ export function MobileSheet({
     }
   }, [showSheet, onClose])
 
+  if (isMobile && !open) return null
+
   if (!showSheet) {
     // Desktop (or a closed sheet on a phone): inline content, hidden on phones.
     return desktopInline ? <div className="hidden md:block">{children}</div> : null
@@ -95,14 +97,14 @@ export function MobileSheet({
           <button
             type="button"
             onClick={onClose}
-            className="lunara-sheet-chrome inline-flex min-h-11 items-center gap-1 rounded-md px-2 font-display text-[0.65rem] uppercase tracking-[0.2em] text-gold/80"
+            className="lunara-sheet-chrome inline-flex min-h-11 items-center gap-1 rounded-md px-2 font-display text-xs uppercase tracking-[0.2em] text-gold/80"
           >
             <ChevronLeft className="h-4 w-4" aria-hidden="true" />
             {backLabel}
           </button>
           <div className="min-w-0 flex-1 px-1 text-center">
             {eyebrow && (
-              <p className="truncate font-display text-[0.55rem] uppercase tracking-[0.3em] text-gold/55">
+              <p className="truncate font-display text-xs uppercase tracking-[0.3em] text-gold/55">
                 {eyebrow}
               </p>
             )}
@@ -147,7 +149,7 @@ export function SheetLauncher({ label, value, hint, icon: Icon, onOpen }: Launch
     >
       {Icon && <Icon className="h-5 w-5 shrink-0 text-gold drop-shadow-[0_0_8px_rgba(212,175,55,0.55)]" aria-hidden="true" />}
       <span className="min-w-0 flex-1">
-        <span className="block font-display text-[0.6rem] uppercase tracking-[0.3em] text-gold/60">
+        <span className="block font-display text-xs uppercase tracking-[0.3em] text-gold/60">
           {label}
         </span>
         {value && (

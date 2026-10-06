@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Shuffle, Sparkles, Hand, BookMarked, Trash2, FolderOpen, Clock, Sun, Star, Moon, Lock, Layers, LayoutGrid, BookOpen } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
@@ -80,6 +80,12 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const [hydrated, setHydrated] = useState(false)
   const [drawing, setDrawing] = useState(false)
+  const drawTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [storageNotice, setStorageNotice] = useState('')
+
+  useEffect(() => () => {
+    if (drawTimer.current) clearTimeout(drawTimer.current)
+  }, [])
   const [history, setHistory] = useState<SavedReading[]>([])
   const [savedId, setSavedId] = useState<string | null>(null)
   const [deckTheme, setDeckTheme] = useState<DeckThemeId>(DECK_THEMES[0]?.id ?? 'hallow-court')
@@ -114,17 +120,25 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
   // ---- Persist the chosen deck theme (a display preference, not account data) ----
   useEffect(() => {
     if (!hydrated) return
-    localStorage.setItem(DECK_THEME_STORAGE_KEY, deckTheme)
+    try {
+      localStorage.setItem(DECK_THEME_STORAGE_KEY, deckTheme)
+    } catch {
+      setStorageNotice('Device storage is unavailable. Your deck choice may not be kept after closing Lunara.')
+    }
   }, [deckTheme, hydrated])
 
   // ---- Persist the in-progress reading whenever it changes ----
   useEffect(() => {
     if (!hydrated) return
-    if (cards.length === 0) {
-      localStorage.removeItem(STORAGE_KEY)
-      return
+    try {
+      if (cards.length === 0) {
+        localStorage.removeItem(STORAGE_KEY)
+        return
+      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ spreadId, cards, question }))
+    } catch {
+      setStorageNotice('Device storage is unavailable. This reading may not be kept after closing Lunara.')
     }
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ spreadId, cards, question }))
   }, [spreadId, cards, question, hydrated])
 
   // ---- Recompute interpretations for whatever is revealed ----
@@ -149,12 +163,14 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
 
   const handleDraw = useCallback(() => {
     const activeSpread = getSpread(spreadId) ?? SPREADS[0]
+    if (drawTimer.current) clearTimeout(drawTimer.current)
     setDrawing(true)
     setInterpretations({})
     setSelectedIndex(null)
     setSavedId(null)
     // brief beat so the shuffle reads as deliberate
-    setTimeout(() => {
+    drawTimer.current = setTimeout(() => {
+      drawTimer.current = null
       setCards(drawCards({ count: activeSpread.positions.length }))
       setDrawing(false)
     }, 450)
@@ -177,6 +193,9 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
   }, [])
 
   const handleReset = useCallback(() => {
+    if (drawTimer.current) clearTimeout(drawTimer.current)
+    drawTimer.current = null
+    setDrawing(false)
     setCards([])
     setInterpretations({})
     setSelectedIndex(null)
@@ -236,14 +255,14 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
   const selectedPosition = selectedIndex !== null ? spread.positions[selectedIndex] : null
 
   return (
-    <section className="relative z-10 mx-auto w-full max-w-4xl px-6 pb-24 pt-16">
+    <section className="relative z-10 mx-auto w-full max-w-4xl px-4 pb-16 pt-8 sm:px-6 md:pb-24 md:pt-16">
       {/* ---- Hero header ---- */}
-      <div className="mb-12 flex flex-col items-center gap-3 text-center">
+      <div className="mb-7 flex flex-col items-center gap-3 text-center">
         <p className="font-display text-xs uppercase tracking-[0.4em] text-gold/70">The Cards</p>
-        <h2 className="font-display text-3xl font-bold uppercase tracking-[0.12em] text-gold-bright text-glow-gold sm:text-4xl">
+        <h2 className="font-display text-2xl font-bold uppercase tracking-[0.06em] text-gold-bright text-glow-gold sm:text-4xl">
           Draw Your Cards
         </h2>
-        <p className="max-w-md text-sm italic leading-relaxed text-muted-foreground text-pretty">
+        <p className="max-w-md text-base italic leading-relaxed text-muted-foreground text-pretty">
           Seventy-eight cards of the arcana. Choose a spread, name your question, and let the cards
           fall as they may.
         </p>
@@ -279,11 +298,11 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
         <div className="mb-10">
           <DeckPicker
             value={deckTheme}
-            onChange={(id) => {
-              setDeckTheme(id)
-              setSheet(null)
-            }}
+            onChange={setDeckTheme}
           />
+          <button type="button" onClick={closeSheet} className="empire-cta mt-5 min-h-12 w-full rounded-lg px-4 py-3 font-display text-sm md:hidden">
+            Use {getDeckTheme(deckTheme).name}
+          </button>
         </div>
       </MobileSheet>
 
@@ -311,7 +330,7 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
                   handleReset()
                   setSheet(null)
                 }}
-                className={`inline-flex items-center gap-2 rounded-md border px-5 py-2 font-display text-xs uppercase tracking-[0.15em] transition-all duration-300 ${
+                className={`inline-flex items-center gap-2 rounded-md border min-h-11 px-5 py-2 font-display text-xs uppercase tracking-[0.15em] transition-all duration-300 ${
                   active
                     ? 'border-gold bg-gold/15 text-gold-bright shadow-[0_0_18px_-6px_var(--gold)]'
                     : locked
@@ -356,12 +375,14 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
           onChange={(e) => setQuestion(e.target.value)}
           placeholder="What am I not seeing? (optional)"
           maxLength={140}
-          className="w-full rounded-md border border-gold/30 bg-surface/50 px-4 py-2.5 text-center text-sm text-foreground placeholder:text-muted-foreground/70 focus:border-gold/60 focus:outline-none focus:ring-1 focus:ring-gold/40"
+          className="w-full rounded-md border border-gold/30 bg-surface/50 min-h-12 px-4 py-3 text-center text-base text-foreground placeholder:text-muted-foreground/70 focus:border-gold/60 focus:outline-none focus:ring-1 focus:ring-gold/40"
         />
         <p className="text-[0.7rem] italic text-muted-foreground/70">
           Name your situation and the reading is drawn around it.
         </p>
       </div>
+
+      {storageNotice && <p role="status" className="mx-auto mt-3 max-w-md text-center text-sm text-foreground">{storageNotice}</p>}
 
       {/* ---- Draw / shuffle control ---- */}
       <div className="mt-6 flex justify-center">
@@ -369,7 +390,7 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
           type="button"
           onClick={handleDraw}
           disabled={drawing}
-          className="empire-cta group inline-flex items-center gap-2.5 rounded-md px-10 py-3.5 font-display text-sm uppercase tracking-[0.2em] disabled:cursor-not-allowed disabled:opacity-60"
+          className="empire-cta group inline-flex min-h-14 w-full max-w-md justify-center items-center gap-2.5 rounded-md px-10 py-3.5 font-display text-sm uppercase tracking-[0.2em] disabled:cursor-not-allowed disabled:opacity-60"
         >
           <Shuffle
             className={`h-4 w-4 transition-transform duration-500 ${drawing ? 'animate-spin' : 'group-hover:rotate-180'}`}
