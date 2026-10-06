@@ -1,3 +1,5 @@
+import { SiteHeader } from '@/components/allpath/site-header'
+import { SiteFooter } from '@/components/allpath/site-footer'
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Cinzel, Cormorant_Garamond, Noto_Sans_Runic } from 'next/font/google'
@@ -57,8 +59,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${cinzel.variable} ${cormorant.variable} ${runic.variable}`}>
-      <body className="font-sans bg-background text-foreground antialiased">
-        {children}
+      <body className="font-sans bg-background text-foreground antialiased flex min-h-dvh flex-col">
+        <SiteHeader compact />
+        <div className="flex min-h-0 flex-1 flex-col">{children}</div>
+        <SiteFooter />
         <InstallPrompt />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

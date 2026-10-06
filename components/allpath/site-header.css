@@ -1,0 +1,39 @@
+.approved-header{position:relative;isolation:isolate;background:#fffdf8;z-index:40;overflow:clip}
+.approved-header:before,.approved-header:after{content:"";position:absolute;z-index:-1;inset:20% 0 16%;pointer-events:none;background:radial-gradient(ellipse at center,#76529526,transparent 65%),linear-gradient(174deg,transparent 44%,#bd913a60 45%,#fff6d8 46%,transparent 48%);mask-image:linear-gradient(transparent,#000 35%,#000 65%,transparent)}
+.approved-header:after{transform:scaleX(-1)}
+.approved-header-art{position:relative;width:min(100%,1080px);aspect-ratio:2048/590;margin:auto}
+.approved-header-art>img{position:absolute;top:0;left:0;width:100%;height:auto;max-width:none}
+.approved-art-nav{position:absolute;inset:0}
+.approved-art-plate{position:absolute;top:60.5%;height:16%;min-height:44px;background:linear-gradient(#fffdf8,#f9edda);border-radius:12px;pointer-events:none}
+.plate-left{left:3.6%;width:32.6%}.plate-right{left:63.8%;width:33%}
+.approved-art-link{position:absolute;top:60.5%;height:16%;display:flex;align-items:center;justify-content:center;color:#382153;background:linear-gradient(#fffdf8,#f9edda);font-size:clamp(12px,1.15vw,15px);font-weight:700;letter-spacing:.025em;text-decoration:none;min-height:44px;border-radius:12px;border:1px solid #d9c089;box-shadow:0 1px 2px #38215314;white-space:nowrap}
+.approved-art-link:hover{background:#f3e5c5}.approved-art-link:focus-visible{outline:3px solid #7443bc;outline-offset:2px}
+/* Four buttons, two per side: left Home + Solutions, right Sign In + The Oli Atlas */
+.nav-0{left:4.4%;width:14.8%}.nav-1{left:20%;width:15.4%}.nav-2{left:64.6%;width:14.8%}.nav-3{left:80.2%;width:15.8%;font-size:clamp(8px,.78vw,10.5px);letter-spacing:-.01em;padding-inline:3px;line-height:1.05;text-align:center}
+.approved-mobile-bar,.approved-mobile-nav{display:none}
+@media(max-width:900px){.approved-header-art{width:900px;max-width:none;left:50%;transform:translateX(-50%);height:245px;aspect-ratio:auto;clip-path:inset(0 36% 0 36%)}.approved-header-art>img{width:900px}.approved-art-nav,.approved-art-plate{display:none}.approved-mobile-bar{position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 16px 8px;background:#fffdf8;color:#382153;font-weight:700}.approved-mobile-bar button{display:grid;place-items:center;min-width:44px;min-height:44px;border:1px solid #b9903b;border-radius:50%}.approved-mobile-nav{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px 16px 16px}.approved-mobile-nav a{display:flex;align-items:center;justify-content:center;min-height:44px;padding:10px;background:#fff7e8;border:1px solid #dac797;border-radius:8px;color:#382153;font-size:16px;text-decoration:none}}
+@media(max-width:900px){.approved-mobile-bar{position:absolute;top:190px;right:12px;padding:0;background:transparent}.approved-header-art{clip-path:none}.approved-header-art>img{mask-image:linear-gradient(to right,transparent 25%,#000 38%,#000 62%,transparent 75%)}.approved-mobile-nav{position:relative;background:#fffdf8}}
+@media(max-width:900px){.approved-header-art>img{clip-path:none;mask-image:linear-gradient(to bottom,#000 0%,#000 40%,transparent 48%),linear-gradient(to right,transparent 34%,#000 37%,#000 63%,transparent 66%);mask-composite:add}}
+@media(min-width:901px){
+ .approved-header-art>img{mask-image:linear-gradient(to right,transparent,#000 7%,#000 93%,transparent)}
+ .approved-header:before,.approved-header:after{
+  inset:0 auto auto; width:max(96px,calc((100% - 1080px)/2 + 96px));
+  height:384px;z-index:-1;
+  background-image:url('https://allpathproperties.com/home/header-approved-20260925.png');
+  background-size:1080px auto;background-repeat:no-repeat;
+  filter:blur(9px);opacity:.72;
+  mask-image:linear-gradient(to bottom,#000 45%,transparent 95%);
+  transform:scaleX(-1);animation:header-edge-glow 9s ease-in-out infinite alternate
+ }
+ .approved-header:before{left:0;background-position:right top}
+ .approved-header:after{right:0;left:auto;background-position:left top;animation-delay:-4.5s}
+}
+@keyframes header-edge-glow{from{opacity:.55}to{opacity:.78}}
+@media(prefers-reduced-motion:reduce){.approved-header:before,.approved-header:after{animation:none}}
+
+.approved-header.compact-head .approved-header-art{aspect-ratio:auto;height:96px;width:min(100%,1080px)}
+.approved-header.compact-head .approved-header-art>img{height:96px;width:auto;max-width:none;left:50%;transform:translateX(-50%);object-fit:cover;object-position:center 18%}
+.approved-header.compact-head .approved-art-link{top:52%;height:40%;min-height:0;font-size:12px;border-radius:10px}
+.approved-header.compact-head .approved-art-plate{display:none}
+.approved-header.compact-head:before,.approved-header.compact-head:after{height:96px;filter:blur(6px)}
+@media(max-width:900px){.approved-header.compact-head .approved-header-art{height:96px;width:100%;transform:none;left:0}.approved-header.compact-head .approved-mobile-bar{top:52px}}
