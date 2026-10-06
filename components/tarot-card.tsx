@@ -1,5 +1,7 @@
 'use client'
 
+import Image from 'next/image'
+
 import { useState } from 'react'
 import { Crown } from 'lucide-react'
 import type { DrawnCard, TarotCard as TarotCardData } from '@/lib/tarot/types'
@@ -231,11 +233,13 @@ export function TarotCard({
         >
           {themeBackSrc(deckTheme) ? (
             <div className="backface-hidden absolute inset-0 overflow-hidden rounded-xl bg-black">
-              <img
+              <Image
+                width={1024}
+                height={1536}
+                sizes={compact ? '136px' : '288px'}
                 src={themeBackSrc(deckTheme) || '/placeholder.svg'}
                 alt="Card back"
                 className="h-full w-full object-cover"
-                crossOrigin="anonymous"
               />
             </div>
           ) : (
@@ -262,11 +266,13 @@ export function TarotCard({
 
           {proof ? (
             <div className="backface-hidden rotate-y-180 absolute inset-0 overflow-hidden rounded-xl bg-black">
-              <img
+              <Image
+                width={1024}
+                height={1536}
+                sizes={compact ? '136px' : '288px'}
                 src={proofImageSrc || '/placeholder.svg'}
                 alt={`${card.name}${isReversed ? ', reversed' : ''}`}
                 className={`h-full w-full object-cover ${isReversed ? 'rotate-180' : ''}`}
-                crossOrigin="anonymous"
               />
               {isReversed && (
                 <span className="absolute left-2 top-2 rounded-full border border-teal/60 bg-black/50 px-1.5 py-0.5 text-[0.5rem] uppercase tracking-[0.15em] text-teal">
