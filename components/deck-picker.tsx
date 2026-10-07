@@ -74,9 +74,6 @@ export function DeckPicker({ value, onChange, size = 'default' }: Props) {
               <span className="mt-2 block truncate font-display text-[0.68rem] uppercase tracking-[0.08em] text-gold-bright sm:text-xs">
                 {theme.name}
               </span>
-              <span className="mt-1 inline-block rounded-full border border-gold/25 px-2 py-0.5 font-display text-[0.52rem] uppercase tracking-[0.18em] text-gold/60">
-                Live
-              </span>
             </button>
           )
         })}
