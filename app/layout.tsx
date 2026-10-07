@@ -4,6 +4,8 @@ import type { Metadata, Viewport } from 'next'
 import { Cinzel, Cormorant_Garamond, Noto_Sans_Runic } from 'next/font/google'
 import { InstallPrompt } from '@/components/install-prompt'
 import { ADSENSE_CLIENT_ID } from '@/lib/adsense'
+import { getSession } from '@/lib/session'
+import { LunaraAccountNav } from '@/components/lunara-account-nav'
 import './globals.css'
 
 const cinzel = Cinzel({
@@ -51,14 +53,17 @@ export const viewport: Viewport = {
   themeColor: '#1a0f2e',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const session = await getSession()
+
   return (
     <html lang="en" className={`${cinzel.variable} ${cormorant.variable} ${runic.variable}`}>
       <body className="font-sans bg-background text-foreground antialiased flex min-h-dvh flex-col">
+        <LunaraAccountNav userName={session?.user?.name ?? null} signedIn={Boolean(session?.user)} />
         <div className="flex min-h-0 flex-1 flex-col">{children}</div>
         <SiteFooter />
         <InstallPrompt />
