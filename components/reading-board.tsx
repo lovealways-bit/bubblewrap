@@ -8,12 +8,11 @@ import { drawCards } from '@/lib/tarot/engine'
 import { getInterpretation, getReadingSummary } from '@/lib/tarot/interpretation'
 import { getSpread, SPREADS } from '@/lib/tarot/spreads'
 import {
-  loadHistory,
-  saveReading,
-  deleteReading,
-  clearHistory,
-  type SavedReading,
-} from '@/lib/tarot/history'
+  clearSavedReadings,
+  deleteSavedReading,
+  getSavedReadings,
+  saveReading as saveAccountReading,
+} from '@/app/actions/readings'
 import type { DrawnCard } from '@/lib/tarot/types'
 import { DECK_THEMES, type DeckThemeId, getDeckTheme } from '@/lib/tarot/decks'
 import { DECK_THEME_STORAGE_KEY } from '@/lib/tarot/deck-preference'
@@ -37,6 +36,32 @@ interface PersistedReading {
   spreadId: string
   cards: DrawnCard[]
   question: string
+}
+
+interface SavedReading {
+  id: string
+  savedAt: number
+  spreadId: string
+  spreadName: string
+  question: string
+  cards: DrawnCard[]
+  summary: string
+  deckTheme: DeckThemeId
+}
+
+function normalizeSavedReadings(
+  rows: Awaited<ReturnType<typeof getSavedReadings>>,
+): SavedReading[] {
+  return rows.map((row) => ({
+    id: row.id,
+    savedAt: row.savedAt,
+    spreadId: row.spreadId,
+    spreadName: getSpread(row.spreadId)?.name ?? row.spreadId,
+    question: row.question,
+    cards: (Array.isArray(row.cards) ? row.cards : []) as DrawnCard[],
+    summary: '',
+    deckTheme: getDeckTheme(row.deckTheme).id,
+  }))
 }
 
 function gridClass(count: number): string {
@@ -71,7 +96,15 @@ function formatWhen(ts: number): string {
   }
 }
 
-export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: boolean }) {
+export function ReadingBoard({
+  premiumSpreads = false,
+  signedIn = false,
+  userName = null,
+}: {
+  premiumSpreads?: boolean
+  signedIn?: boolean
+  userName?: string | null
+}) {
   const router = useRouter()
   const [spreadId, setSpreadId] = useState<string>(SPREADS[0].id)
   const [cards, setCards] = useState<DrawnCard[]>([])
@@ -113,9 +146,24 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
     } catch {
       /* ignore corrupt storage */
     }
-    setHistory(loadHistory())
     setHydrated(true)
   }, [])
+
+  const refreshHistory = useCallback(async () => {
+    if (!signedIn) {
+      setHistory([])
+      return
+    }
+    try {
+      setHistory(normalizeSavedReadings(await getSavedReadings()))
+    } catch {
+      setStorageNotice('Could not load your saved readings right now.')
+    }
+  }, [signedIn])
+
+  useEffect(() => {
+    void refreshHistory()
+  }, [refreshHistory])
 
   // ---- Persist the chosen deck theme (a display preference, not account data) ----
   useEffect(() => {
@@ -213,18 +261,31 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
     [allRevealed, spread, cards, question],
   )
 
-  const handleSave = useCallback(() => {
+  const handleSave = useCallback(async () => {
     if (!allRevealed) return
-    const next = saveReading({
+    if (!signedIn) {
+      router.push('/sign-up?next=/reading')
+      return
+    }
+
+    const result = await saveAccountReading({
       spreadId,
-      spreadName: spread.name,
       question,
+      deckTheme,
       cards,
-      summary,
     })
-    setHistory(next)
-    setSavedId(next[0]?.id ?? null)
-  }, [allRevealed, spreadId, spread.name, question, cards, summary])
+    if (!result.ok) {
+      if (result.error === 'history-limit') {
+        setStorageNotice(`Your current plan can save up to ${result.limit} readings and castings.`)
+      } else {
+        setStorageNotice('Sign in to save this reading to your Lunara account.')
+      }
+      return
+    }
+
+    setSavedId(result.id)
+    await refreshHistory()
+  }, [allRevealed, signedIn, router, spreadId, question, deckTheme, cards, refreshHistory])
 
   const handleOpenSaved = useCallback((r: SavedReading) => {
     setSpreadId(r.spreadId)
@@ -234,22 +295,25 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
     const firstRevealed = r.cards.findIndex((c) => c.revealed)
     setSelectedIndex(firstRevealed >= 0 ? firstRevealed : 0)
     setSavedId(r.id)
+    setDeckTheme(r.deckTheme)
     setSheet(null)
     if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [])
 
   const handleDeleteSaved = useCallback(
-    (id: string) => {
-      setHistory(deleteReading(id))
+    async (id: string) => {
+      await deleteSavedReading(id)
       setSavedId((cur) => (cur === id ? null : cur))
+      await refreshHistory()
     },
-    [],
+    [refreshHistory],
   )
 
-  const handleClearHistory = useCallback(() => {
-    setHistory(clearHistory())
+  const handleClearHistory = useCallback(async () => {
+    await clearSavedReadings()
     setSavedId(null)
-  }, [])
+    await refreshHistory()
+  }, [refreshHistory])
 
   const selected = selectedIndex !== null ? cards[selectedIndex] : null
   const selectedPosition = selectedIndex !== null ? spread.positions[selectedIndex] : null
@@ -294,7 +358,7 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
               <SheetLauncher
                 icon={Clock}
                 label="Saved readings"
-                value={`${history.length} on this device`}
+                value={`${history.length} saved to ${userName || 'your account'}`}
                 onOpen={() => setSheet('saved')}
               />
             )}
@@ -682,7 +746,11 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
                 className="inline-flex items-center gap-2 rounded-md border border-gold bg-gold/10 px-6 py-2.5 font-display text-xs uppercase tracking-[0.2em] text-gold-bright transition-all duration-300 hover:bg-gold/20 hover:shadow-[0_0_22px_-6px_var(--gold)] disabled:cursor-default disabled:opacity-60"
               >
                 <BookMarked className="h-4 w-4" />
-                {savedId ? 'Saved to this device' : 'Save this reading'}
+                {savedId
+                  ? `Saved to ${userName || 'your account'}`
+                  : signedIn
+                    ? `Save to ${userName || 'my account'}`
+                    : 'Create account to save'}
               </button>
               <button
                 type="button"
@@ -696,9 +764,9 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
         </div>
       )}
 
-      {/* ---- Saved readings, stored on this device ---- */}
+      {/* ---- Saved readings, stored in the signed-in account ---- */}
       {history.length > 0 && (
-        <MobileSheet open={sheet === 'saved'} onClose={closeSheet} eyebrow="This device" title="Saved readings">
+        <MobileSheet open={sheet === 'saved'} onClose={closeSheet} eyebrow={userName || 'Your account'} title="Saved readings">
         <div className="md:mt-16 md:border-t md:border-gold/15 md:pt-10">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <p className="flex items-center gap-2 font-display text-xs uppercase tracking-[0.35em] text-gold/70">
@@ -716,7 +784,7 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
           </div>
 
           <p className="mt-2 text-xs italic text-muted-foreground/80">
-            Kept only on this device. Open one to return to that draw.
+            Synced to your Lunara account. Open one to return to that draw.
           </p>
 
           <ul className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
