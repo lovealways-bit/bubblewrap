@@ -10,7 +10,7 @@
 // every user-facing surface (picker, saved preference, random variants) until
 // it is switched on. Only switch a deck on once `cardCount` reaches
 // FULL_DECK_CARD_COUNT and its art has been approved.
-export type DeckThemeId = 'classic' | 'mermaid' | 'fairy' | 'creature' | 'summer-court' | 'winter-court' | 'hallow-court'
+export type DeckThemeId = 'classic' | 'mermaid' | 'fairy' | 'creature' | 'summer-court' | 'winter-court' | 'hallow-court' | 'christmas-court'
 
 export const FULL_DECK_CARD_COUNT = 78
 
@@ -24,6 +24,8 @@ export interface DeckTheme {
   enabled: boolean
   /** How many of the 78 cards have themed art on disk today. */
   cardCount: number
+  /** Asset extension for themed cards. */
+  extension?: 'png' | 'webp'
 }
 
 const FULL_THEME_CARD_IDS = new Set<string>([
@@ -112,6 +114,7 @@ const THEME_CARD_IDS: Record<DeckThemeId, Set<string>> = {
   'hallow-court': FULL_THEME_CARD_IDS,
   'summer-court': FULL_THEME_CARD_IDS,
   'winter-court': FULL_THEME_CARD_IDS,
+  'christmas-court': FULL_THEME_CARD_IDS,
   mermaid: new Set(['major-00', 'major-01', 'wands-01', 'cups-01', 'swords-01', 'pentacles-01']),
   fairy: new Set(['major-00', 'major-01', 'wands-01', 'cups-01', 'swords-01', 'pentacles-01']),
   creature: new Set(['major-00', 'major-01', 'wands-01', 'cups-01', 'swords-01', 'pentacles-01']),
@@ -143,6 +146,15 @@ export const ALL_DECK_THEMES: DeckTheme[] = [
     folder: 'winter-court',
     enabled: true,
     cardCount: FULL_DECK_CARD_COUNT,
+  },
+  {
+    id: 'christmas-court',
+    name: 'Christmas Court',
+    tagline: 'A candlelit winter court of holly, hearthlight, and snowfall.',
+    folder: 'christmas-court',
+    enabled: true,
+    cardCount: FULL_DECK_CARD_COUNT,
+    extension: 'webp',
   },
   {
     id: 'classic',
@@ -204,7 +216,7 @@ export function hasThemeArt(themeId: DeckThemeId, cardId: string): boolean {
 
 export function themeArtSrc(themeId: DeckThemeId, cardId: string): string {
   const theme = ALL_DECK_THEMES.find((t) => t.id === themeId) ?? ALL_DECK_THEMES[0]
-  return `/cards/${theme.folder}/${cardId}.png`
+  return `/cards/${theme.folder}/${cardId}.${theme.extension ?? 'png'}`
 }
 
 /** Optional full-bleed card back shipped with a LIVE theme folder. */

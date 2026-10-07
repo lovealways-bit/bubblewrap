@@ -20,7 +20,7 @@ export function InstallPrompt() {
   useEffect(() => {
     if (typeof window === 'undefined') return
 
-    // Already installed / launched from home screen — never show.
+    // Already installed / launched from home screen - never show.
     const standalone =
       window.matchMedia('(display-mode: standalone)').matches ||
       // iOS exposes this non-standard flag when launched from the home screen.

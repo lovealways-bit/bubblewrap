@@ -19,7 +19,7 @@ export function AccountActions({ signOutOnly }: Props) {
       const url = await createBillingPortal()
       if (url) window.location.href = url
     } catch {
-      // No billing account yet — nothing to open.
+      // No billing account yet - nothing to open.
     } finally {
       setLoading(false)
     }

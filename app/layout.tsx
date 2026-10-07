@@ -1,4 +1,3 @@
-import { SiteHeader } from '@/components/allpath/site-header'
 import { SiteFooter } from '@/components/allpath/site-footer'
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
@@ -28,7 +27,7 @@ const runic = Noto_Sans_Runic({
 export const metadata: Metadata = {
   title: 'Lunara Ascension · AllPath Edu',
   description:
-    'Lunara Ascension — a moonlit tarot divination sanctuary by AllPath Edu & SynchPathways. Cut the deck and read the path written among your stars.',
+    'Lunara Ascension - a moonlit tarot divination sanctuary by AllPath Edu & SynchPathways. Cut the deck and read the path written among your stars.',
   generator: 'v0.app',
   applicationName: 'Lunara Ascension',
   appleWebApp: {
@@ -60,7 +59,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${cinzel.variable} ${cormorant.variable} ${runic.variable}`}>
       <body className="font-sans bg-background text-foreground antialiased flex min-h-dvh flex-col">
-        <SiteHeader compact />
         <div className="flex min-h-0 flex-1 flex-col">{children}</div>
         <SiteFooter />
         <InstallPrompt />

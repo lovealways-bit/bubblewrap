@@ -1,4 +1,4 @@
-// The living Sunflower Compass Clock — the Empire's growth emblem.
+// The living Sunflower Compass Clock - the Empire's growth emblem.
 // Petals illuminate with the reader's progress, the compass needle favors
 // the current direction, and the inner clock marks reached milestones.
 // Purely presentational; it reads its state from props computed by the
@@ -59,7 +59,7 @@ export function SunflowerCompass({
       <circle cx={CENTER} cy={CENTER} r="94" fill="none" stroke="rgba(242,201,76,0.22)" strokeWidth="1" />
       <circle cx={CENTER} cy={CENTER} r="88" fill="none" stroke="rgba(242,201,76,0.12)" strokeWidth="1" />
 
-      {/* petals radiating from the center — lit ones carry the reader's progress */}
+      {/* petals radiating from the center - lit ones carry the reader's progress */}
       {Array.from({ length: PETALS }).map((_, i) => {
         const angle = (360 / PETALS) * i
         const lit = i < litPetals

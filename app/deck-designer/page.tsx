@@ -41,10 +41,10 @@ export default async function DeckDesignerPage() {
           Design your own deck
         </h1>
         <p className="mt-2 max-w-xl text-sm italic text-muted-foreground text-pretty">
-          Describe a visual world and Lunara paints a free preview — the card back
+          Describe a visual world and Lunara paints a free preview - the card back
           and three signature arcana. Love it? Unlock the full{' '}
           {FULL_DECK_SIZE}-card deck for {CUSTOM_DECK_UNLOCK_PRICE_LABEL}
-          {entitledFree ? ' — included with your membership.' : ', one time per deck.'}
+          {entitledFree ? ' - included with your membership.' : ', one time per deck.'}
         </p>
 
         <DeckDesigner

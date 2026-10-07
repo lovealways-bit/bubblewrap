@@ -1,6 +1,6 @@
 // The Reader Growth Model: a self-learning layer derived from the seeker's
 // own on-device history (tarot + runes). It is intentionally reflective, not
-// predictive — it summarizes what has recurred, what is being explored, and
+// predictive - it summarizes what has recurred, what is being explored, and
 // what has been integrated, so the Empire "grows with" the reader.
 //
 // Framework-agnostic and read-only over the history stores; the UI consumes
@@ -93,13 +93,13 @@ const REALM_DEFS: Record<RealmId, { name: string; lesson: string; symbol: string
 const REALM_ORDER = Object.keys(REALM_DEFS) as RealmId[]
 
 const DIRECTION: Record<RealmId, { text: string; cardinal: GrowthModel['cardinal'] }> = {
-  swords: { text: 'Toward clarity — the mind is asking to be met', cardinal: 'n' },
-  wands: { text: 'Toward action — a fire wants to move', cardinal: 'e' },
-  pentacles: { text: 'Toward foundation — something real is being built', cardinal: 's' },
-  cups: { text: 'Toward the heart — feeling leads the way', cardinal: 'w' },
-  awakening: { text: 'Toward awakening — a new journey is opening', cardinal: null },
-  reckoning: { text: 'Toward the reckoning — a trial asks to be faced', cardinal: null },
-  return: { text: 'Toward return — a great cycle is completing', cardinal: null },
+  swords: { text: 'Toward clarity - the mind is asking to be met', cardinal: 'n' },
+  wands: { text: 'Toward action - a fire wants to move', cardinal: 'e' },
+  pentacles: { text: 'Toward foundation - something real is being built', cardinal: 's' },
+  cups: { text: 'Toward the heart - feeling leads the way', cardinal: 'w' },
+  awakening: { text: 'Toward awakening - a new journey is opening', cardinal: null },
+  reckoning: { text: 'Toward the reckoning - a trial asks to be faced', cardinal: null },
+  return: { text: 'Toward return - a great cycle is completing', cardinal: null },
 }
 
 // Seven gates, the thresholds of a deepening practice.
@@ -243,7 +243,7 @@ export function computeGrowth(): GrowthModel {
       cardinal = DIRECTION[top].cardinal
     }
   } else if (newestRune) {
-    direction = 'Toward the old ways — the runes hold your current thread'
+    direction = 'Toward the old ways - the runes hold your current thread'
     cardinal = null
   }
 

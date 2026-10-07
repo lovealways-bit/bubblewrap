@@ -2,7 +2,7 @@
 // Pricing (names, amounts, feature sets) mirrors LUNARA_MONETIZATION_V0_DIRECTIVE.md.
 // Price IDs below are test-mode Products/Prices created directly in this
 // project's connected Stripe account (via STRIPE_SECRET_KEY) so Checkout
-// actually works end-to-end here — the directive's own test IDs live in a
+// actually works end-to-end here - the directive's own test IDs live in a
 // separate "AllPath Edu. sandbox" Stripe account this project's key cannot
 // see. Test-mode Price IDs are not secrets. Replace with live equivalents
 // only after the owner connects a live Stripe account.
@@ -25,7 +25,7 @@ export interface Tier {
   customization: boolean
   customDecks: boolean
   personalConsult: boolean
-  /** Private moon & sun journal — paid members only. */
+  /** Private moon & sun journal - paid members only. */
   journal: boolean
   /** Celestial calendar: moon/sun phases, eclipses, esoteric events. */
   celestial: boolean
@@ -45,7 +45,7 @@ export const TIERS: Record<TierId, Tier> = {
     features: [
       'Single-card and three-card spreads',
       'All four preset deck themes',
-      'Design a deck — free preview, $5 to unlock the full set',
+      'Design a deck - free preview, $5 to unlock the full set',
       'Up to 10 saved readings, synced across devices',
       'Ad-supported, with optional rewarded-ad bonus content',
     ],
@@ -72,7 +72,7 @@ export const TIERS: Record<TierId, Tier> = {
       'Birth-chart insights',
       'Private moon & sun journal',
       'Celestial calendar with eclipses & sabbats',
-      'Design a deck — free preview, $5 to unlock the full set',
+      'Design a deck - free preview, $5 to unlock the full set',
       'Ad-free',
     ],
     historyLimit: null,
@@ -96,7 +96,7 @@ export const TIERS: Record<TierId, Tier> = {
       'Everything in Core',
       'All deep spreads including the Celtic Cross',
       'Unlimited synced reading history + Growth insights',
-      'Design unlimited decks — full AI card art included (no $5 unlock)',
+      'Design unlimited decks - full AI card art included (no $5 unlock)',
       'Ad-free',
     ],
     historyLimit: null,
@@ -206,7 +206,7 @@ export const ONE_TIME_OFFERS: Record<OneTimeOfferId, OneTimeOffer> = {
     priceCents: CUSTOM_DECK_UNLOCK_PRICE_CENTS,
     stripePriceId: CUSTOM_DECK_UNLOCK_PRICE_ID,
     description:
-      'Design your own deck with AI card art. Preview it free, then unlock the full deck for $5 — one time, per deck. Included free with Plus and Personal.',
+      'Design your own deck with AI card art. Preview it free, then unlock the full deck for $5 - one time, per deck. Included free with Plus and Personal.',
     requiresDeliveryPreference: false,
     ctaHref: '/deck-designer',
     ctaLabel: 'Open the atelier',
