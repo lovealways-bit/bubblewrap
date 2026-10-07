@@ -152,7 +152,7 @@ export const ALL_DECK_THEMES: DeckTheme[] = [
     name: 'Christmas Court',
     tagline: 'A candlelit winter court of holly, hearthlight, and snowfall.',
     folder: 'christmas-court',
-    enabled: true,
+    enabled: false,
     cardCount: FULL_DECK_CARD_COUNT,
     extension: 'webp',
   },
