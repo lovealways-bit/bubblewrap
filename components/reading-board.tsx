@@ -459,6 +459,13 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
             ))}
           </div>
 
+          {anyRevealed && (
+            <p className="mx-auto mt-4 flex max-w-md items-center justify-center gap-2 text-center text-xs italic text-gold/70">
+              <BookOpen className="h-4 w-4 shrink-0" aria-hidden="true" />
+              Tap a turned card to enlarge it and read what it means.
+            </p>
+          )}
+
           {/* the labeled path: each position as a signature gold-framed row */}
           {allRevealed && (
             <div
@@ -538,6 +545,15 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
                   title={selected.card.name}
                   backLabel="Cards"
                 >
+                <div className="mx-auto mb-5 w-full max-w-[18rem]">
+                  <TarotCard
+                    drawn={selected}
+                    positionLabel={selectedPosition.label}
+                    selected
+                    detail
+                    deckTheme={deckTheme}
+                  />
+                </div>
                 <div
                   key={selectedIndex}
                   className="empire-panel p-6"

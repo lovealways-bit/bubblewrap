@@ -165,10 +165,11 @@ function CardArt({
 interface Props {
   drawn: DrawnCard
   positionLabel: string
-  onReveal: () => void
+  onReveal?: () => void
   onSelect?: () => void
   selected?: boolean
   compact?: boolean
+  detail?: boolean
   deckTheme?: DeckThemeId
 }
 
@@ -179,6 +180,7 @@ export function TarotCard({
   onSelect,
   selected = false,
   compact = false,
+  detail = false,
   deckTheme = getDeckTheme(null).id,
 }: Props) {
   const { card, orientation, revealed } = drawn
@@ -195,7 +197,8 @@ export function TarotCard({
   const proofImageSrc = themedArt ? themeArtSrc(deckTheme, card.id) : proofSrc(card.id)
 
   const handleClick = () => {
-    if (!revealed) onReveal()
+    if (detail) return
+    if (!revealed) onReveal?.()
     else onSelect?.()
   }
 
@@ -211,13 +214,18 @@ export function TarotCard({
 
       <button
         type="button"
-        onClick={handleClick}
+        onClick={detail ? undefined : handleClick}
+        tabIndex={detail ? -1 : 0}
         aria-label={
-          revealed ? `${card.name}, ${orientation}. Select to read.` : `Reveal ${positionLabel} card`
+          detail
+            ? `${card.name}, ${orientation}, enlarged card`
+            : revealed
+              ? `${card.name}, ${orientation}. Select to enlarge and read.`
+              : `Reveal ${positionLabel} card`
         }
-        aria-pressed={revealed ? selected : false}
-        className={`perspective group relative aspect-[2/3] w-full cursor-pointer rounded-xl outline-none transition-all duration-300 focus-visible:ring-2 focus-visible:ring-gold ${
-          compact ? 'max-w-[8.5rem]' : 'max-w-[18rem]'
+        aria-pressed={revealed && !detail ? selected : undefined}
+        className={`perspective group relative aspect-[2/3] w-full rounded-xl outline-none transition-all duration-300 focus-visible:ring-2 focus-visible:ring-gold ${
+          detail ? 'max-w-[18rem] cursor-default' : compact ? 'max-w-[8.5rem] cursor-pointer' : 'max-w-[18rem] cursor-pointer'
         } ${
           selected
             ? 'ring-2 ring-gold shadow-[0_0_26px_-4px_var(--gold)]'
@@ -236,7 +244,7 @@ export function TarotCard({
               <Image
                 width={1024}
                 height={1536}
-                sizes={compact ? '136px' : '288px'}
+                sizes={detail ? '(max-width: 767px) 76vw, 320px' : compact ? '136px' : '288px'}
                 src={themeBackSrc(deckTheme) || '/placeholder.svg'}
                 alt="Card back"
                 className="h-full w-full object-cover"
@@ -269,7 +277,7 @@ export function TarotCard({
               <Image
                 width={1024}
                 height={1536}
-                sizes={compact ? '136px' : '288px'}
+                sizes={detail ? '(max-width: 767px) 76vw, 320px' : compact ? '136px' : '288px'}
                 src={proofImageSrc || '/placeholder.svg'}
                 alt={`${card.name}${isReversed ? ', reversed' : ''}`}
                 className={`h-full w-full object-cover ${isReversed ? 'rotate-180' : ''}`}
