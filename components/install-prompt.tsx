@@ -81,7 +81,7 @@ export function InstallPrompt() {
           type="button"
           onClick={dismiss}
           aria-label="Dismiss install prompt"
-          className="absolute right-3 top-3 rounded-full p-1 text-gold/60 transition-colors hover:text-gold"
+          className="absolute right-2 top-2 grid h-11 w-11 place-items-center rounded-full text-gold/60 transition-colors hover:text-gold"
         >
           <X className="h-4 w-4" />
         </button>
@@ -115,7 +115,7 @@ export function InstallPrompt() {
               <button
                 type="button"
                 onClick={handleInstall}
-                className="empire-cta mt-3 inline-flex items-center gap-2 rounded-md px-5 py-2 font-display text-xs uppercase tracking-[0.2em]"
+                className="empire-cta mt-3 inline-flex min-h-11 items-center gap-2 rounded-md px-5 py-3 font-display text-xs uppercase tracking-[0.2em]"
               >
                 <Download className="h-4 w-4" />
                 Add to device
