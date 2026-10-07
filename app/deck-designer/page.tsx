@@ -34,26 +34,4 @@ export default async function DeckDesignerPage() {
       </header>
 
       <div className="relative z-10 mx-auto max-w-4xl px-5 pb-24 pt-10">
-        <p className="font-display text-[0.6rem] uppercase tracking-[0.3em] text-gold/70">
-          Lunara Atelier
-        </p>
-        <h1 className="mt-1 font-display text-3xl font-bold text-gold-bright text-balance">
-          Design your own deck
-        </h1>
-        <p className="mt-2 max-w-xl text-sm italic text-muted-foreground text-pretty">
-          Describe a visual world and Lunara paints a free preview â€” the card back
-          and three signature arcana. Love it? Unlock the full{' '}
-          {FULL_DECK_SIZE}-card deck for {CUSTOM_DECK_UNLOCK_PRICE_LABEL}
-          {entitledFree ? ' â€” included with your membership.' : ', one time per deck.'}
-        </p>
-
-        <DeckDesigner
-          initialDecks={decks}
-          entitledFree={entitledFree}
-          unlockPriceLabel={CUSTOM_DECK_UNLOCK_PRICE_LABEL}
-          fullDeckSize={FULL_DECK_SIZE}
-        />
-      </div>
-    </main>
-  )
-}
+        <p className="font-display text-[0.6rem] u¶»§q«^

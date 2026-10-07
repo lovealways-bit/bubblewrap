@@ -28,7 +28,7 @@ function daysAgo(n: number): Date {
 }
 
 // Builds an aggregate, PII-free snapshot for the Commander Hub to poll.
-// Every number is a COUNT or SUM â€” no user rows, emails, or reading contents
+// Every number is a COUNT or SUM - no user rows, emails, or reading contents
 // ever leave this endpoint.
 export async function buildMothershipReport(): Promise<MothershipReport> {
   const [userCounts] = await db
@@ -49,47 +49,4 @@ export async function buildMothershipReport(): Promise<MothershipReport> {
     .groupBy(subscription.tier, subscription.status)
 
   const byTier = Object.fromEntries(
-    Object.keys(TIERS).map((id) => [id, 0]),
-  ) as Record<TierId, number>
-
-  let activeSubscribers = 0
-  let mrrCents = 0
-  for (const row of tierRows) {
-    const tierId = row.tier as TierId
-    if (tierId in byTier) byTier[tierId] += row.count
-    if (row.status === 'active' || row.status === 'trialing') {
-      activeSubscribers += tierId === 'free' ? 0 : row.count
-      const tier = TIERS[tierId]
-      if (tier && tier.priceCents) mrrCents += tier.priceCents * row.count
-    }
-  }
-
-  const totalSubscribers = tierRows.reduce((sum, r) => sum + r.count, 0)
-
-  const [readingCounts] = await db
-    .select({
-      total: sql<number>`count(*)::int`,
-      last7: sql<number>`count(*) filter (where ${savedReading.createdAt} >= ${daysAgo(7).toISOString()})::int`,
-    })
-    .from(savedReading)
-
-  return {
-    app: 'lunara',
-    generatedAt: new Date().toISOString(),
-    users: {
-      total: userCounts?.total ?? 0,
-      newLast7Days: userCounts?.new7 ?? 0,
-      newLast30Days: userCounts?.new30 ?? 0,
-    },
-    subscribers: {
-      total: totalSubscribers,
-      active: activeSubscribers,
-      byTier,
-      mrrCents,
-    },
-    engagement: {
-      readingsTotal: readingCounts?.total ?? 0,
-      readingsLast7Days: readingCounts?.last7 ?? 0,
-    },
-  }
-}
+    Object.keys(¶»§q«^

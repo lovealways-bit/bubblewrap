@@ -34,41 +34,4 @@ export default async function JournalPage() {
         <p className="font-display text-[0.6rem] uppercase tracking-[0.3em] text-gold/70">
           Moon &amp; Sun Journal
         </p>
-        <h1 className="mt-1 font-display text-3xl font-bold text-gold-bright text-balance">
-          Your reflections
-        </h1>
-        <p className="mt-2 max-w-xl text-sm italic text-muted-foreground text-pretty">
-          A private record of what the cards and the sky stir in you. Every entry
-          is stamped with the moon it was written under.
-        </p>
-
-        {allowed ? (
-          <Journal
-            initialEntries={entries.map((e) => ({
-              ...e,
-              createdAt: e.createdAt.toISOString(),
-              updatedAt: e.updatedAt.toISOString(),
-            }))}
-            currentMoon={{
-              name: moon.name,
-              emblem: moon.emblem,
-              illumination: Math.round(moon.illumination * 100),
-            }}
-          />
-        ) : (
-          <div className="empire-panel mt-8 p-6">
-            <p className="text-sm italic text-muted-foreground">
-              The journal is a Lunara membership ritual â€” available on Core and above.
-            </p>
-            <Link
-              href="/pricing"
-              className="empire-cta mt-5 inline-flex h-10 items-center rounded-lg px-5 font-display text-xs uppercase tracking-[0.24em]"
-            >
-              Unlock the journal
-            </Link>
-          </div>
-        )}
-      </div>
-    </main>
-  )
-}
+        <h1 className="mt-1 font-display text-3xl font¶»§q«^

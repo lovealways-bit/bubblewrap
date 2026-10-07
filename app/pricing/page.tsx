@@ -6,7 +6,7 @@ import { OfferCheckoutCard } from '@/components/offer-checkout-card'
 import { LegalLinks } from '@/components/checkout-disclosure'
 
 export const metadata = {
-  title: 'Membership & Pricing â€” Lunara',
+  title: 'Membership & Pricing - Lunara',
   description: 'Choose your Lunara membership, or book a one-time birth chart or personal reading.',
 }
 
@@ -31,25 +31,4 @@ export default async function PricingPage() {
 
         <PricingCards currentTier={tier?.id ?? (session?.user ? 'free' : null)} signedIn={Boolean(session?.user)} />
 
-        <div className="mt-16">
-          <div className="mb-6 text-center">
-            <p className="font-display text-xs uppercase tracking-[0.3em] text-gold/70">
-              Readings &amp; add-ons
-            </p>
-            <h2 className="mt-2 font-display text-3xl font-bold text-gold-bright">
-              One-time experiences
-            </h2>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            {Object.values(ONE_TIME_OFFERS).map((offer) => (
-              <OfferCheckoutCard key={offer.id} offer={offer} signedIn={Boolean(session?.user)} />
-            ))}
-          </div>
-        </div>
-
-        <LegalLinks className="mx-auto mt-14 max-w-xl text-center text-xs text-muted-foreground" />
-      </section>
-    </main>
-  )
-}
+        <div className="mt-16">¶»§q«^

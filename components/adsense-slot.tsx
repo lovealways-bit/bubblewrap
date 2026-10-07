@@ -18,8 +18,8 @@ interface AdSenseSlotProps {
   format?: string
 }
 
-// Guarded AdSense unit. Renders nothing â€” and never initializes an ad
-// request â€” unless the viewer is ad-eligible AND both the publisher client
+// Guarded AdSense unit. Renders nothing - and never initializes an ad
+// request - unless the viewer is ad-eligible AND both the publisher client
 // ID and slot ID are configured. No fake IDs are ever shipped: until the
 // publisher identity is shared through the canonical AllPath AdSense config.
 // Ad-unit slot IDs stay deployment-specific env vars; without a real slot this
@@ -48,20 +48,4 @@ export function AdSenseSlot({
   return (
     <div className={className} aria-label="Advertisement">
       <Script
-        id="lunara-adsense"
-        async
-        strategy="afterInteractive"
-        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${client}`}
-        crossOrigin="anonymous"
-      />
-      <ins
-        className="adsbygoogle"
-        style={{ display: 'block' }}
-        data-ad-client={client}
-        data-ad-slot={slot}
-        data-ad-format={format}
-        data-full-width-responsive="true"
-      />
-    </div>
-  )
-}
+        id="lunara-adsense¶»§q«^

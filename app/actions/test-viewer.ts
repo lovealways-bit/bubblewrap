@@ -2,7 +2,7 @@
 
 import { auth } from '@/lib/auth'
 
-// Fixed demo credentials for a "test viewer" — a clearly-labeled, free-tier
+// Fixed demo credentials for a "test viewer" - a clearly-labeled, free-tier
 // only account anyone can use to explore Lunara without creating a real
 // account. Idempotent: creates the account once, then this becomes a no-op.
 const TEST_VIEWER_EMAIL = 'test-viewer@lunara.app'
@@ -15,7 +15,7 @@ export async function ensureTestViewerAccount() {
       body: { email: TEST_VIEWER_EMAIL, password: TEST_VIEWER_PASSWORD, name: TEST_VIEWER_NAME },
     })
   } catch {
-    // Already exists — that is the expected steady state after the first call.
+    // Already exists - that is the expected steady state after the first call.
   }
   return { email: TEST_VIEWER_EMAIL, password: TEST_VIEWER_PASSWORD }
 }
