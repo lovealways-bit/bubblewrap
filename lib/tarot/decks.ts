@@ -133,16 +133,16 @@ export const ALL_DECK_THEMES: DeckTheme[] = [
   },
   {
     id: 'summer-court',
-    name: 'Summer Court',
-    tagline: 'A sunlit court of golden figures.',
+    name: 'Summer',
+    tagline: 'Sunlit gold, warmth, and summer radiance.',
     folder: 'summer-court',
     enabled: true,
     cardCount: FULL_DECK_CARD_COUNT,
   },
   {
     id: 'winter-court',
-    name: 'Winter Court',
-    tagline: 'A pale silver court of frost, cauldrons, and carved stone.',
+    name: 'Winter',
+    tagline: 'Pale silver frost, winter light, and carved stone.',
     folder: 'winter-court',
     enabled: true,
     cardCount: FULL_DECK_CARD_COUNT,
@@ -203,7 +203,7 @@ export function isDeckEnabled(id: DeckThemeId): boolean {
  * to the main deck.
  */
 export function getDeckTheme(id: string | null | undefined): DeckTheme {
-  // Older saved preferences used the id 'blonde' for what is now Summer Court.
+  // Older saved preferences used the id 'blonde' for what is now Summer.
   const normalized = id === 'blonde' ? 'summer-court' : id
   return DECK_THEMES.find((t) => t.id === normalized) ?? DECK_THEMES[0]
 }
@@ -223,6 +223,9 @@ export function themeArtSrc(themeId: DeckThemeId, cardId: string): string {
 export function themeBackSrc(themeId: DeckThemeId): string | null {
   if (themeId === 'hallow-court' && isDeckEnabled('hallow-court')) {
     return '/cards/hallow-court/back.png'
+  }
+  if (themeId === 'summer-court' && isDeckEnabled('summer-court')) {
+    return '/cards/summer-court/back.svg'
   }
   return null
 }
