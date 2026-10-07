@@ -4,6 +4,7 @@ import { ONE_TIME_OFFERS } from '@/lib/subscription/tiers'
 import { PricingCards } from '@/components/pricing-cards'
 import { OfferCheckoutCard } from '@/components/offer-checkout-card'
 import { LegalLinks } from '@/components/checkout-disclosure'
+import { PricingScrollGuard } from '@/components/pricing-scroll-guard'
 
 export const metadata = {
   title: 'Membership & Pricing - Lunara',
@@ -15,7 +16,8 @@ export default async function PricingPage() {
   const tier = session?.user ? await getUserTier(session.user.id) : null
 
   return (
-    <main className="min-h-screen bg-background px-5 py-16 text-foreground">
+    <main className="min-h-dvh bg-background px-5 py-16 text-foreground">
+      <PricingScrollGuard />
       <section className="mx-auto max-w-6xl">
         <div className="mx-auto mb-12 max-w-2xl text-center">
           <p className="mb-3 font-display text-xs uppercase tracking-[0.4em] text-gold/70">
