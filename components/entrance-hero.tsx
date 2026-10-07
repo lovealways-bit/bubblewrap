@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { SiteFooter } from '@/components/site-footer'
 import { AccountNav } from '@/components/account-nav'
 
 // The moonlit entrance to Lunara Ascension. The altar photograph carries the
@@ -24,14 +23,6 @@ export function EntranceHero() {
       />
 
       <div className="relative z-10 flex min-h-screen flex-col">
-        {/* Brand bar */}
-        <header className="flex items-center justify-between px-6 pt-8 md:px-14 md:pt-10">
-          <p className="font-display text-[0.6rem] uppercase tracking-[0.42em] text-gold/70 sm:text-xs">
-            AllPath Edu
-          </p>
-          <AccountNav />
-        </header>
-
         {/* Hero copy, anchored low-left over the open sky */}
         <div className="mt-auto px-6 pb-14 md:px-14 md:pb-24">
           <div className="max-w-xl">
@@ -46,7 +37,7 @@ export function EntranceHero() {
             </div>
 
             <h1
-              className="mt-5 font-display text-5xl font-bold uppercase leading-[0.95] tracking-[0.06em] text-gold-bright text-glow-gold sm:text-6xl md:text-7xl text-balance"
+              className="mt-5 max-w-full font-display text-[clamp(2.65rem,13vw,4.8rem)] font-bold uppercase leading-[0.93] tracking-[0.025em] text-gold-bright text-glow-gold sm:tracking-[0.06em] md:text-7xl"
               style={{ animation: 'empire-rise 0.9s ease-out 0.1s both' }}
             >
               Lunara
@@ -68,7 +59,7 @@ export function EntranceHero() {
             >
               <Link
                 href="/reading"
-                className="group inline-flex items-center gap-3 rounded-lg border border-gold bg-gold/15 px-8 py-3.5 font-display text-xs uppercase tracking-[0.28em] text-gold-bright shadow-[0_0_28px_-8px_var(--gold)] transition-all duration-300 hover:bg-gold/25 hover:shadow-[0_0_34px_-4px_var(--gold)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
+                className="group inline-flex min-h-12 w-full max-w-md items-center justify-center gap-3 rounded-lg border border-gold bg-gold/15 px-5 py-3.5 font-display text-[0.7rem] uppercase tracking-[0.2em] text-gold-bright shadow-[0_0_28px_-8px_var(--gold)] transition-all duration-300 hover:bg-gold/25 hover:shadow-[0_0_34px_-4px_var(--gold)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 sm:w-auto sm:px-8 sm:text-xs sm:tracking-[0.28em]"
               >
                 Enter the Sanctum
                 <span
@@ -83,10 +74,12 @@ export function EntranceHero() {
                 78 cards · drawn by fate
               </p>
             </div>
+
+            <div className="mt-5">
+              <AccountNav />
+            </div>
           </div>
         </div>
-
-        <SiteFooter />
       </div>
     </main>
   )
