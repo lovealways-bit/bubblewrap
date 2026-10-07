@@ -1,15 +1,22 @@
 // The Reader Growth Model: a self-learning layer derived from the seeker's
-// own on-device history (tarot + runes). It is intentionally reflective, not
-// predictive - it summarizes what has recurred, what is being explored, and
-// what has been integrated, so the Empire "grows with" the reader.
-//
-// Framework-agnostic and read-only over the history stores; the UI consumes
-// the single `computeGrowth()` result.
+// account-owned saved tarot + rune history. It is intentionally reflective,
+// not predictive. The UI supplies the signed-in user's history so growth can
+// follow that account across devices instead of being tied to localStorage.
 
-import { loadHistory } from './history'
 import type { DrawnCard, Suit } from './types'
-import { loadRuneHistory } from '@/lib/runes/history'
 import { RUNES } from '@/lib/runes/runes'
+
+export interface GrowthTarotReading {
+  savedAt: number
+  question: string
+  cards: DrawnCard[]
+}
+
+export interface GrowthRuneReading {
+  savedAt: number
+  question: string
+  cast: { runeId: string; orientation: 'upright' | 'merkstave' }[]
+}
 
 export type MajorRealmId = 'awakening' | 'reckoning' | 'return'
 export type RealmId = Suit | MajorRealmId
@@ -135,9 +142,10 @@ function titleCase(s: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-export function computeGrowth(): GrowthModel {
-  const tarot = loadHistory()
-  const runes = loadRuneHistory()
+export function computeGrowth(
+  tarot: GrowthTarotReading[] = [],
+  runes: GrowthRuneReading[] = [],
+): GrowthModel {
 
   const allCards: DrawnCard[] = tarot.flatMap((r) => r.cards)
   const totalCards = allCards.length

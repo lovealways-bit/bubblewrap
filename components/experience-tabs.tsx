@@ -19,14 +19,34 @@ const TABS: { id: TabId; label: string; hint: string; icon: LucideIcon }[] = [
   { id: 'growth', label: 'Growth', hint: 'Open your constellation', icon: Star },
 ]
 
-function Panel({ id, premiumSpreads }: { id: TabId; premiumSpreads: boolean }) {
-  if (id === 'cards') return <ReadingBoard premiumSpreads={premiumSpreads} />
-  if (id === 'runes') return <RuneOracle />
+function Panel({
+  id,
+  premiumSpreads,
+  signedIn,
+  userName,
+}: {
+  id: TabId
+  premiumSpreads: boolean
+  signedIn: boolean
+  userName: string | null
+}) {
+  if (id === 'cards') {
+    return <ReadingBoard premiumSpreads={premiumSpreads} signedIn={signedIn} userName={userName} />
+  }
+  if (id === 'runes') return <RuneOracle signedIn={signedIn} userName={userName} />
   if (id === 'codex') return <CardMeanings />
-  return <GrowthConstellation />
+  return <GrowthConstellation signedIn={signedIn} userName={userName} />
 }
 
-export function ExperienceTabs({ premiumSpreads = false }: { premiumSpreads?: boolean }) {
+export function ExperienceTabs({
+  premiumSpreads = false,
+  signedIn = false,
+  userName = null,
+}: {
+  premiumSpreads?: boolean
+  signedIn?: boolean
+  userName?: string | null
+}) {
   const [tab, setTab] = useState<TabId>('cards')
   const [mobilePanel, setMobilePanel] = useState<TabId | null>(null)
 
@@ -85,7 +105,7 @@ export function ExperienceTabs({ premiumSpreads = false }: { premiumSpreads?: bo
             backLabel="Lunara"
             desktopInline={false}
           >
-            <Panel id={id} premiumSpreads={premiumSpreads} />
+            <Panel id={id} premiumSpreads={premiumSpreads} signedIn={signedIn} userName={userName} />
           </MobileSheet>
         ))}
       </div>
@@ -124,7 +144,7 @@ export function ExperienceTabs({ premiumSpreads = false }: { premiumSpreads?: bo
           Readings are for entertainment and personal reflection only, not advice.
         </p>
 
-        <Panel id={tab} premiumSpreads={premiumSpreads} />
+        <Panel id={tab} premiumSpreads={premiumSpreads} signedIn={signedIn} userName={userName} />
       </div>
     </div>
   )

@@ -9,11 +9,14 @@ import { ensureTestViewerAccount } from '@/app/actions/test-viewer'
 
 interface Props {
   mode: 'sign-in' | 'sign-up'
+  nextPath?: string | null
 }
 
-export function AuthForm({ mode }: Props) {
+export function AuthForm({ mode, nextPath = null }: Props) {
   const router = useRouter()
   const isSignUp = mode === 'sign-up'
+  const safeNext =
+    nextPath && nextPath.startsWith('/') && !nextPath.startsWith('//') ? nextPath : null
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -76,8 +79,8 @@ export function AuthForm({ mode }: Props) {
           return
         }
       }
-      // New accounts go straight to the deck picker; returning seekers to their account.
-      router.push(isSignUp ? '/choose-deck?from=signup' : '/account')
+      // Save flows return to the reading that prompted authentication.
+      router.push(safeNext ?? (isSignUp ? '/choose-deck?from=signup' : '/account'))
       router.refresh()
     } catch {
       setError('Something went wrong. Please try again.')
@@ -195,7 +198,7 @@ export function AuthForm({ mode }: Props) {
       <p className="mt-5 text-center text-sm text-muted-foreground">
         {isSignUp ? 'Already initiated?' : 'New to the sanctuary?'}{' '}
         <Link
-          href={isSignUp ? '/sign-in' : '/sign-up'}
+          href={`${isSignUp ? '/sign-in' : '/sign-up'}${safeNext ? `?next=${encodeURIComponent(safeNext)}` : ''}`}
           className="text-gold-bright underline-offset-4 hover:underline"
         >
           {isSignUp ? 'Sign in' : 'Create an account'}

@@ -1,8 +1,17 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { BookHeart, Compass, Sparkles, Star, Trophy } from 'lucide-react'
-import { computeGrowth, realmSuit, type GrowthModel, type LessonRealm } from '@/lib/tarot/growth'
+import { getGrowthHistory } from '@/app/actions/readings'
+import {
+  computeGrowth,
+  realmSuit,
+  type GrowthModel,
+  type GrowthRuneReading,
+  type GrowthTarotReading,
+  type LessonRealm,
+} from '@/lib/tarot/growth'
 import { SunflowerCompass } from './sunflower-compass'
 import { SuitEmblem } from './suit-emblem'
 
@@ -20,13 +29,65 @@ const STATUS_TONE: Record<LessonRealm['status'], string> = {
   integrated: 'border-teal/60 text-teal',
 }
 
-export function GrowthConstellation() {
+export function GrowthConstellation({
+  signedIn = false,
+  userName = null,
+}: {
+  signedIn?: boolean
+  userName?: string | null
+}) {
   const [model, setModel] = useState<GrowthModel | null>(null)
 
-  // Recompute from on-device history every time the screen opens.
   useEffect(() => {
-    setModel(computeGrowth())
-  }, [])
+    let cancelled = false
+    if (!signedIn) {
+      setModel(null)
+      return
+    }
+
+    void getGrowthHistory().then((history) => {
+      if (cancelled) return
+      const tarot: GrowthTarotReading[] = history.tarot.map((reading) => ({
+        savedAt: reading.savedAt,
+        question: reading.question,
+        cards: (Array.isArray(reading.cards) ? reading.cards : []) as GrowthTarotReading['cards'],
+      }))
+      const runes: GrowthRuneReading[] = history.runes.map((reading) => ({
+        savedAt: reading.savedAt,
+        question: reading.question,
+        cast: (Array.isArray(reading.cast) ? reading.cast : []) as GrowthRuneReading['cast'],
+      }))
+      setModel(computeGrowth(tarot, runes))
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [signedIn])
+
+  if (!signedIn) {
+    return (
+      <section className="mx-auto max-w-3xl px-4 py-10">
+        <div className="empire-panel p-8 text-center">
+          <Compass className="mx-auto h-8 w-8 text-gold/60" />
+          <h2 className="mt-4 font-display text-2xl uppercase tracking-[0.18em] text-gold-bright text-glow-gold">
+            Your Growth Constellation
+          </h2>
+          <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-surface-foreground/85 text-pretty">
+            Create an account or sign in to save readings and let Lunara build a Growth Constellation that follows you across devices.
+          </p>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Link href="/sign-up?next=/reading" className="empire-cta inline-flex min-h-11 items-center rounded-lg px-5 font-display text-xs uppercase tracking-[0.2em]">
+              Create account
+            </Link>
+            <Link href="/sign-in?next=/reading" className="inline-flex min-h-11 items-center rounded-lg border border-gold/40 px-5 font-display text-xs uppercase tracking-[0.2em] text-gold-bright">
+              Sign in
+            </Link>
+          </div>
+        </div>
+      </section>
+    )
+  }
 
   if (!model) return null
 
@@ -45,7 +106,7 @@ export function GrowthConstellation() {
           className="h-56 w-56 drop-shadow-[0_0_30px_-8px_var(--gold)]"
         />
         <h2 className="mt-4 font-display text-2xl uppercase tracking-[0.18em] text-gold-bright text-glow-gold">
-          Growth Constellation
+          {userName ? `${userName}'s Growth Constellation` : 'Growth Constellation'}
         </h2>
         <p className="mt-2 max-w-md text-sm italic leading-relaxed text-surface-foreground/85 text-pretty">
           {model.direction}
@@ -62,9 +123,9 @@ export function GrowthConstellation() {
           <Compass className="mx-auto h-8 w-8 text-gold/60" />
           <p className="mt-3 text-sm leading-relaxed text-surface-foreground/80 text-pretty">
             The map is empty for now. Draw and{' '}
-            <span className="text-gold-bright">save a reading</span> - Lunara will begin to learn
-            your recurring themes, the lessons you are working through, and the symbols that speak to
-            you.
+            <span className="text-gold-bright">save a reading</span> to this account. Lunara will begin
+            to learn your recurring themes, the lessons you are working through, and the symbols that
+            speak to you.
           </p>
         </div>
       ) : (
