@@ -260,42 +260,52 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
       <div className="mb-7 flex flex-col items-center gap-3 text-center">
         <p className="font-display text-xs uppercase tracking-[0.4em] text-gold/70">The Cards</p>
         <h2 className="font-display text-2xl font-bold uppercase tracking-[0.06em] text-gold-bright text-glow-gold sm:text-4xl">
-          Draw Your Cards
+          Begin Your Reading
         </h2>
         <p className="max-w-md text-base italic leading-relaxed text-muted-foreground text-pretty">
-          Seventy-eight cards of the arcana. Choose a spread, name your question, and let the cards
-          fall as they may.
+          Set the deck and spread first. Then cross into the draw.
         </p>
       </div>
 
-      {/* ---- Phone controls: each opens its section in a sheet ---- */}
-      <div className="mx-auto mb-8 flex max-w-md flex-col gap-2.5 md:hidden">
-        <SheetLauncher
-          icon={Layers}
-          label="Your deck"
-          value={getDeckTheme(deckTheme).name}
-          onOpen={() => setSheet('deck')}
-        />
-        <SheetLauncher
-          icon={LayoutGrid}
-          label="Your spread"
-          value={spread.name}
-          hint={spread.tagline}
-          onOpen={() => setSheet('spread')}
-        />
-        {history.length > 0 && (
-          <SheetLauncher
-            icon={Clock}
-            label="Saved readings"
-            value={`${history.length} on this device`}
-            onOpen={() => setSheet('saved')}
-          />
-        )}
+      {/* ---- Step one: configure the reading ---- */}
+      <div className="mx-auto mb-7 max-w-md md:hidden">
+        <div className="empire-panel p-4">
+          <p className="text-center font-display text-[0.58rem] uppercase tracking-[0.38em] text-gold/55">
+            Step One
+          </p>
+          <h3 className="mt-1 text-center font-display text-lg uppercase tracking-[0.12em] text-gold-bright">
+            Set Your Reading
+          </h3>
+          <div className="mt-4 flex flex-col gap-2.5">
+            <SheetLauncher
+              icon={Layers}
+              label="Choose your deck"
+              value={getDeckTheme(deckTheme).name}
+              onOpen={() => setSheet('deck')}
+            />
+            <SheetLauncher
+              icon={LayoutGrid}
+              label="Choose your spread"
+              value={spread.name}
+              hint={spread.tagline}
+              onOpen={() => setSheet('spread')}
+            />
+            {history.length > 0 && (
+              <SheetLauncher
+                icon={Clock}
+                label="Saved readings"
+                value={`${history.length} on this device`}
+                onOpen={() => setSheet('saved')}
+              />
+            )}
+          </div>
+        </div>
       </div>
 
       {/* ---- Deck theme selector ---- */}
-      <MobileSheet open={sheet === 'deck'} onClose={closeSheet} eyebrow="The Cards" title="Your deck">
-        <div className="mb-10">
+      <MobileSheet open={sheet === 'deck'} onClose={closeSheet} title="Choose a deck">
+        <div className="mb-8 rounded-xl border border-gold/25 bg-surface/20 p-4 md:p-6">
+          <p className="mb-4 text-center font-display text-[0.58rem] uppercase tracking-[0.38em] text-gold/55">Choose Your Deck</p>
           <DeckPicker
             value={deckTheme}
             onChange={setDeckTheme}
@@ -308,7 +318,7 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
 
       {/* ---- Spread selector ---- */}
       <MobileSheet open={sheet === 'spread'} onClose={closeSheet} eyebrow="The Cards" title="Choose your spread">
-      <div className="flex flex-col items-center gap-4">
+      <div className="rounded-xl border border-gold/25 bg-surface/20 p-4 md:p-6 flex flex-col items-center gap-4">
         <p className="font-display text-xs uppercase tracking-[0.4em] text-gold/70">
           Choose your spread
         </p>
@@ -360,43 +370,57 @@ export function ReadingBoard({ premiumSpreads = false }: { premiumSpreads?: bool
       </div>
       </MobileSheet>
 
-      {/* ---- Ask a question (situational) ---- */}
-      <div className="mx-auto mt-8 flex max-w-md flex-col items-center gap-2">
-        <label
-          htmlFor="empire-question"
-          className="font-display text-[0.65rem] uppercase tracking-[0.35em] text-gold/60"
-        >
-          Ask the cards a question
-        </label>
-        <input
-          id="empire-question"
-          type="text"
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          placeholder="What am I not seeing? (optional)"
-          maxLength={140}
-          className="w-full rounded-md border border-gold/30 bg-surface/50 min-h-12 px-4 py-3 text-center text-base text-foreground placeholder:text-muted-foreground/70 focus:border-gold/60 focus:outline-none focus:ring-1 focus:ring-gold/40"
-        />
-        <p className="text-[0.7rem] italic text-muted-foreground/70">
-          Name your situation and the reading is drawn around it.
-        </p>
+      {/* ---- Threshold between setup and the draw ---- */}
+      <div className="mx-auto my-8 flex max-w-xl items-center gap-3" aria-hidden="true">
+        <span className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/45 to-gold/20" />
+        <span className="font-display text-sm tracking-[0.35em] text-gold/70">✦ ☾ ✦</span>
+        <span className="h-px flex-1 bg-gradient-to-l from-transparent via-gold/45 to-gold/20" />
       </div>
 
-      {storageNotice && <p role="status" className="mx-auto mt-3 max-w-md text-center text-sm text-foreground">{storageNotice}</p>}
-
-      {/* ---- Draw / shuffle control ---- */}
-      <div className="mt-6 flex justify-center">
+      {/* ---- Step two: question + draw ---- */}
+      <div className="empire-panel mx-auto max-w-md p-5 sm:p-6">
+        <p className="text-center font-display text-[0.58rem] uppercase tracking-[0.38em] text-gold/55">
+          Step Two
+        </p>
+        <h3 className="mt-1 text-center font-display text-xl uppercase tracking-[0.12em] text-gold-bright text-glow-gold">
+          Draw Your Cards
+        </h3>
+        <div className="mt-5 flex flex-col items-center gap-2">
+          <label
+            htmlFor="empire-question"
+            className="font-display text-[0.65rem] uppercase tracking-[0.3em] text-gold/60"
+          >
+            Ask the cards a question
+          </label>
+          <input
+            id="empire-question"
+            type="text"
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            placeholder="What am I not seeing? (optional)"
+            maxLength={140}
+            className="w-full rounded-md border border-gold/30 bg-surface/50 min-h-12 px-4 py-3 text-center text-base text-foreground placeholder:text-muted-foreground/70 focus:border-gold/60 focus:outline-none focus:ring-1 focus:ring-gold/40"
+          />
+          <p className="text-center text-[0.7rem] italic text-muted-foreground/70">
+            Name your situation, or leave it open.
+          </p>
+        </div>
         <button
           type="button"
           onClick={handleDraw}
           disabled={drawing}
-          className="empire-cta group inline-flex min-h-14 w-full max-w-md justify-center items-center gap-2.5 rounded-md px-10 py-3.5 font-display text-sm uppercase tracking-[0.2em] disabled:cursor-not-allowed disabled:opacity-60"
+          className="empire-cta group mt-5 inline-flex min-h-14 w-full justify-center items-center gap-2.5 rounded-lg px-8 py-3.5 font-display text-sm uppercase tracking-[0.2em] disabled:cursor-not-allowed disabled:opacity-60"
         >
           <Shuffle
             className={`h-4 w-4 transition-transform duration-500 ${drawing ? 'animate-spin' : 'group-hover:rotate-180'}`}
           />
           {hasReading ? 'Shuffle & draw again' : 'Draw my cards'}
         </button>
+        {storageNotice && (
+          <p role="status" className="mt-3 text-center text-sm text-foreground">
+            {storageNotice}
+          </p>
+        )}
       </div>
 
       {/* ---- The reading ---- */}
