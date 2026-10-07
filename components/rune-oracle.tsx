@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { BookMarked, Clock, Sparkles, Trash2 } from 'lucide-react'
 import {
   castRunes,
@@ -14,12 +15,11 @@ import {
   type RuneSpread,
 } from '@/lib/runes/runes'
 import {
-  clearRuneHistory,
-  deleteRuneReading,
-  loadRuneHistory,
-  saveRuneReading,
-  type SavedRuneReading,
-} from '@/lib/runes/history'
+  clearSavedRuneReadings,
+  deleteSavedRuneReading,
+  getSavedRuneReadings,
+  saveRuneReading as saveAccountRuneReading,
+} from '@/app/actions/readings'
 
 const STORAGE_KEY = 'empire-tarot-runes-v1'
 
@@ -27,6 +27,30 @@ interface PersistedCast {
   spreadId: string
   question: string
   cast: { runeId: string; orientation: 'upright' | 'merkstave' }[]
+}
+
+interface SavedRuneReading {
+  id: string
+  savedAt: number
+  spreadId: string
+  spreadName: string
+  question: string
+  cast: PersistedCast['cast']
+  summary: string
+}
+
+function normalizeRuneHistory(
+  rows: Awaited<ReturnType<typeof getSavedRuneReadings>>,
+): SavedRuneReading[] {
+  return rows.map((row) => ({
+    id: row.id,
+    savedAt: row.savedAt,
+    spreadId: row.spreadId,
+    spreadName: getRuneSpread(row.spreadId).name,
+    question: row.question,
+    cast: (Array.isArray(row.cast) ? row.cast : []) as PersistedCast['cast'],
+    summary: '',
+  }))
 }
 
 function serialize(spreadId: string, question: string, cast: CastRune[]): PersistedCast {
@@ -46,7 +70,14 @@ function hydrate(data: PersistedCast): CastRune[] {
     .filter((c): c is CastRune => c !== null)
 }
 
-export function RuneOracle() {
+export function RuneOracle({
+  signedIn = false,
+  userName = null,
+}: {
+  signedIn?: boolean
+  userName?: string | null
+}) {
+  const router = useRouter()
   const [spreadId, setSpreadId] = useState<string>('single')
   const [question, setQuestion] = useState('')
   const [cast, setCast] = useState<CastRune[]>([])
@@ -58,10 +89,21 @@ export function RuneOracle() {
 
   const spread = useMemo(() => getRuneSpread(spreadId), [spreadId])
 
-  // Load the saved casts on mount.
+  const refreshHistory = useCallback(async () => {
+    if (!signedIn) {
+      setHistory([])
+      return
+    }
+    try {
+      setHistory(normalizeRuneHistory(await getSavedRuneReadings()))
+    } catch {
+      setHistory([])
+    }
+  }, [signedIn])
+
   useEffect(() => {
-    setHistory(loadRuneHistory())
-  }, [])
+    void refreshHistory()
+  }, [refreshHistory])
 
   // Restore a prior cast so refreshing mid-reading does not lose it.
   useEffect(() => {
@@ -117,18 +159,23 @@ export function RuneOracle() {
     [spread, cast, question],
   )
 
-  const handleSave = useCallback(() => {
+  const handleSave = useCallback(async () => {
     if (cast.length === 0) return
-    const next = saveRuneReading({
+    if (!signedIn) {
+      router.push('/sign-up?next=/reading')
+      return
+    }
+
+    const result = await saveAccountRuneReading({
       spreadId,
-      spreadName: spread.name,
       question,
       cast: cast.map((c) => ({ runeId: c.rune.id, orientation: c.orientation })),
-      summary,
     })
-    setHistory(next)
+    if (!result.ok) return
+
     setJustSaved(true)
-  }, [cast, spreadId, spread.name, question, summary])
+    await refreshHistory()
+  }, [cast, signedIn, router, spreadId, question, refreshHistory])
 
   const handleOpenSaved = useCallback((saved: SavedRuneReading) => {
     const runes = saved.cast
@@ -147,13 +194,15 @@ export function RuneOracle() {
     document.getElementById('the-runes')?.scrollIntoView({ behavior: 'smooth' })
   }, [])
 
-  const handleDeleteSaved = useCallback((id: string) => {
-    setHistory(deleteRuneReading(id))
-  }, [])
+  const handleDeleteSaved = useCallback(async (id: string) => {
+    await deleteSavedRuneReading(id)
+    await refreshHistory()
+  }, [refreshHistory])
 
-  const handleClearHistory = useCallback(() => {
-    setHistory(clearRuneHistory())
-  }, [])
+  const handleClearHistory = useCallback(async () => {
+    await clearSavedRuneReadings()
+    await refreshHistory()
+  }, [refreshHistory])
 
   // The detail panel: an explicit cast selection wins, else a browsed stave.
   const detail: { rune: Rune; orientation: 'upright' | 'merkstave'; text: string; label?: string } | null =
@@ -387,18 +436,22 @@ export function RuneOracle() {
             className="inline-flex items-center gap-2.5 rounded-md border border-gold bg-gold/10 px-7 py-3 font-display text-sm uppercase tracking-[0.2em] text-gold-bright transition-all duration-300 hover:bg-gold/20 hover:shadow-[0_0_22px_-6px_var(--gold)] disabled:cursor-default disabled:border-gold/40 disabled:text-gold/60 disabled:shadow-none"
           >
             <BookMarked className="h-4 w-4" />
-            {justSaved ? 'Saved to this device' : 'Save this casting'}
+            {justSaved
+              ? `Saved to ${userName || 'your account'}`
+              : signedIn
+                ? `Save to ${userName || 'my account'}`
+                : 'Create account to save'}
           </button>
         </div>
       )}
 
-      {/* ---- Saved castings (on-device history) ---- */}
+      {/* ---- Saved castings (account history) ---- */}
       {history.length > 0 && (
         <div className="mx-auto mt-14 max-w-2xl">
           <div className="flex items-center justify-between border-b border-gold/20 pb-3">
             <p className="flex items-center gap-2 font-display text-xs uppercase tracking-[0.3em] text-gold/70">
               <Clock className="h-3.5 w-3.5" />
-              Your saved castings ({history.length})
+              {userName ? `${userName}'s saved castings` : 'Your saved castings'} ({history.length})
             </p>
             <button
               type="button"
