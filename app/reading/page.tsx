@@ -17,7 +17,11 @@ export default async function ReadingPage() {
   return (
     <main className="relative flex min-h-0 flex-1 flex-col overflow-hidden bg-background">
       <Starfield />
-      <ExperienceTabs premiumSpreads={premiumSpreads} />
+      <ExperienceTabs
+        premiumSpreads={premiumSpreads}
+        signedIn={Boolean(session?.user)}
+        userName={session?.user?.name ?? null}
+      />
       {/* Restrained lower-page banner: only initializes for ad-eligible
           (free/signed-out) viewers, and only once real AdSense IDs are
           configured in env. Never shown to a paid member. */}
