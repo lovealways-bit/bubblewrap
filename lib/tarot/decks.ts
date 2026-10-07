@@ -10,7 +10,7 @@
 // every user-facing surface (picker, saved preference, random variants) until
 // it is switched on. Only switch a deck on once `cardCount` reaches
 // FULL_DECK_CARD_COUNT and its art has been approved.
-export type DeckThemeId = 'classic' | 'mermaid' | 'fairy' | 'creature' | 'summer-court' | 'winter-court' | 'hallow-court'
+export type DeckThemeId = 'classic' | 'mermaid' | 'fairy' | 'creature' | 'summer-court' | 'winter-court' | 'hallow-court' | 'christmas-court'
 
 export const FULL_DECK_CARD_COUNT = 78
 
@@ -112,6 +112,7 @@ const THEME_CARD_IDS: Record<DeckThemeId, Set<string>> = {
   'hallow-court': FULL_THEME_CARD_IDS,
   'summer-court': FULL_THEME_CARD_IDS,
   'winter-court': FULL_THEME_CARD_IDS,
+  'christmas-court': FULL_THEME_CARD_IDS,
   mermaid: new Set(['major-00', 'major-01', 'wands-01', 'cups-01', 'swords-01', 'pentacles-01']),
   fairy: new Set(['major-00', 'major-01', 'wands-01', 'cups-01', 'swords-01', 'pentacles-01']),
   creature: new Set(['major-00', 'major-01', 'wands-01', 'cups-01', 'swords-01', 'pentacles-01']),
@@ -141,6 +142,14 @@ export const ALL_DECK_THEMES: DeckTheme[] = [
     name: 'Winter Court',
     tagline: 'A pale silver court of frost, cauldrons, and carved stone.',
     folder: 'winter-court',
+    enabled: true,
+    cardCount: FULL_DECK_CARD_COUNT,
+  },
+  {
+    id: 'christmas-court',
+    name: 'Christmas Court',
+    tagline: 'A candlelit winter court of holly, hearthlight, and snowfall.',
+    folder: 'christmas-court',
     enabled: true,
     cardCount: FULL_DECK_CARD_COUNT,
   },
