@@ -62,7 +62,7 @@ export function GrowthConstellation() {
           <Compass className="mx-auto h-8 w-8 text-gold/60" />
           <p className="mt-3 text-sm leading-relaxed text-surface-foreground/80 text-pretty">
             The map is empty for now. Draw and{' '}
-            <span className="text-gold-bright">save a reading</span> — Lunara will begin to learn
+            <span className="text-gold-bright">save a reading</span> - Lunara will begin to learn
             your recurring themes, the lessons you are working through, and the symbols that speak to
             you.
           </p>

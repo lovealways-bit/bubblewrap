@@ -11,7 +11,7 @@ import { AccountNav } from '@/components/account-nav'
 export const metadata = {
   title: 'Celestial Calendar · Lunara',
   description:
-    'Moon phases, eclipses, solstices, equinoxes, and the old sabbats — the turning sky mapped ahead.',
+    'Moon phases, eclipses, solstices, equinoxes, and the old sabbats - the turning sky mapped ahead.',
 }
 
 export default async function CalendarPage() {
@@ -45,7 +45,7 @@ export default async function CalendarPage() {
           The turning sky
         </h1>
         <p className="mt-2 max-w-xl text-sm italic text-muted-foreground text-pretty">
-          Moon phases, eclipses, solstices, and the old sabbats — mapped ahead so
+          Moon phases, eclipses, solstices, and the old sabbats - mapped ahead so
           you can time your rituals with the heavens.
         </p>
 
@@ -61,7 +61,7 @@ export default async function CalendarPage() {
         ) : (
           <div className="empire-panel mt-8 p-6">
             <p className="text-sm italic text-muted-foreground">
-              The celestial calendar is a Lunara membership ritual — available on Core and above.
+              The celestial calendar is a Lunara membership ritual - available on Core and above.
             </p>
             <Link
               href="/pricing"

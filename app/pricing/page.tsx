@@ -6,7 +6,7 @@ import { OfferCheckoutCard } from '@/components/offer-checkout-card'
 import { LegalLinks } from '@/components/checkout-disclosure'
 
 export const metadata = {
-  title: 'Membership & Pricing — Lunara',
+  title: 'Membership & Pricing - Lunara',
   description: 'Choose your Lunara membership, or book a one-time birth chart or personal reading.',
 }
 

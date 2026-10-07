@@ -10,7 +10,7 @@ export interface DeckCard {
 }
 
 // A small, curated preview set: the card back plus three iconic faces.
-// Free for everyone — the teaser before a $5 full-deck unlock.
+// Free for everyone - the teaser before a $5 full-deck unlock.
 export const PREVIEW_CARDS: DeckCard[] = [
   {
     id: 'back',

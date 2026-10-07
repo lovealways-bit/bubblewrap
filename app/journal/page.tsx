@@ -58,7 +58,7 @@ export default async function JournalPage() {
         ) : (
           <div className="empire-panel mt-8 p-6">
             <p className="text-sm italic text-muted-foreground">
-              The journal is a Lunara membership ritual — available on Core and above.
+              The journal is a Lunara membership ritual - available on Core and above.
             </p>
             <Link
               href="/pricing"

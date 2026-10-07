@@ -18,8 +18,8 @@ interface AdSenseSlotProps {
   format?: string
 }
 
-// Guarded AdSense unit. Renders nothing — and never initializes an ad
-// request — unless the viewer is ad-eligible AND both the publisher client
+// Guarded AdSense unit. Renders nothing - and never initializes an ad
+// request - unless the viewer is ad-eligible AND both the publisher client
 // ID and slot ID are configured. No fake IDs are ever shipped: until the
 // publisher identity is shared through the canonical AllPath AdSense config.
 // Ad-unit slot IDs stay deployment-specific env vars; without a real slot this

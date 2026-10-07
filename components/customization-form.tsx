@@ -121,7 +121,7 @@ export function CustomizationForm({ initial }: Props) {
               onChange={(e) => update(key, e.target.value)}
               className="lunara-input"
             >
-              <option value="">—</option>
+              <option value="">-</option>
               {ZODIAC.map((z) => (
                 <option key={z} value={z}>{z}</option>
               ))}

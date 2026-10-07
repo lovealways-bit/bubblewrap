@@ -28,7 +28,7 @@ function daysAgo(n: number): Date {
 }
 
 // Builds an aggregate, PII-free snapshot for the Commander Hub to poll.
-// Every number is a COUNT or SUM — no user rows, emails, or reading contents
+// Every number is a COUNT or SUM - no user rows, emails, or reading contents
 // ever leave this endpoint.
 export async function buildMothershipReport(): Promise<MothershipReport> {
   const [userCounts] = await db

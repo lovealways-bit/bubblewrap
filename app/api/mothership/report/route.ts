@@ -6,7 +6,7 @@ export const runtime = 'nodejs'
 
 // Read-only metrics feed for the Mothership Commander Hub.
 // The Hub polls this with `Authorization: Bearer <MOTHERSHIP_REPORT_TOKEN>`.
-// No mutation surface, no PII — aggregate counts only.
+// No mutation surface, no PII - aggregate counts only.
 function timingSafeEqual(a: string, b: string): boolean {
   if (a.length !== b.length) return false
   let mismatch = 0

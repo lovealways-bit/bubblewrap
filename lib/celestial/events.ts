@@ -24,7 +24,7 @@ const FIXED_EVENTS: CelestialEvent[] = [
     date: '2026-02-01',
     kind: 'sabbat',
     title: 'Imbolc',
-    detail: 'Cross-quarter fire festival — first stirrings of spring, a time for cleansing and new intentions.',
+    detail: 'Cross-quarter fire festival - first stirrings of spring, a time for cleansing and new intentions.',
     emblem: '✦',
   },
   {
@@ -38,7 +38,7 @@ const FIXED_EVENTS: CelestialEvent[] = [
     date: '2026-03-03',
     kind: 'eclipse-lunar',
     title: 'Total Lunar Eclipse',
-    detail: 'A blood moon — the full moon slips fully into Earth\u2019s shadow. Culminations and emotional reckonings.',
+    detail: 'A blood moon - the full moon slips fully into Earth\u2019s shadow. Culminations and emotional reckonings.',
     emblem: '●',
   },
   {
@@ -59,7 +59,7 @@ const FIXED_EVENTS: CelestialEvent[] = [
     date: '2026-06-21',
     kind: 'solstice',
     title: 'June Solstice',
-    detail: 'The longest day. Peak solar power as the Sun enters Cancer — a threshold of light.',
+    detail: 'The longest day. Peak solar power as the Sun enters Cancer - a threshold of light.',
     emblem: '☀',
   },
   {
@@ -94,14 +94,14 @@ const FIXED_EVENTS: CelestialEvent[] = [
     date: '2026-10-31',
     kind: 'sabbat',
     title: 'Samhain',
-    detail: 'The veil thins. The witches\u2019 new year — ancestor work, divination, and endings honored.',
+    detail: 'The veil thins. The witches\u2019 new year - ancestor work, divination, and endings honored.',
     emblem: '✦',
   },
   {
     date: '2026-12-21',
     kind: 'solstice',
     title: 'December Solstice',
-    detail: 'The longest night. The Sun\u2019s rebirth as it enters Capricorn — stillness and deep renewal.',
+    detail: 'The longest night. The Sun\u2019s rebirth as it enters Capricorn - stillness and deep renewal.',
     emblem: '❄',
   },
   // ── 2027 ──────────────────────────────────────────────────────────────
@@ -109,7 +109,7 @@ const FIXED_EVENTS: CelestialEvent[] = [
     date: '2027-02-01',
     kind: 'sabbat',
     title: 'Imbolc',
-    detail: 'Cross-quarter fire festival — first stirrings of spring, a time for cleansing and new intentions.',
+    detail: 'Cross-quarter fire festival - first stirrings of spring, a time for cleansing and new intentions.',
     emblem: '✦',
   },
   {
@@ -137,7 +137,7 @@ const FIXED_EVENTS: CelestialEvent[] = [
     date: '2027-06-21',
     kind: 'solstice',
     title: 'June Solstice',
-    detail: 'The longest day. Peak solar power as the Sun enters Cancer — a threshold of light.',
+    detail: 'The longest day. Peak solar power as the Sun enters Cancer - a threshold of light.',
     emblem: '☀',
   },
   {
@@ -172,14 +172,14 @@ const FIXED_EVENTS: CelestialEvent[] = [
     date: '2027-10-31',
     kind: 'sabbat',
     title: 'Samhain',
-    detail: 'The veil thins. The witches\u2019 new year — ancestor work, divination, and endings honored.',
+    detail: 'The veil thins. The witches\u2019 new year - ancestor work, divination, and endings honored.',
     emblem: '✦',
   },
   {
     date: '2027-12-22',
     kind: 'solstice',
     title: 'December Solstice',
-    detail: 'The longest night. The Sun\u2019s rebirth as it enters Capricorn — stillness and deep renewal.',
+    detail: 'The longest night. The Sun\u2019s rebirth as it enters Capricorn - stillness and deep renewal.',
     emblem: '❄',
   },
 ]
