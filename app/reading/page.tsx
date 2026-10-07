@@ -15,9 +15,8 @@ export default async function ReadingPage() {
   const premiumSpreads = tier ? canUsePremiumSpreads(tier) : false
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-background">
+    <main className="relative flex min-h-0 flex-1 flex-col overflow-hidden bg-background">
       <Starfield />
-      <div className="h-2 md:h-6" />
       <ExperienceTabs premiumSpreads={premiumSpreads} />
       {/* Restrained lower-page banner: only initializes for ad-eligible
           (free/signed-out) viewers, and only once real AdSense IDs are
