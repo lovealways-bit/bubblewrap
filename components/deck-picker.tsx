@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { Check } from 'lucide-react'
 import {
   DECK_THEMES,
+  deckCourtTitle,
   type DeckThemeId,
   getDeckTheme,
   hasThemeArt,
@@ -53,6 +54,10 @@ export function DeckPicker({ value, onChange, size = 'default' }: Props) {
                   : 'border-gold/25 bg-background/25 hover:border-gold/55')
               }
             >
+              <span className="mb-1.5 block truncate font-display text-[0.6rem] uppercase tracking-[0.18em] text-gold/80">
+                {deckCourtTitle(theme.id)}
+              </span>
+
               {active && (
                 <span className="absolute right-1.5 top-1.5 z-10 flex h-6 w-6 items-center justify-center rounded-full border border-gold bg-background/90 text-gold-bright">
                   <Check className="h-3.5 w-3.5" aria-hidden="true" />

@@ -193,6 +193,17 @@ export const ALL_DECK_THEMES: DeckTheme[] = [
 /** The decks users can see and choose. */
 export const DECK_THEMES: DeckTheme[] = ALL_DECK_THEMES.filter((t) => t.enabled)
 
+/** One consistent court title per deck, shown at the top of every deck tile and every card.
+ *  Court decks always read "<Season> Court"; other decks keep their deck name. */
+export function deckCourtTitle(id: DeckThemeId | null | undefined): string {
+  const theme = getDeckTheme(id ?? null)
+  if (theme.id.endsWith('-court')) {
+    const base = theme.name.replace(/\s+court$/i, '').trim()
+    return `${base} Court`
+  }
+  return theme.name
+}
+
 export function isDeckEnabled(id: DeckThemeId): boolean {
   return ALL_DECK_THEMES.some((t) => t.id === id && t.enabled)
 }
