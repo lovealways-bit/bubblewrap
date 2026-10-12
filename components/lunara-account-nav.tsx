@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { CircleUserRound, Gem } from 'lucide-react'
+import { AppShareButton } from '@/components/app-share-button'
 
 export function LunaraAccountNav({
   signedIn,
@@ -15,6 +16,11 @@ export function LunaraAccountNav({
       aria-label="Lunara account and subscriptions"
       className="fixed right-[max(0.75rem,env(safe-area-inset-right))] top-[max(0.75rem,env(safe-area-inset-top))] z-[55] flex items-center gap-1.5"
     >
+      <AppShareButton
+        shareTitle="Lunara Ascension"
+        shareUrl="/"
+        className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-gold/45 bg-background/90 text-gold-bright shadow-[0_6px_24px_-10px_rgba(0,0,0,0.9)] backdrop-blur-md transition-colors hover:border-gold/80 hover:bg-gold/10"
+      />
       <Link
         href={signedIn ? '/account' : '/sign-in'}
         className="inline-flex min-h-10 items-center gap-1.5 rounded-full border border-gold/35 bg-background/90 px-3 font-display text-[0.6rem] uppercase tracking-[0.14em] text-gold-bright shadow-[0_6px_24px_-10px_rgba(0,0,0,0.9)] backdrop-blur-md transition-colors hover:border-gold/70 hover:bg-surface/95 sm:text-[0.65rem]"
