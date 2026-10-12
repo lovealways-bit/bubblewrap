@@ -211,6 +211,7 @@ export function TarotCard({
       >
         {positionLabel}
       </span>
+      {deckCourtTitle(deckTheme) && (
       <span
         data-court-title
         className={`font-display uppercase text-gold-bright/90 ${
@@ -219,6 +220,7 @@ export function TarotCard({
       >
         {deckCourtTitle(deckTheme)}
       </span>
+      )}
 
       <button
         type="button"
