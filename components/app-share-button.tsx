@@ -10,6 +10,16 @@ type AppShareButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onClic
   showLabel?: boolean
 }
 
+// Shares always use the public AllPath address, never a preview address.
+const CANONICAL_ORIGIN = "https://lunara.allpathproperties.com"
+
+// Plain link only: AllPath origin + path, with everything after ? or # removed.
+function canonicalShareUrl(shareUrl?: string) {
+  const raw = shareUrl || window.location.pathname
+  const path = new URL(raw, CANONICAL_ORIGIN).pathname
+  return CANONICAL_ORIGIN + path
+}
+
 async function copyLink(url: string) {
   if (navigator.clipboard?.writeText) {
     await navigator.clipboard.writeText(url)
@@ -37,7 +47,9 @@ export function AppShareButton({
   const [copied, setCopied] = useState(false)
 
   async function handleShare() {
-    const url = new URL(shareUrl || window.location.href, window.location.href).toString()
+    // Old: const url = new URL(shareUrl || window.location.href, window.location.href).toString()
+    // That shared preview addresses on preview deploys and kept ?query and #hash parts.
+    const url = canonicalShareUrl(shareUrl)
     const title = shareTitle || document.title
 
     try {
