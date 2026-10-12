@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { Crown } from 'lucide-react'
 import type { DrawnCard, TarotCard as TarotCardData } from '@/lib/tarot/types'
 import { hasProof, proofSrc, hasSummerCourtVariant, summerCourtSrc } from '@/lib/tarot/proofs'
-import { type DeckThemeId, getDeckTheme, hasThemeArt, themeArtSrc, themeBackSrc } from '@/lib/tarot/decks'
+import { type DeckThemeId, deckCourtTitle, getDeckTheme, hasThemeArt, themeArtSrc, themeBackSrc } from '@/lib/tarot/decks'
 import { SuitEmblem } from './suit-emblem'
 import { Wings } from './wings'
 
@@ -210,6 +210,14 @@ export function TarotCard({
         }`}
       >
         {positionLabel}
+      </span>
+      <span
+        data-court-title
+        className={`font-display uppercase text-gold-bright/90 ${
+          compact ? 'text-[0.5rem] tracking-[0.18em] leading-tight' : 'text-[0.65rem] tracking-[0.25em]'
+        }`}
+      >
+        {deckCourtTitle(deckTheme)}
       </span>
 
       <button
